@@ -187,7 +187,7 @@ export const HomeView: React.FC = () => {
                 <span className="block text-[17px] sm:text-[22px] lg:text-[28px] font-black text-[#0B1B3A] tracking-[-0.01em] uppercase leading-[1.2]">
                   Conference
                 </span>
-                <span className="block text-[22px] sm:text-[30px] lg:text-[38px] font-bold text-[#1a2b4d] tracking-[-0.02em] mt-1.5">
+                <span className="block text-[22px] sm:text-[30px] lg:text-[38px] font-bold text-[#1a2b4d] tracking-[-0.02em] leading-[1.15] mt-1.5">
                   Dobe全球 AI 创客大会
                 </span>
               </h1>
