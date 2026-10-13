@@ -225,6 +225,36 @@ export const Navbar: React.FC = () => {
               <Search className="w-4 h-4" />
             </button>
 
+            {/* 账号入口（会议结论）：登录态点头像跳「我的 DOAI」；未登录显示登录按钮 */}
+            {currentUser ? (
+              <button
+                type="button"
+                onClick={() => {
+                  setActiveRoute('dashboard');
+                  setMobileMenuOpen(false);
+                }}
+                aria-label="我的 DOAI"
+                title={currentUser.name}
+                className="w-9 h-9 rounded-full overflow-hidden border-2 border-[#E3ECFA] hover:border-[#A9CCFF] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#165DFF] shrink-0"
+              >
+                <img
+                  src={currentUser.avatar}
+                  alt={currentUser.name}
+                  referrerPolicy="no-referrer"
+                  className="w-full h-full object-cover"
+                  draggable={false}
+                />
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setLoginModalOpen(true)}
+                className="px-4 py-2 text-xs font-semibold text-white bg-[#165DFF] hover:bg-[#1453E6] rounded-full transition-colors shrink-0"
+              >
+                登录
+              </button>
+            )}
+
             {/* Mobile menu trigger — the desktop nav is hidden below lg, so
                 without this there is no site navigation on phones at all. */}
             <button

@@ -117,6 +117,8 @@ function seed() {
         id: 'team-synapse',
         name: 'Synapse Core',
         track: 'creator',
+        mark: '⚡',
+        desc: '自适应多智能体协作中枢，正在冲刺自由赛道决赛路演。',
         inviteCode: 'NF8921',
         leaderId: 'user-101',
         createdAt: '2026-09-18 14:32',
@@ -407,6 +409,26 @@ app.get('/api/teams', (_req, res) => {
 app.get('/api/teams/mine', (req, res) => {
   const team = teamOf(String(req.query.userId || ''));
   res.json({ ok: true, team: team || null });
+});
+
+/* 队长编辑战队信息：改名 / 简介 / 队伍标识（会议结论：改队名、改头像、可编辑） */
+app.post('/api/teams/:id/update', (req, res) => {
+  const { byUserId, name, desc, mark } = req.body || {};
+  const list = load('teams');
+  const team = list.find(t => t.id === req.params.id);
+  if (!team) return res.status(404).json({ ok: false, message: '战队不存在' });
+  if (byUserId !== team.leaderId) {
+    return res.status(403).json({ ok: false, message: '只有队长可以编辑战队信息' });
+  }
+  if (name !== undefined) {
+    const trimmed = String(name).trim();
+    if (!trimmed) return res.status(400).json({ ok: false, message: '战队名称不能为空' });
+    team.name = trimmed.slice(0, 24);
+  }
+  if (desc !== undefined) team.desc = String(desc).trim().slice(0, 120);
+  if (mark !== undefined) team.mark = /^[⚡🚀🧠🛠️🎯🔥💎🤖]$/u.test(mark) ? mark : team.mark;
+  save('teams', list);
+  res.json({ ok: true, team });
 });
 
 app.post('/api/teams/:id/remove-member', (req, res) => {

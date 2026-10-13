@@ -19,6 +19,7 @@ import {
   HeartHandshake,
   Inbox,
   Send,
+  Settings2,
 } from 'lucide-react';
 import { TrackType } from '../../types';
 
@@ -37,6 +38,8 @@ interface Team {
   leaderId: string;
   createdAt: string;
   members: TeamMember[];
+  mark?: string;
+  desc?: string;
 }
 
 interface DirectoryUser {
@@ -160,6 +163,40 @@ export const TeamPanel: React.FC = () => {
       refresh();
     } catch (err) {
       flash(err instanceof Error ? err.message : '操作失败');
+    } finally {
+      setBusyId(null);
+    }
+  };
+
+  /* ---- 队长编辑战队：改队名 / 简介 / 队伍标识（会议结论：改队名、改头像、可编辑） ---- */
+  const TEAM_MARKS = ['⚡', '🚀', '🧠', '🛠️', '🎯', '🔥', '💎', '🤖'];
+  const [editing, setEditing] = useState(false);
+  const [editName, setEditName] = useState('');
+  const [editDesc, setEditDesc] = useState('');
+  const [editMark, setEditMark] = useState('⚡');
+
+  const startEdit = () => {
+    if (!team) return;
+    setEditName(team.name);
+    setEditDesc(team.desc || '');
+    setEditMark(team.mark || '⚡');
+    setEditing(true);
+  };
+
+  const handleSaveEdit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!team || !editName.trim()) return;
+    try {
+      setBusyId('save-edit');
+      await api(`/api/teams/${team.id}/update`, {
+        method: 'POST',
+        body: JSON.stringify({ byUserId: me.id, name: editName, desc: editDesc, mark: editMark }),
+      });
+      setEditing(false);
+      flash('战队信息已更新');
+      refresh();
+    } catch (err) {
+      flash(err instanceof Error ? err.message : '保存失败');
     } finally {
       setBusyId(null);
     }
@@ -353,20 +390,108 @@ export const TeamPanel: React.FC = () => {
           {/* ---- 战队信息 ---- */}
           <div className="doa-card p-8 space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#E8EAED]">
-              <div>
-                <h3 className="text-xl font-bold text-[#0B1B3A]">战队管理：{team.name}</h3>
+              <div className="min-w-0">
+                <h3 className="text-xl font-bold text-[#0B1B3A] flex items-center gap-2">
+                  <span className="w-9 h-9 rounded-xl bg-[#165DFF]/10 flex items-center justify-center text-lg shrink-0">
+                    {team.mark || '⚡'}
+                  </span>
+                  <span className="truncate">战队管理：{team.name}</span>
+                </h3>
                 <p className="text-xs text-[#666666] mt-0.5">
                   {team.track === 'creator' ? '自由赛道' : '产业赛道'} · 成员 {team.members.length}/5 ·
                   组队申请需双方互相关注
                 </p>
+                {team.desc && (
+                  <p className="text-xs text-[#98A6BE] mt-1">{team.desc}</p>
+                )}
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 shrink-0">
+                {isLeader(team) && !editing && (
+                  <button
+                    onClick={startEdit}
+                    className="px-3 py-1.5 text-xs font-semibold text-[#165DFF] hover:bg-[#165DFF]/10 border border-[#165DFF]/30 rounded-full transition-colors flex items-center gap-1"
+                  >
+                    <Settings2 className="w-3.5 h-3.5" />
+                    编辑战队
+                  </button>
+                )}
                 <span className="text-xs text-[#888888]">邀请码：</span>
                 <span className="px-3 py-1 bg-[#165DFF]/10 text-[#165DFF] font-mono font-bold text-xs rounded-lg">
                   {team.inviteCode}
                 </span>
               </div>
             </div>
+
+            {/* 编辑战队表单（队长） */}
+            {editing && (
+              <form onSubmit={handleSaveEdit} className="p-5 doa-panel space-y-4">
+                <div className="text-xs font-bold text-[#0B1B3A]">编辑战队信息</div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-semibold text-[#0B1B3A] mb-1.5">
+                      战队名称 <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      required
+                      maxLength={24}
+                      value={editName}
+                      onChange={e => setEditName(e.target.value)}
+                      className="w-full px-4 py-2.5 bg-white border border-[#E8EAED] rounded-xl text-sm focus:outline-none focus:border-[#165DFF]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-[#0B1B3A] mb-1.5">
+                      队伍标识（头像）
+                    </label>
+                    <div className="flex flex-wrap gap-1.5">
+                      {TEAM_MARKS.map(m => (
+                        <button
+                          key={m}
+                          type="button"
+                          onClick={() => setEditMark(m)}
+                          className={`w-9 h-9 rounded-xl text-lg flex items-center justify-center border transition-all ${
+                            editMark === m
+                              ? 'border-[#165DFF] bg-[#165DFF]/10 scale-110'
+                              : 'border-[#E8EAED] bg-white hover:border-[#A9CCFF]'
+                          }`}
+                        >
+                          {m}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-[#0B1B3A] mb-1.5">
+                    战队简介 <span className="text-[#98A6BE] font-normal">（展示在名片与邀请中，120 字内）</span>
+                  </label>
+                  <textarea
+                    rows={2}
+                    maxLength={120}
+                    value={editDesc}
+                    onChange={e => setEditDesc(e.target.value)}
+                    placeholder="一句话介绍你们的战队方向与目标…"
+                    className="w-full px-4 py-2.5 bg-white border border-[#E8EAED] rounded-xl text-sm focus:outline-none focus:border-[#165DFF]"
+                  />
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    type="submit"
+                    disabled={busyId === 'save-edit'}
+                    className="px-6 py-2.5 text-xs font-semibold text-white bg-[#165DFF] hover:bg-[#1453E6] rounded-full disabled:opacity-50"
+                  >
+                    保存
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setEditing(false)}
+                    className="px-6 py-2.5 text-xs font-semibold text-[#666666]"
+                  >
+                    取消
+                  </button>
+                </div>
+              </form>
+            )}
 
             {/* 成员列表 */}
             <div className="space-y-3">
