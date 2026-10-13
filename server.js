@@ -117,7 +117,6 @@ function seed() {
         id: 'team-synapse',
         name: 'Synapse Core',
         track: 'creator',
-        mark: '⚡',
         desc: '自适应多智能体协作中枢，正在冲刺自由赛道决赛路演。',
         inviteCode: 'NF8921',
         leaderId: 'user-101',
@@ -413,7 +412,7 @@ app.get('/api/teams/mine', (req, res) => {
 
 /* 队长编辑战队信息：改名 / 简介 / 队伍标识（会议结论：改队名、改头像、可编辑） */
 app.post('/api/teams/:id/update', (req, res) => {
-  const { byUserId, name, desc, mark } = req.body || {};
+  const { byUserId, name, desc } = req.body || {};
   const list = load('teams');
   const team = list.find(t => t.id === req.params.id);
   if (!team) return res.status(404).json({ ok: false, message: '战队不存在' });
@@ -426,7 +425,6 @@ app.post('/api/teams/:id/update', (req, res) => {
     team.name = trimmed.slice(0, 24);
   }
   if (desc !== undefined) team.desc = String(desc).trim().slice(0, 120);
-  if (mark !== undefined) team.mark = /^[⚡🚀🧠🛠️🎯🔥💎🤖]$/u.test(mark) ? mark : team.mark;
   save('teams', list);
   res.json({ ok: true, team });
 });

@@ -540,11 +540,11 @@ export const HomeView: React.FC = () => {
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
           {[
-            { mark: '⚛', markBg: 'bg-neutral-100', markText: 'text-neutral-700', name: '原子公社', en: 'AtomHub', tag: '社区伙伴' },
+            { mark: '原', markBg: 'bg-neutral-100', markText: 'text-neutral-700', name: '原子公社', en: 'AtomHub', tag: '社区伙伴' },
             { mark: 'DB', markBg: 'bg-[#165DFF]', markText: 'text-white', name: '德必集团', en: 'DOBE GROUP', tag: '主办场地' },
-            { mark: '🏛', markBg: 'bg-[#F2F7FF]', markText: 'text-[#165DFF]', name: '长宁区人民政府', en: 'Changning Gov.', tag: '指导单位' },
-            { mark: '⊞', markBg: 'bg-[#F25022]/10', markText: 'text-[#F25022]', name: 'Microsoft', en: '微软', tag: '技术伙伴' },
-            { mark: '◈', markBg: 'bg-[#76B900]/10', markText: 'text-[#76B900]', name: 'NVIDIA', en: '英伟达', tag: '算力伙伴' },
+            { mark: '长', markBg: 'bg-[#F2F7FF]', markText: 'text-[#165DFF]', name: '长宁区人民政府', en: 'Changning Gov.', tag: '指导单位' },
+            { mark: 'MS', markBg: 'bg-[#F25022]/10', markText: 'text-[#F25022]', name: 'Microsoft', en: '微软', tag: '技术伙伴' },
+            { mark: 'N', markBg: 'bg-[#76B900]/10', markText: 'text-[#76B900]', name: 'NVIDIA', en: '英伟达', tag: '算力伙伴' },
             { mark: 'intel', markBg: 'bg-[#0068B5]/10', markText: 'text-[#0068B5]', name: 'Intel', en: '英特尔', tag: '硬件伙伴' },
           ].map(p => (
             <div

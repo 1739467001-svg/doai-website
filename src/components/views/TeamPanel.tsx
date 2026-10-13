@@ -38,7 +38,6 @@ interface Team {
   leaderId: string;
   createdAt: string;
   members: TeamMember[];
-  mark?: string;
   desc?: string;
 }
 
@@ -169,17 +168,14 @@ export const TeamPanel: React.FC = () => {
   };
 
   /* ---- 队长编辑战队：改队名 / 简介 / 队伍标识（会议结论：改队名、改头像、可编辑） ---- */
-  const TEAM_MARKS = ['⚡', '🚀', '🧠', '🛠️', '🎯', '🔥', '💎', '🤖'];
   const [editing, setEditing] = useState(false);
   const [editName, setEditName] = useState('');
   const [editDesc, setEditDesc] = useState('');
-  const [editMark, setEditMark] = useState('⚡');
 
   const startEdit = () => {
     if (!team) return;
     setEditName(team.name);
     setEditDesc(team.desc || '');
-    setEditMark(team.mark || '⚡');
     setEditing(true);
   };
 
@@ -190,7 +186,7 @@ export const TeamPanel: React.FC = () => {
       setBusyId('save-edit');
       await api(`/api/teams/${team.id}/update`, {
         method: 'POST',
-        body: JSON.stringify({ byUserId: me.id, name: editName, desc: editDesc, mark: editMark }),
+        body: JSON.stringify({ byUserId: me.id, name: editName, desc: editDesc }),
       });
       setEditing(false);
       flash('战队信息已更新');
@@ -391,9 +387,9 @@ export const TeamPanel: React.FC = () => {
           <div className="doa-card p-8 space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#E8EAED]">
               <div className="min-w-0">
-                <h3 className="text-xl font-bold text-[#0B1B3A] flex items-center gap-2">
-                  <span className="w-9 h-9 rounded-xl bg-[#165DFF]/10 flex items-center justify-center text-lg shrink-0">
-                    {team.mark || '⚡'}
+                <h3 className="text-xl font-bold text-[#0B1B3A] flex items-center gap-2.5">
+                  <span className="w-9 h-9 rounded-xl bg-[#165DFF] text-white flex items-center justify-center text-sm font-extrabold shrink-0">
+                    {team.name.slice(0, 1)}
                   </span>
                   <span className="truncate">战队管理：{team.name}</span>
                 </h3>
@@ -426,40 +422,18 @@ export const TeamPanel: React.FC = () => {
             {editing && (
               <form onSubmit={handleSaveEdit} className="p-5 doa-panel space-y-4">
                 <div className="text-xs font-bold text-[#0B1B3A]">编辑战队信息</div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-semibold text-[#0B1B3A] mb-1.5">
-                      战队名称 <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      required
-                      maxLength={24}
-                      value={editName}
-                      onChange={e => setEditName(e.target.value)}
-                      className="w-full px-4 py-2.5 bg-white border border-[#E8EAED] rounded-xl text-sm focus:outline-none focus:border-[#165DFF]"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-[#0B1B3A] mb-1.5">
-                      队伍标识（头像）
-                    </label>
-                    <div className="flex flex-wrap gap-1.5">
-                      {TEAM_MARKS.map(m => (
-                        <button
-                          key={m}
-                          type="button"
-                          onClick={() => setEditMark(m)}
-                          className={`w-9 h-9 rounded-xl text-lg flex items-center justify-center border transition-all ${
-                            editMark === m
-                              ? 'border-[#165DFF] bg-[#165DFF]/10 scale-110'
-                              : 'border-[#E8EAED] bg-white hover:border-[#A9CCFF]'
-                          }`}
-                        >
-                          {m}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
+                <div>
+                  <label className="block text-xs font-semibold text-[#0B1B3A] mb-1.5">
+                    战队名称 <span className="text-red-500">*</span>
+                    <span className="ml-2 font-normal text-[#98A6BE]">标识取名称首字，自动生成</span>
+                  </label>
+                  <input
+                    required
+                    maxLength={24}
+                    value={editName}
+                    onChange={e => setEditName(e.target.value)}
+                    className="w-full px-4 py-2.5 bg-white border border-[#E8EAED] rounded-xl text-sm focus:outline-none focus:border-[#165DFF]"
+                  />
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-[#0B1B3A] mb-1.5">
