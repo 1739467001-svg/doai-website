@@ -4,29 +4,20 @@ import {
   Calendar,
   Clock,
   MapPin,
-  Users,
   CheckCircle2,
   Plus,
-  X,
-  Sparkles,
-  ArrowRight,
   ShieldCheck,
-  Send
+  ExternalLink
 } from 'lucide-react';
-import { ForumSession } from '../../types';
 
 export const ForumView: React.FC = () => {
-  const { lang, t, forums, bookForum, cancelForum, currentUser, setLoginModalOpen, setActiveRoute } = useApp();
+  const { lang, t, forums, bookForum, cancelForum, setActiveRoute } = useApp();
 
   const [filterSlot, setFilterSlot] = useState<'all' | 'morning' | 'afternoon' | 'allday'>('all');
-  const [proposeModalOpen, setProposeModalOpen] = useState(false);
-  const [proposeSubmitted, setProposeSubmitted] = useState(false);
 
-  // Propose forum form state
-  const [forumTitle, setForumTitle] = useState('');
-  const [forumSpeakers, setForumSpeakers] = useState('');
-  const [forumFormat, setForumFormat] = useState('线下深度研讨');
-  const [forumDesc, setForumDesc] = useState('');
+  // 会议结论 2026-10-13：发起分论坛申请不做站内数据收集，直接跳飞书问卷。
+  const FORUM_PROPOSE_FORM_URL =
+    'https://pcntu7vxqu2m.feishu.cn/share/base/shrcn4bA2qUb1drKi7VVcw3BY1d';
 
   // Slots follow the plan's 排期建议：上午 / 下午 / 全天。
   const slotOf = (time: string): 'morning' | 'afternoon' | 'allday' => {
@@ -39,22 +30,6 @@ export const ForumView: React.FC = () => {
     if (filterSlot === 'all') return true;
     return slotOf(f.time) === filterSlot;
   });
-
-  const handleProposeSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!currentUser) {
-      setLoginModalOpen(true);
-      return;
-    }
-    setProposeSubmitted(true);
-    setTimeout(() => {
-      setProposeModalOpen(false);
-      setProposeSubmitted(false);
-      setForumTitle('');
-      setForumSpeakers('');
-      setForumDesc('');
-    }, 2000);
-  };
 
   return (
     <div className="pt-24 pb-24">
@@ -76,17 +51,12 @@ export const ForumView: React.FC = () => {
 
           <div className="flex items-center gap-3">
             <button
-              onClick={() => {
-                if (!currentUser) {
-                  setLoginModalOpen(true);
-                } else {
-                  setProposeModalOpen(true);
-                }
-              }}
+              onClick={() => window.open(FORUM_PROPOSE_FORM_URL, '_blank', 'noopener')}
               className="px-6 py-2.5 text-xs font-semibold text-[#165DFF] bg-white hover:bg-[#F7F8FA] border border-[#165DFF]/30 rounded-full transition-all flex items-center gap-1.5"
             >
               <Plus className="w-4 h-4" />
               <span>{t.forum.proposeBtn}</span>
+              <ExternalLink className="w-3 h-3 opacity-60" />
             </button>
           </div>
         </div>
@@ -238,106 +208,6 @@ export const ForumView: React.FC = () => {
         </div>
       </section>
 
-      {/* Propose a Forum Modal */}
-      {proposeModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-in fade-in duration-150">
-          <div className="relative w-full max-w-lg bg-white rounded-3xl p-8 shadow-floating border border-[#E8EAED]">
-            <div className="flex items-center justify-between pb-3 border-b border-[#E8EAED] mb-4">
-              <h3 className="text-base font-bold text-[#0B1B3A]">发起 DOAI 分论坛申请</h3>
-              <button
-                onClick={() => setProposeModalOpen(false)}
-                className="p-1.5 text-[#888888] hover:text-[#0B1B3A] rounded-full"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            {proposeSubmitted ? (
-              <div className="text-center py-8 space-y-3">
-                <CheckCircle2 className="w-12 h-12 text-[#00C48C] mx-auto" />
-                <h4 className="text-base font-bold text-[#0B1B3A]">申请已提交组委会！</h4>
-                <p className="text-xs text-[#666666]">
-                  我们将在 3 个工作日内评估研讨主题与场地排期，并通过站内信通知审核结果。
-                </p>
-              </div>
-            ) : (
-              <form onSubmit={handleProposeSubmit} className="space-y-4">
-                <div>
-                  <label className="block text-xs font-semibold text-[#0B1B3A] mb-1">
-                    拟办分论坛主题 <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={forumTitle}
-                    onChange={e => setForumTitle(e.target.value)}
-                    placeholder="例如: 开源大模型与端侧具身软硬协同前沿研讨"
-                    className="w-full px-4 py-2 bg-[#F7F8FA] border border-[#E8EAED] rounded-xl text-xs"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-[#0B1B3A] mb-1">
-                    拟邀主讲/圆桌嘉宾
-                  </label>
-                  <input
-                    type="text"
-                    value={forumSpeakers}
-                    onChange={e => setForumSpeakers(e.target.value)}
-                    placeholder="嘉宾姓名、机构与所属领域"
-                    className="w-full px-4 py-2 bg-[#F7F8FA] border border-[#E8EAED] rounded-xl text-xs"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-[#0B1B3A] mb-1">
-                    形式建议
-                  </label>
-                  <select
-                    value={forumFormat}
-                    onChange={e => setForumFormat(e.target.value)}
-                    className="w-full px-4 py-2 bg-[#F7F8FA] border border-[#E8EAED] rounded-xl text-xs"
-                  >
-                    <option value="线下深度研讨">线下深度闭门研讨 (50人)</option>
-                    <option value="公开圆桌峰会">公开圆桌峰会 (200人)</option>
-                    <option value="全球线上双向连线">全球线上双向连线 (多地跨时区)</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-[#0B1B3A] mb-1">
-                    议程简介与讨论核心价值
-                  </label>
-                  <textarea
-                    rows={3}
-                    required
-                    value={forumDesc}
-                    onChange={e => setForumDesc(e.target.value)}
-                    placeholder="阐述本场分论坛拟探讨的核心学术/产业价值..."
-                    className="w-full px-4 py-2 bg-[#F7F8FA] border border-[#E8EAED] rounded-xl text-xs"
-                  />
-                </div>
-
-                <div className="pt-2 flex justify-end gap-2 border-t border-[#E8EAED]">
-                  <button
-                    type="button"
-                    onClick={() => setProposeModalOpen(false)}
-                    className="px-4 py-2 text-xs font-semibold text-[#666666]"
-                  >
-                    取消
-                  </button>
-                  <button
-                    type="submit"
-                    className="px-6 py-2 text-xs font-semibold text-white bg-[#165DFF] hover:bg-[#1453E6] rounded-full"
-                  >
-                    提交申请
-                  </button>
-                </div>
-              </form>
-            )}
-          </div>
-        </div>
-      )}
     </div>
   );
 };

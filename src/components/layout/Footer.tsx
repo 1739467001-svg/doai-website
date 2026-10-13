@@ -31,8 +31,6 @@ export const Footer: React.FC = () => {
                 <Lock className="w-3.5 h-3.5 text-[#165DFF]" />
                 {lang === 'zh' ? '项目知识产权受保' : 'IP Protected'}
               </span>
-              <span aria-hidden="true">·</span>
-              <span>京ICP备2026010204号</span>
             </div>
           </div>
 

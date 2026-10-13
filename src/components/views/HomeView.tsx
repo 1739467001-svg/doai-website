@@ -516,79 +516,55 @@ export const HomeView: React.FC = () => {
       <PeopleSection />
 
       {/* =========================================================================
-          5. GLOBAL PARTNERS ("全球合作伙伴" - Exact Row Layout from Screenshot)
+          5. GLOBAL PARTNERS — 合作方名片墙
+          Meeting 2026-10-13: partners should read as proper name cards /
+          posters, not a bare logo strip. Card grid with mark + name + tag.
          ========================================================================= */}
       <section className="py-14 sm:py-16 max-w-[1200px] mx-auto px-6 md:px-10 border-t border-[#F0F2F5]">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
-          {/* Left Title */}
-          <div className="lg:w-1/4">
-            <h3 className="text-lg font-bold text-[#0B1B3A]">全球合作伙伴</h3>
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 mb-8">
+          <div>
+            <div className="doa-eyebrow">GLOBAL PARTNERS</div>
+            <h3 className="text-lg font-bold text-[#0B1B3A] mt-1">全球合作伙伴</h3>
             <p className="text-xs text-[#888888] mt-1">
               感谢所有合作伙伴的支持，让 AI 创造更大的价值
             </p>
           </div>
+          <button
+            onClick={() => window.open('https://pcntu7vxqu2m.feishu.cn/share/base/shrcneQMxqly9NmTAFQXqzYj0xf', '_blank', 'noopener')}
+            className="self-start lg:self-auto px-5 py-2.5 text-xs font-semibold text-[#165DFF] hover:text-[#1453E6] bg-white hover:bg-[#F5F8FF] border border-[#165DFF]/50 rounded-full transition-all inline-flex items-center gap-1.5"
+          >
+            成为合作伙伴 / 展商
+            <span aria-hidden="true">→</span>
+          </button>
+        </div>
 
-          {/* Right Logos Row (Matching Screenshot Icons & Clean Branding) */}
-          <div className="lg:w-3/4 flex flex-wrap items-center justify-between gap-6 sm:gap-8 text-neutral-600">
-            {/* 1. 原子公社 AtomHub */}
-            <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-full bg-neutral-200/80 flex items-center justify-center text-neutral-700 font-bold text-xs">
-                ⚛
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
+          {[
+            { mark: '⚛', markBg: 'bg-neutral-100', markText: 'text-neutral-700', name: '原子公社', en: 'AtomHub', tag: '社区伙伴' },
+            { mark: 'DB', markBg: 'bg-[#165DFF]', markText: 'text-white', name: '德必集团', en: 'DOBE GROUP', tag: '主办场地' },
+            { mark: '🏛', markBg: 'bg-[#F2F7FF]', markText: 'text-[#165DFF]', name: '长宁区人民政府', en: 'Changning Gov.', tag: '指导单位' },
+            { mark: '⊞', markBg: 'bg-[#F25022]/10', markText: 'text-[#F25022]', name: 'Microsoft', en: '微软', tag: '技术伙伴' },
+            { mark: '◈', markBg: 'bg-[#76B900]/10', markText: 'text-[#76B900]', name: 'NVIDIA', en: '英伟达', tag: '算力伙伴' },
+            { mark: 'intel', markBg: 'bg-[#0068B5]/10', markText: 'text-[#0068B5]', name: 'Intel', en: '英特尔', tag: '硬件伙伴' },
+          ].map(p => (
+            <div
+              key={p.name}
+              className="doa-card doa-card-hover p-4 flex flex-col items-start gap-3 min-h-[120px]"
+            >
+              <div
+                className={`w-9 h-9 rounded-xl ${p.markBg} ${p.markText} flex items-center justify-center font-bold text-xs shrink-0`}
+              >
+                {p.mark}
               </div>
-              <div className="text-left">
-                <div className="text-xs font-bold text-neutral-800 leading-tight">原子公社</div>
-                <div className="text-[9px] text-neutral-500 font-sans tracking-tight">AtomHub</div>
+              <div className="mt-auto">
+                <div className="text-[13px] font-bold text-[#0B1B3A] leading-tight truncate">{p.name}</div>
+                <div className="text-[10px] text-[#98A6BE] tracking-tight truncate">{p.en}</div>
+                <span className="inline-block mt-1.5 px-1.5 py-0.5 text-[10px] font-medium text-[#48597A] bg-[#F7FAFF] border border-[#E3ECFA] rounded">
+                  {p.tag}
+                </span>
               </div>
             </div>
-
-            {/* 2. 德必集团 Dobe Group */}
-            <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-md border border-neutral-300 flex items-center justify-center font-bold text-xs text-neutral-700">
-                DB
-              </div>
-              <div className="text-left">
-                <div className="text-xs font-bold text-neutral-800 leading-tight">德必集团</div>
-                <div className="text-[9px] text-neutral-500 font-sans tracking-tight">DOBE GROUP</div>
-              </div>
-            </div>
-
-            {/* 3. 长宁区人民政府 */}
-            <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-full bg-neutral-100 border border-neutral-300 flex items-center justify-center text-[10px] text-neutral-700 font-bold">
-                🏛
-              </div>
-              <div className="text-left">
-                <div className="text-xs font-bold text-neutral-800 leading-tight">长宁区人民政府</div>
-                <div className="text-[9px] text-neutral-500 font-sans tracking-tight">Changning District Government</div>
-              </div>
-            </div>
-
-            {/* 4. Microsoft */}
-            <div className="flex items-center gap-2">
-              <div className="grid grid-cols-2 gap-0.5 w-4 h-4">
-                <span className="bg-[#F25022] w-1.5 h-1.5" />
-                <span className="bg-[#7FBA00] w-1.5 h-1.5" />
-                <span className="bg-[#00A4EF] w-1.5 h-1.5" />
-                <span className="bg-[#FFB900] w-1.5 h-1.5" />
-              </div>
-              <span className="text-sm font-semibold text-neutral-800 tracking-tight">Microsoft</span>
-            </div>
-
-            {/* 5. NVIDIA */}
-            <div className="flex items-center gap-1.5">
-              <span className="text-sm font-black text-neutral-800 tracking-tight">NVIDIA</span>
-            </div>
-
-            {/* 6. Intel */}
-            <div className="flex items-center gap-1.5">
-              <span className="text-base font-extrabold text-neutral-800 font-sans tracking-tight">intel</span>
-            </div>
-
-            {/* More ellipsis */}
-            <div className="text-neutral-400 font-bold tracking-widest text-sm">
-              ···
-            </div>
-          </div>
+          ))}
         </div>
       </section>
 
