@@ -51,6 +51,7 @@ interface AppContextType {
   markNotificationRead: (id: string) => void;
   submitRegistration: (data: Omit<Registration, 'id' | 'makerId' | 'status' | 'submittedAt' | 'inviteCode'>) => { id: string; makerId: string };
   updateRegistrationStatus: (id: string, status: Registration['status'], feedback?: string) => void;
+  submitWork: (id: string, submission: { videoUrl: string; demoUrl: string; githubUrl: string }) => void;
   toggleLikeRecruit: (id: string) => void;
   toggleLikeTalent: (id: string) => void;
   bookForum: (id: string) => boolean;
@@ -553,6 +554,26 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setNotifications(prev => prev.map(n => (n.id === id ? { ...n, read: true } : n)));
   };
 
+
+  const submitWork = (
+    id: string,
+    submission: { videoUrl: string; demoUrl: string; githubUrl: string },
+  ) => {
+    setRegistrations(prev =>
+      prev.map(r =>
+        r.id === id
+          ? {
+              ...r,
+              submission: {
+                ...submission,
+                submittedAt: new Date().toISOString().replace('T', ' ').substring(0, 16),
+              },
+            }
+          : r,
+      ),
+    );
+  };
+
   const submitRegistration = (data: Omit<Registration, 'id' | 'makerId' | 'status' | 'submittedAt' | 'inviteCode'>) => {
     const randomNum = Math.floor(1000 + Math.random() * 9000);
     const newMakerId = `DOAI-2026-M${randomNum}`;
@@ -794,6 +815,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         markNotificationRead,
         submitRegistration,
         updateRegistrationStatus,
+        submitWork,
         toggleLikeRecruit,
         toggleLikeTalent,
         bookForum,

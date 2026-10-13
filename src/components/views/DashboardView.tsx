@@ -19,6 +19,124 @@ import {
   ChevronRight
 } from 'lucide-react';
 
+/* ------------------------------------------------------------------
+ * 提交作品表单（会议 2026-10-13）：报名成功后提交三个链接
+ * —— Demo 视频链接 / 可访问链接 / GitHub 链接
+ * ------------------------------------------------------------------ */
+const SubmitWorkForm: React.FC<{ registrationId: string; onDone?: () => void }> = ({
+  registrationId,
+}) => {
+  const { submitWork } = useApp();
+  const [videoUrl, setVideoUrl] = useState('');
+  const [demoUrl, setDemoUrl] = useState('');
+  const [githubUrl, setGithubUrl] = useState('');
+  const [error, setError] = useState('');
+
+  const isValidUrl = (url: string) => {
+    try {
+      const parsed = new URL(url);
+      return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+    } catch {
+      return false;
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    if (!isValidUrl(videoUrl)) {
+      setError('Demo 视频链接不合法（仅接受 http/https 外部公开直链，如 Bilibili / 腾讯视频 / YouTube）');
+      return;
+    }
+    if (!isValidUrl(demoUrl)) {
+      setError('可访问链接不合法（请填写可在线访问的项目地址）');
+      return;
+    }
+    if (!/^https:\/\/github\.com\//.test(githubUrl.trim())) {
+      setError('GitHub 仓库链接需以 https://github.com/ 开头');
+      return;
+    }
+    submitWork(registrationId, {
+      videoUrl: videoUrl.trim(),
+      demoUrl: demoUrl.trim(),
+      githubUrl: githubUrl.trim(),
+    });
+  };
+
+  const field =
+    'w-full px-4 py-2.5 bg-[#F7F8FA] border border-[#E8EAED] rounded-xl text-sm font-mono focus:outline-none focus:border-[#165DFF]';
+
+  return (
+    <form
+      onSubmit={handleSubmit}
+      className="p-5 doa-panel space-y-4"
+    >
+      <div className="flex items-center gap-2">
+        <AlertCircle className="w-4 h-4 text-[#FF8A1F]" />
+        <div className="text-xs font-bold text-[#0B1B3A]">提交作品</div>
+        <span className="text-[11px] text-[#98A6BE]">作品提交窗口：11/03 — 11/07 · 仅接受链接，不收文件</span>
+      </div>
+
+      <div className="space-y-3">
+        <div>
+          <label className="block text-xs font-semibold text-[#0B1B3A] mb-1">
+            1. Demo 视频链接 <span className="text-red-500">*</span>
+            <span className="ml-2 font-normal text-[#888888]">支持 Bilibili / 腾讯视频 / YouTube</span>
+          </label>
+          <input
+            type="url"
+            required
+            value={videoUrl}
+            onChange={e => setVideoUrl(e.target.value)}
+            placeholder="https://www.bilibili.com/video/BV..."
+            className={field}
+          />
+        </div>
+        <div>
+          <label className="block text-xs font-semibold text-[#0B1B3A] mb-1">
+            2. 可访问链接（在线 Demo / 官网） <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="url"
+            required
+            value={demoUrl}
+            onChange={e => setDemoUrl(e.target.value)}
+            placeholder="https://your-demo.app"
+            className={field}
+          />
+        </div>
+        <div>
+          <label className="block text-xs font-semibold text-[#0B1B3A] mb-1">
+            3. GitHub 仓库链接 <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="url"
+            required
+            value={githubUrl}
+            onChange={e => setGithubUrl(e.target.value)}
+            placeholder="https://github.com/your-team/your-repo"
+            className={field}
+          />
+        </div>
+      </div>
+
+      {error && (
+        <div className="p-3 rounded-xl bg-red-50 text-red-600 text-xs flex items-center gap-2 border border-red-100">
+          <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+          {error}
+        </div>
+      )}
+
+      <button
+        type="submit"
+        className="w-full py-3 text-xs font-semibold text-white bg-[#165DFF] hover:bg-[#1453E6] rounded-xl transition-colors"
+      >
+        提交作品
+      </button>
+    </form>
+  );
+};
+
 export const DashboardView: React.FC = () => {
   const {
     currentUser,
@@ -30,9 +148,17 @@ export const DashboardView: React.FC = () => {
     lang,
     setLoginModalOpen,
     setActiveRoute,
+    activeRoute,
+    submitWork,
   } = useApp();
 
-  const [activeTab, setActiveTab] = useState<'passport' | 'registrations' | 'team' | 'settings'>('passport');
+  // 支持子路由直链：dashboard/registrations 等（报名成功后「去提交作品」用）
+  const routeSub = activeRoute.split('/')[1];
+  const initialTab =
+    routeSub === 'registrations' || routeSub === 'team' || routeSub === 'settings'
+      ? (routeSub as 'registrations' | 'team' | 'settings')
+      : 'passport';
+  const [activeTab, setActiveTab] = useState<'passport' | 'registrations' | 'team' | 'settings'>(initialTab);
   const [copiedId, setCopiedId] = useState(false);
   const [checkInNotice, setCheckInNotice] = useState<string | null>(null);
 
@@ -381,34 +507,37 @@ export const DashboardView: React.FC = () => {
               </div>
             )}
 
-            {/* Submitted URLs info */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-              <div className="p-4 doa-panel">
-                <div className="text-[#888888] mb-1">Demo 视频直链 (仅供评委保密评审)：</div>
-                <a
-                  href={myRegistration.videoUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="font-mono text-[#165DFF] hover:underline flex items-center gap-1 truncate"
-                >
-                  <span className="truncate">{myRegistration.videoUrl}</span>
-                  <ExternalLink className="w-3 h-3 shrink-0" />
-                </a>
+            {/* 提交作品（会议 2026-10-13：报名后提交 视频 / 可访问 / GitHub 三个链接） */}
+            {myRegistration.submission ? (
+              <div className="p-5 doa-panel space-y-2">
+                <div className="font-semibold text-[#0B1B3A] text-xs flex items-center gap-1.5">
+                  <CheckCircle2 className="w-4 h-4 text-[#00C48C]" />
+                  <span>作品已提交（{myRegistration.submission.submittedAt}）</span>
+                </div>
+                <div className="grid grid-cols-1 gap-1.5 text-xs pt-1">
+                  {[
+                    { label: 'Demo 视频链接', url: myRegistration.submission.videoUrl },
+                    { label: '可访问链接（在线 Demo）', url: myRegistration.submission.demoUrl },
+                    { label: 'GitHub 仓库链接', url: myRegistration.submission.githubUrl },
+                  ].map(row => (
+                    <div key={row.label} className="flex items-center gap-2 justify-between">
+                      <span className="text-[#888888] shrink-0">{row.label}：</span>
+                      <a
+                        href={row.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="font-mono text-[#165DFF] hover:underline flex items-center gap-1 truncate"
+                      >
+                        <span className="truncate">{row.url}</span>
+                        <ExternalLink className="w-3 h-3 shrink-0" />
+                      </a>
+                    </div>
+                  ))}
+                </div>
               </div>
-
-              <div className="p-4 doa-panel">
-                <div className="text-[#888888] mb-1">项目白皮书 / 文档链接：</div>
-                <a
-                  href={myRegistration.docUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="font-mono text-[#165DFF] hover:underline flex items-center gap-1 truncate"
-                >
-                  <span className="truncate">{myRegistration.docUrl}</span>
-                  <ExternalLink className="w-3 h-3 shrink-0" />
-                </a>
-              </div>
-            </div>
+            ) : (
+              <SubmitWorkForm registrationId={myRegistration.id} onDone={() => setActiveTab('registrations')} />
+            )}
           </div>
         </div>
       )}

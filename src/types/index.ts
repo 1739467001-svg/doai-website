@@ -53,6 +53,14 @@ export interface TeamMember {
   avatar?: string;
 }
 
+/** 报名后提交的作品链接（会议 2026-10-13：视频 / 可访问 / GitHub 三个链接） */
+export interface WorkSubmission {
+  videoUrl: string;
+  demoUrl: string;
+  githubUrl: string;
+  submittedAt: string;
+}
+
 export interface Registration {
   id: string;
   makerId: string;
@@ -70,6 +78,7 @@ export interface Registration {
   needsInfoDetails?: string;
   submittedAt: string;
   reviewedAt?: string;
+  submission?: WorkSubmission;
 }
 
 export interface RecruitmentPost {

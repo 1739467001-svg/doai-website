@@ -5,8 +5,6 @@ import {
   AlertCircle,
   Users,
   User,
-  Video,
-  FileText,
   Link as LinkIcon,
   ArrowRight,
   ArrowLeft,
@@ -18,7 +16,11 @@ import {
 import { TrackType, TeamMember } from '../../types';
 
 export const RegisterView: React.FC = () => {
-  const { lang, currentUser, setLoginModalOpen, submitRegistration, setActiveRoute } = useApp();
+  const { lang, currentUser, setLoginModalOpen, submitRegistration, setActiveRoute, activeRoute } = useApp();
+
+  // 从赛道详情页带过来：register/industry、register/creator
+  const routeTrack = activeRoute.split('/')[1];
+  const initialTrack: TrackType = routeTrack === 'industry' || routeTrack === 'creator' ? routeTrack : 'creator';
 
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [copied, setCopied] = useState(false);
@@ -41,12 +43,10 @@ export const RegisterView: React.FC = () => {
 
   // Step 3: Project State
   const [projectName, setProjectName] = useState('NeuroFlow 自适应多智能体协作中枢');
-  const [track, setTrack] = useState<TrackType>('creator');
+  const [track, setTrack] = useState<TrackType>(initialTrack);
   const [projectSummary, setProjectSummary] = useState(
     '基于动态拓扑与共识算法的分布式自主智能体协作协议，显著降低复杂多任务下的 LLM 通信损耗与幻觉。'
   );
-  const [videoUrl, setVideoUrl] = useState('https://www.bilibili.com/video/BV1xx411c7XN');
-  const [docUrl, setDocUrl] = useState('https://docs.neuroflow.ai/whitepaper-v1');
 
   // Step 4: Submission result
   const [submittedMakerId, setSubmittedMakerId] = useState('');
@@ -82,16 +82,6 @@ export const RegisterView: React.FC = () => {
     setMembers(members.filter(m => m.id !== id));
   };
 
-  // URL Validation rule from PRD: Only external URLs (Bilibili/Tencent/YouTube/direct URL), NO file upload
-  const isValidUrl = (url: string) => {
-    try {
-      const parsed = new URL(url);
-      return parsed.protocol === 'http:' || parsed.protocol === 'https:';
-    } catch {
-      return false;
-    }
-  };
-
   const handleStepSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setValidationError('');
@@ -117,15 +107,6 @@ export const RegisterView: React.FC = () => {
         setValidationError('请完整填写项目名称与项目介绍');
         return;
       }
-      if (!isValidUrl(videoUrl)) {
-        setValidationError('Demo 视频仅支持合法的外部公开直链（如 Bilibili、腾讯视频或 YouTube 链接）');
-        return;
-      }
-      if (!isValidUrl(docUrl)) {
-        setValidationError('项目文档仅支持在线链接（如飞书文档、Notion 或 GitHub 链接），不接收本地文件上传');
-        return;
-      }
-
       // Submit registration
       const result = submitRegistration({
         type: regType,
@@ -133,8 +114,8 @@ export const RegisterView: React.FC = () => {
         teamName: regType === 'team' ? teamName : personalName,
         projectName,
         projectSummary,
-        videoUrl,
-        docUrl,
+        videoUrl: '',
+        docUrl: '',
         members: regType === 'team' ? members : [{
           id: currentUser?.id || '1',
           name: personalName,
@@ -447,7 +428,7 @@ export const RegisterView: React.FC = () => {
           {currentStep === 3 && (
             <div className="space-y-6 animate-in fade-in duration-200">
               <h3 className="text-lg font-bold text-[#0B1B3A] pb-2 border-b border-[#E8EAED]">
-                03. 申报项目与作品成果 (仅支持链接提交)
+                03. 申报项目信息（作品链接在报名成功后于「提交作品」中填写）
               </h3>
 
               {/* Track Selector */}
@@ -508,49 +489,6 @@ export const RegisterView: React.FC = () => {
                   value={projectSummary}
                   onChange={e => setProjectSummary(e.target.value)}
                   placeholder="请用 100-200 字阐明项目的核心痛点、技术突破点与实际落地价值..."
-                  className="w-full px-4 py-2.5 bg-[#F7F8FA] border border-[#E8EAED] rounded-xl text-sm focus:outline-none focus:border-[#165DFF]"
-                />
-              </div>
-
-              {/* Demo Video URL (PRD: Strict Link Rule, no file upload) */}
-              <div>
-                <div className="flex items-center justify-between mb-1.5">
-                  <label className="text-xs font-semibold text-[#0B1B3A] flex items-center gap-1.5">
-                    <Video className="w-3.5 h-3.5 text-[#165DFF]" />
-                    <span>Demo 视频链接 (仅接受外部公开直链)</span>
-                    <span className="text-red-500">*</span>
-                  </label>
-                  <span className="text-[11px] text-[#888888]">支持 Bilibili / 腾讯视频 / YouTube</span>
-                </div>
-                <input
-                  type="url"
-                  required
-                  value={videoUrl}
-                  onChange={e => setVideoUrl(e.target.value)}
-                  placeholder="https://www.bilibili.com/video/BV..."
-                  className="w-full px-4 py-2.5 bg-[#F7F8FA] border border-[#E8EAED] rounded-xl text-sm focus:outline-none focus:border-[#165DFF]"
-                />
-                <p className="text-[11px] text-[#888888] mt-1">
-                  ※ 系统将实时校验 URL 可达性，不可访问会导致机审无法通过。
-                </p>
-              </div>
-
-              {/* Doc URL (PRD: Strict Link Rule, no file upload) */}
-              <div>
-                <div className="flex items-center justify-between mb-1.5">
-                  <label className="text-xs font-semibold text-[#0B1B3A] flex items-center gap-1.5">
-                    <FileText className="w-3.5 h-3.5 text-[#00C48C]" />
-                    <span>项目文档 / 白皮书在线链接</span>
-                    <span className="text-red-500">*</span>
-                  </label>
-                  <span className="text-[11px] text-[#888888]">支持飞书文档 / Notion / GitHub</span>
-                </div>
-                <input
-                  type="url"
-                  required
-                  value={docUrl}
-                  onChange={e => setDocUrl(e.target.value)}
-                  placeholder="https://docs.yourproject.ai/overview"
                   className="w-full px-4 py-2.5 bg-[#F7F8FA] border border-[#E8EAED] rounded-xl text-sm focus:outline-none focus:border-[#165DFF]"
                 />
               </div>
@@ -644,17 +582,17 @@ export const RegisterView: React.FC = () => {
               <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
                 <button
                   type="button"
-                  onClick={() => setActiveRoute('dashboard')}
+                  onClick={() => setActiveRoute('dashboard/registrations')}
                   className="px-6 py-2.5 text-xs font-semibold text-white bg-[#165DFF] hover:bg-[#1453E6] rounded-full transition-all shadow-sm"
                 >
-                  前往个人中心查看审核进度与 Passport →
+                  下一步：提交作品（视频 / 可访问 / GitHub 链接） →
                 </button>
                 <button
                   type="button"
-                  onClick={() => setActiveRoute('square')}
+                  onClick={() => setActiveRoute('dashboard')}
                   className="px-6 py-2.5 text-xs font-semibold text-[#0B1B3A] hover:text-[#165DFF] bg-white border border-[#E8EAED] rounded-full transition-colors"
                 >
-                  去组队广场招募更多伙伴
+                  前往个人中心查看审核进度
                 </button>
               </div>
             </div>

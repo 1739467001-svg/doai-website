@@ -122,10 +122,10 @@ export const MakerView: React.FC = () => {
             <div className="pt-8 flex items-center justify-between border-t border-[#E8EAED] mt-6">
               <span className="text-xs text-[#888888]">重点考量：商业可行性与商业落地闭环</span>
               <button
-                onClick={() => setActiveRoute('register')}
+                onClick={() => setActiveRoute('track/industry')}
                 className="px-4 py-2 text-xs font-semibold text-[#165DFF] bg-[#165DFF]/5 hover:bg-[#165DFF]/10 rounded-full transition-colors"
               >
-                申报产业赛道 →
+                申报赛道 · 查看详情 →
               </button>
             </div>
           </div>
@@ -156,10 +156,10 @@ export const MakerView: React.FC = () => {
             <div className="pt-8 flex items-center justify-between border-t border-[#E8EAED] mt-6">
               <span className="text-xs text-[#888888]">重点考量：突破性技术创新与极客精神</span>
               <button
-                onClick={() => setActiveRoute('register')}
+                onClick={() => setActiveRoute('track/creator')}
                 className="px-4 py-2 text-xs font-semibold text-[#00C48C] bg-[#00C48C]/5 hover:bg-[#00C48C]/10 rounded-full transition-colors"
               >
-                申报自由赛道 →
+                申报赛道 · 查看详情 →
               </button>
             </div>
           </div>

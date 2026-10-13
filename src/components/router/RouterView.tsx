@@ -12,6 +12,7 @@ import { HomeView } from '../views/HomeView';
 import { ConferenceView } from '../views/ConferenceView';
 import { MakerView } from '../views/MakerView';
 import { RegisterView } from '../views/RegisterView';
+import { TrackDetailView } from '../views/TrackDetailView';
 import { SquareView } from '../views/SquareView';
 import { ForumView } from '../views/ForumView';
 import { LiveView } from '../views/LiveView';
@@ -83,6 +84,9 @@ export const RouterView: React.FC = () => {
   if (base === 'rules') return <RulesView />;
   if (base === 'news') return <NewsView />;
   if (base === 'attend') return <AttendView />;
+
+  // 赛道详情页（参考 GOAI：申报赛道 → 赛道详情 → 报名）
+  if (base === 'track') return <TrackDetailView track={sub ?? undefined} />;
 
   // Detail routes are encoded as `detail/<kind>/<id>`.
   if (base === 'detail') {
