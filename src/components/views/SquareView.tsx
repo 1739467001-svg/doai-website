@@ -17,37 +17,26 @@ import {
   Sparkles,
   ChevronRight
 } from 'lucide-react';
-import { RecruitmentPost, TalentProfile, TrackType } from '../../types';
+import { RecruitmentPost, TrackType } from '../../types';
 
-export const SquareView: React.FC<{ sub?: string | null }> = ({ sub }) => {
+export const SquareView: React.FC = () => {
   const {
     lang,
     t,
     recruitments,
     setRecruitments,
-    talents,
     currentUser,
     setLoginModalOpen,
     toggleLikeRecruit,
-    toggleLikeTalent,
     addExchangedCard,
     setNotificationDrawerOpen,
     setActiveRoute,
   } = useApp();
 
-  const [activeTab, setActiveTab] = useState<'recruits' | 'talents'>('recruits');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedTrack, setSelectedTrack] = useState<string>('all');
   const [selectedRole, setSelectedRole] = useState<string>('all');
   const [selectedCity, setSelectedCity] = useState<string>('all');
-
-  // Deep links from the navbar: /square (recruits), /square/recruit,
-  // /square/talent, /square/cards — each selects the matching panel.
-  React.useEffect(() => {
-    if (!sub) return;
-    if (sub === 'talent' || sub === 'talents') setActiveTab('talents');
-    else if (sub === 'recruit' || sub === 'recruits' || sub === 'team') setActiveTab('recruits');
-  }, [sub]);
 
   // Modal State: Publish Recruitment
   const [publishModalOpen, setPublishModalOpen] = useState(false);
@@ -84,19 +73,6 @@ export const SquareView: React.FC<{ sub?: string | null }> = ({ sub }) => {
   });
 
   // Filtered Talents
-  const filteredTalents = talents.filter(talent => {
-    if (selectedCity !== 'all' && !talent.city.includes(selectedCity)) return false;
-    if (selectedRole !== 'all' && !talent.roleIntent.includes(selectedRole)) return false;
-    if (searchTerm) {
-      const q = searchTerm.toLowerCase();
-      const matchName = talent.name.toLowerCase().includes(q);
-      const matchBio = talent.bio.toLowerCase().includes(q);
-      const matchSkills = talent.skills.some(s => s.toLowerCase().includes(q));
-      if (!matchName && !matchBio && !matchSkills) return false;
-    }
-    return true;
-  });
-
   const handlePublishSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!currentUser) {
@@ -154,27 +130,6 @@ export const SquareView: React.FC<{ sub?: string | null }> = ({ sub }) => {
     }, 1500);
   };
 
-  const handleExchangeCard = (talent: TalentProfile) => {
-    if (!currentUser) {
-      setLoginModalOpen(true);
-      return;
-    }
-
-    addExchangedCard({
-      id: `card-${Date.now()}`,
-      name: talent.name,
-      avatar: talent.avatar,
-      phone: '138****0000',
-      org: `${talent.city} · 独立创客`,
-      skills: talent.skills,
-      city: talent.city,
-      exchangedAt: new Date().toISOString().substring(0, 10),
-    });
-
-    setExchangeSuccess(talent.name);
-    setTimeout(() => setExchangeSuccess(null), 2500);
-  };
-
   return (
     <div className="pt-24 pb-24">
       {/* Top Banner & Header */}
@@ -182,10 +137,10 @@ export const SquareView: React.FC<{ sub?: string | null }> = ({ sub }) => {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-[#E8EAED]">
           <div>
             <div className="text-xs font-semibold text-[#165DFF] tracking-wider uppercase mb-1">
-              DOAI CREATOR NETWORK & TALENT MARKET
+              DOAI CREATOR NETWORK
             </div>
             <h1 className="text-3xl sm:text-4xl font-bold text-[#0B1B3A]">
-              组队广场与人才市场
+              组队广场
             </h1>
             <p className="text-xs text-[#666666] mt-1.5 flex items-center gap-1.5">
               <ShieldCheck className="w-3.5 h-3.5 text-[#00C48C]" />
@@ -213,28 +168,6 @@ export const SquareView: React.FC<{ sub?: string | null }> = ({ sub }) => {
         {/* Tab Switcher & Search Bar */}
         <div className="mt-8 flex flex-col md:flex-row items-center justify-between gap-4">
           {/* Tabs */}
-          <div className="flex items-center p-1 bg-[#F7F8FA] border border-[#E8EAED] rounded-xl self-start w-full md:w-auto">
-            <button
-              onClick={() => setActiveTab('recruits')}
-              className={`flex-1 md:flex-none px-6 py-2 rounded-lg text-xs font-semibold transition-all ${
-                activeTab === 'recruits'
-                  ? 'bg-white text-[#0B1B3A] shadow-xs'
-                  : 'text-[#666666] hover:text-[#0B1B3A]'
-              }`}
-            >
-              {t.square.tabRecruits} ({recruitments.length})
-            </button>
-            <button
-              onClick={() => setActiveTab('talents')}
-              className={`flex-1 md:flex-none px-6 py-2 rounded-lg text-xs font-semibold transition-all ${
-                activeTab === 'talents'
-                  ? 'bg-white text-[#0B1B3A] shadow-xs'
-                  : 'text-[#666666] hover:text-[#0B1B3A]'
-              }`}
-            >
-              {t.square.tabTalents} ({talents.length})
-            </button>
-          </div>
 
           {/* Search Box */}
           <div className="relative w-full md:w-80">
@@ -311,7 +244,7 @@ export const SquareView: React.FC<{ sub?: string | null }> = ({ sub }) => {
 
       {/* Main Grid Content */}
       <section className="max-w-[1200px] mx-auto px-6 sm:px-8 pt-4">
-        {activeTab === 'recruits' ? (
+        {(
           /* Tab 1: Recruitment Posts Grid */
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredRecruitments.map(item => (
@@ -406,109 +339,6 @@ export const SquareView: React.FC<{ sub?: string | null }> = ({ sub }) => {
                       {t.square.applyJoin}
                     </button>
                   </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          /* Tab 2: Talent Market Grid */
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredTalents.map(talent => (
-              <div
-                key={talent.id}
-                className="bg-white rounded-3xl p-6 sm:p-7 border border-[#E8EAED] hover:border-[#00C48C]/40 shadow-sm hover:shadow-premium transition-all duration-200 flex flex-col justify-between"
-              >
-                <div>
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex items-center gap-3">
-                      <img
-                        src={talent.avatar}
-                        alt={talent.name}
-                        referrerPolicy="no-referrer"
-                        className="w-14 h-14 rounded-full object-cover border-2 border-white shadow-xs"
-                      />
-                      <div>
-                        <div className="flex items-center gap-1.5">
-                          <button
-                            type="button"
-                            onClick={() => setActiveRoute(`detail/talent/${talent.id}`)}
-                            className="hover:text-[#165DFF] transition-colors"
-                          >
-                            <h4 className="text-base font-bold text-[#0B1B3A]">{talent.name}</h4>
-                          </button>
-                          {talent.atomclubVerified && (
-                            <span className="text-[10px] font-semibold text-[#00C48C] bg-[#00C48C]/10 px-1.5 py-0.5 rounded-full">
-                              原子认证
-                            </span>
-                          )}
-                        </div>
-                        <div className="text-xs text-[#888888] mt-0.5">{talent.roleIntent}</div>
-                      </div>
-                    </div>
-
-                    <button
-                      onClick={() => toggleLikeTalent(talent.id)}
-                      className={`p-1.5 rounded-full ${
-                        talent.hasLiked ? 'text-rose-500' : 'text-[#888888]'
-                      }`}
-                    >
-                      <Heart className={`w-4 h-4 ${talent.hasLiked ? 'fill-current' : ''}`} />
-                    </button>
-                  </div>
-
-                  <p className="text-xs text-[#666666] leading-relaxed mb-4 line-clamp-3">
-                    {talent.bio}
-                  </p>
-
-                  <div className="space-y-2 mb-4">
-                    <div className="text-[11px] font-semibold text-[#888888]">特长技能：</div>
-                    <div className="flex flex-wrap gap-1.5">
-                      {talent.skills.map(s => (
-                        <span
-                          key={s}
-                          className="px-2.5 py-1 text-xs rounded-lg bg-[#F7F8FA] border border-[#E8EAED] text-[#333333]"
-                        >
-                          {s}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between text-xs text-[#888888] pt-2">
-                    <span className="flex items-center gap-1">
-                      <MapPin className="w-3.5 h-3.5" />
-                      {talent.city}
-                    </span>
-                    <span className="flex items-center gap-1 text-[#00C48C] font-medium">
-                      <Clock className="w-3.5 h-3.5" />
-                      {talent.availableTime}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Footer Action: Invite & Card Exchange */}
-                <div className="pt-4 mt-5 border-t border-[#F0F2F5] flex items-center justify-between gap-2">
-                  <button
-                    onClick={() => handleExchangeCard(talent)}
-                    className="flex-1 py-2 text-xs font-semibold text-[#0B1B3A] hover:text-[#165DFF] bg-[#F7F8FA] hover:bg-[#EEF0F4] border border-[#E8EAED] rounded-full transition-colors flex items-center justify-center gap-1"
-                  >
-                    <CreditCard className="w-3.5 h-3.5" />
-                    <span>{t.square.exchangeCard}</span>
-                  </button>
-
-                  <button
-                    onClick={() => {
-                      if (!currentUser) {
-                        setLoginModalOpen(true);
-                      } else {
-                        alert(`已向 ${talent.name} 发送战队组队邀请函！`);
-                      }
-                    }}
-                    className="flex-1 py-2 text-xs font-semibold text-white bg-[#165DFF] hover:bg-[#1453E6] rounded-full transition-colors flex items-center justify-center gap-1"
-                  >
-                    <Users className="w-3.5 h-3.5" />
-                    <span>{t.square.inviteTalent}</span>
-                  </button>
                 </div>
               </div>
             ))}

@@ -86,7 +86,7 @@ export const Footer: React.FC = () => {
                   onClick={() => setActiveRoute('square')}
                   className="hover:text-[#165DFF] transition-colors"
                 >
-                  {lang === 'zh' ? '组队广场与人才市场' : 'Team Square & Talents'}
+                  {lang === 'zh' ? '创客社区' : 'Maker Community'}
                 </button>
               </li>
               <li>

@@ -19,7 +19,6 @@ import { DashboardView } from '../views/DashboardView';
 import { AdminView } from '../views/AdminView';
 import { ForumDetailView } from '../views/ForumDetailView';
 import { RecruitDetailView } from '../views/RecruitDetailView';
-import { TalentDetailView } from '../views/TalentDetailView';
 import { ProjectDetailView } from '../views/ProjectDetailView';
 import { ScheduleDetailView } from '../views/ScheduleDetailView';
 import { ModuleView } from '../detail/ModuleView';
@@ -93,8 +92,6 @@ export const RouterView: React.FC = () => {
         return <ForumDetailView id={id} />;
       case 'recruit':
         return <RecruitDetailView id={id} />;
-      case 'talent':
-        return <TalentDetailView id={id} />;
       case 'project':
         return <ProjectDetailView id={id} />;
       case 'schedule':
@@ -112,7 +109,7 @@ export const RouterView: React.FC = () => {
     case 'register':
       return <RegisterView />;
     case 'square':
-      return <SquareView sub={sub} />;
+      return <SquareView />;
     case 'forum':
       return <ForumView />;
     case 'live':

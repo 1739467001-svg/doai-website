@@ -53,19 +53,14 @@ export const Navbar: React.FC = () => {
       route: 'maker',
       children: [
         { label: '赛事总览', route: 'maker' },
-        { label: '赛事报名', route: 'register' },
         { label: '赛题与赛制', route: 'rules' },
       ],
     },
     {
       key: 'square',
       label: '创客社区',
-      hasDropdown: true,
-      route: 'square/recruit',
-      children: [
-        { label: '组队广场', route: 'square/recruit' },
-        { label: '人才市场', route: 'square/talent' },
-      ],
+      hasDropdown: false,
+      route: 'square',
     },
     { key: 'live', label: '直播中心', hasDropdown: false },
     { key: 'dashboard', label: '我的 DOAI', hasDropdown: false },
