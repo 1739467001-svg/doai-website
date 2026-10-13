@@ -520,6 +520,25 @@ export const DashboardView: React.FC = () => {
               </div>
             </div>
           </div>
+
+          {/* 退出登录（会议结论 2026-10-13：我的 DOAI 需要退出登录入口） */}
+          <div className="doa-card p-8 flex items-center justify-between gap-4">
+            <div>
+              <h3 className="text-sm font-bold text-[#0B1B3A]">退出登录</h3>
+              <p className="text-[11px] text-[#666666] mt-0.5">
+                退出后将返回官网首页，报名与战队数据保留在账号中
+              </p>
+            </div>
+            <button
+              onClick={() => {
+                setCurrentUser(null);
+                setActiveRoute('home');
+              }}
+              className="px-5 py-2.5 text-xs font-semibold text-red-600 hover:text-white hover:bg-red-500 border border-red-300 hover:border-red-500 rounded-full transition-colors shrink-0"
+            >
+              退出登录
+            </button>
+          </div>
         </div>
       )}
     </div>

@@ -475,7 +475,34 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   });
 
   const [currentUser, setCurrentUser] = useState<User | null>(initialUser);
-  const [activeRoute, setActiveRoute] = useState<string>('home');
+
+  // ---- URL 路由同步：/admin、/forum 等直链可直接打开对应页面 ----
+  const KNOWN_ROUTE_BASES = [
+    'home', 'conference', 'maker', 'register', 'square', 'forum', 'live',
+    'dashboard', 'admin', 'rules', 'news', 'attend', 'module', 'detail',
+  ];
+  const routeFromLocation = (): string => {
+    if (typeof window === 'undefined') return 'home';
+    const p = window.location.pathname.replace(/\/+$/, '') || '/';
+    if (p === '/') return 'home';
+    const base = p.slice(1).split('/')[0];
+    return KNOWN_ROUTE_BASES.includes(base) ? p.slice(1) : 'home';
+  };
+  const [activeRoute, setActiveRouteState] = useState<string>(routeFromLocation);
+  const setActiveRoute = (route: string) => {
+    setActiveRouteState(route);
+    if (typeof window === 'undefined') return;
+    const path = route === 'home' ? '/' : `/${route}`;
+    if (window.location.pathname !== path) {
+      window.history.pushState({}, '', path);
+    }
+  };
+  useEffect(() => {
+    const onPop = () => setActiveRouteState(routeFromLocation());
+    window.addEventListener('popstate', onPop);
+    return () => window.removeEventListener('popstate', onPop);
+  }, []);
+
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [notificationDrawerOpen, setNotificationDrawerOpen] = useState(false);
   const [policyModalOpen, setPolicyModalOpen] = useState(false);
