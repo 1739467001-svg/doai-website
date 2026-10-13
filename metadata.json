@@ -1,0 +1,6 @@
+{
+  "name": "DOAI 2026 AI 创客大会官网",
+  "description": "DOAI 2026 全球 AI 时代创造者大会官方数字平台。连接全球 AI 创造者，涵盖赛事报名、在线组队、人才广场、DOAI Forum、直播中心及数字身份系统。",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

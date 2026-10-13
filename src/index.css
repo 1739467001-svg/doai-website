@@ -1,0 +1,378 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   DOAI 2026 — Design tokens
+   A single system derived from the hero key art: white paper, ink navy for
+   type, and a light-blue ramp for every surface, border and accent. Components
+   across the site consume these tokens so the palette never drifts.
+   ========================================================================== */
+@theme {
+  /* Brand ramp — the hero's sky blue, lightened into usable tints. */
+  --color-doa-50: #F2F7FF;
+  --color-doa-100: #E4EFFF;
+  --color-doa-200: #CFE2FF;
+  --color-doa-300: #A9CCFF;
+  --color-doa-400: #6FA8FF;
+  --color-doa-500: #2E7BF6;
+  --color-doa-600: #165DFF;
+  --color-doa-700: #0F47CC;
+
+  /* Ink ramp — the poster's near-black headline blue. */
+  --color-ink-900: #0B1B3A;
+  --color-ink-700: #1A2B4D;
+  --color-ink-500: #48597A;
+  --color-ink-400: #6B7C9B;
+  --color-ink-300: #98A6BE;
+
+  /* Surfaces — white to the faintest sky. */
+  --color-surface: #FFFFFF;
+  --color-surface-sunken: #F7FAFF;
+  --color-surface-tint: #EFF5FF;
+  --color-line: #E3ECFA;
+  --color-line-strong: #CBDDF7;
+
+  /* Semantic */
+  --color-success: #00B487;
+  --color-warning: #FF8A1F;
+  --color-danger: #E5484D;
+}
+
+@layer base {
+  :root {
+    --brand-blue: #165DFF;
+    --brand-green: #00C48C;
+    --brand-orange: #FF7D00;
+    --text-primary: #111111;
+    --text-secondary: #666666;
+    --bg-cloud: #F7F8FA;
+    --border-subtle: #E8EAED;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: var(--text-primary);
+    background-color: #ffffff;
+    overflow-x: hidden;
+  }
+
+  /* Numerals and short data read better in the mono face. */
+  .font-mono,
+  code, kbd, samp {
+    font-feature-settings: 'tnum' 1;
+  }
+}
+
+/* ==========================================================================
+   Layout — one container width for the whole site.
+   The hero artwork is full-bleed by design; every content surface below and
+   across all pages uses this single measure so the site reads as one column.
+   ========================================================================== */
+@utility doa-container {
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .doa-container {
+    padding-inline: 2.5rem;
+  }
+}
+
+/* ==========================================================================
+   Surfaces
+   ========================================================================== */
+
+/* The house card: white paper, hairline blue border, one soft shadow. */
+.doa-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: 1rem;
+  box-shadow: 0 1px 2px rgba(11, 27, 58, 0.04), 0 8px 24px rgba(22, 93, 255, 0.06);
+  transition:
+    transform var(--dur-hover) var(--ease-spring),
+    box-shadow var(--dur-hover) var(--ease-standard),
+    border-color var(--dur-hover) var(--ease-standard);
+}
+
+.doa-card-hover:hover {
+  transform: translateY(-3px);
+  border-color: var(--color-line-strong);
+  box-shadow: 0 2px 6px rgba(11, 27, 58, 0.05), 0 18px 40px rgba(22, 93, 255, 0.12);
+}
+
+/* A tinted panel for secondary content blocks. */
+.doa-panel {
+  background: linear-gradient(180deg, #FFFFFF 0%, var(--color-surface-sunken) 100%);
+  border: 1px solid var(--color-line);
+  border-radius: 1.25rem;
+}
+
+/* Section label: the small uppercase eyebrow used above every heading. */
+.doa-eyebrow {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-doa-600);
+}
+
+/* Pill / chip */
+.doa-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.625rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.4;
+  background: var(--color-doa-50);
+  color: var(--color-doa-700);
+  border: 1px solid var(--color-doa-100);
+}
+
+/* Buttons */
+.doa-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 44px;                       /* Apple HIG minimum touch target */
+  padding-inline: 1.5rem;
+  border-radius: 999px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 150ms ease, color 150ms ease,
+              box-shadow 200ms ease, transform 150ms ease, border-color 150ms ease;
+}
+
+.doa-btn:focus-visible {
+  outline: 2px solid var(--color-doa-600);
+  outline-offset: 2px;
+}
+
+.doa-btn:active {
+  transform: scale(0.97);
+}
+
+.doa-btn-primary {
+  background: var(--color-doa-600);
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(22, 93, 255, 0.26);
+}
+.doa-btn-primary:hover {
+  background: var(--color-doa-700);
+  box-shadow: 0 12px 28px rgba(22, 93, 255, 0.32);
+}
+
+.doa-btn-secondary {
+  background: #fff;
+  color: var(--color-doa-600);
+  border: 1px solid var(--color-doa-600);
+}
+.doa-btn-secondary:hover {
+  background: var(--color-doa-50);
+}
+
+.doa-btn-ghost {
+  background: transparent;
+  color: var(--color-ink-700);
+  border: 1px solid var(--color-line);
+}
+.doa-btn-ghost:hover {
+  background: var(--color-surface-tint);
+  border-color: var(--color-line-strong);
+}
+
+.doa-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Form fields — Material outlined, tuned to the blue ramp. */
+.doa-input,
+.doa-textarea,
+.doa-select {
+  width: 100%;
+  border-radius: 0.75rem;
+  border: 1.5px solid var(--color-line);
+  background: #fff;
+  color: var(--color-ink-900);
+  padding: 0.75rem 0.875rem;
+  font-size: 0.875rem;
+  transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.doa-input::placeholder,
+.doa-textarea::placeholder {
+  color: var(--color-ink-300);
+}
+
+.doa-input:focus,
+.doa-textarea:focus,
+.doa-select:focus {
+  outline: none;
+  border-color: var(--color-doa-600);
+  box-shadow: 0 0 0 3px rgba(22, 93, 255, 0.12);
+}
+
+.doa-label {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-ink-700);
+  margin-bottom: 0.375rem;
+}
+
+/* Hairline divider that fades at both ends. */
+.doa-rule {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-line) 20%, var(--color-line) 80%, transparent);
+}
+
+/* Glassmorphism subtle blur */
+.glass-nav {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+}
+
+/* Custom card shadow as per spec: 0 20px 60px rgba(0,0,0,0.06) */
+.shadow-premium {
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.06);
+}
+
+.shadow-floating {
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.1);
+}
+
+/* Subtle light sweep animation */
+@keyframes sweep {
+  0% { transform: translateX(-100%); }
+  50%, 100% { transform: translateX(200%); }
+}
+
+.animate-sweep {
+  animation: sweep 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* ==========================================================================
+   DOAI Hero motion system
+   Motion curves follow Material 3 + Apple HIG:
+   --ease-standard is the default; emphasis uses a slight overshoot.
+   ========================================================================== */
+:root {
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+  --dur-hover: 260ms;
+}
+
+/* Hero backdrop grid — a faint blueprint mesh that fades toward the edges. */
+.doa-hero-grid {
+  background-image:
+    linear-gradient(rgba(22, 93, 255, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(22, 93, 255, 0.055) 1px, transparent 1px);
+  background-size: 54px 54px;
+  -webkit-mask-image: radial-gradient(ellipse 85% 75% at 62% 38%, black 25%, transparent 78%);
+  mask-image: radial-gradient(ellipse 85% 75% at 62% 38%, black 25%, transparent 78%);
+}
+
+/* The ASCII earth, drawn in brand-blue ink on the paper background. */
+.doa-ascii-globe {
+  color: #165dff;
+  white-space: pre;
+}
+
+/* Soft radial seat behind the globe so it doesn't float on bare white. */
+.doa-globe-halo {
+  background: radial-gradient(
+    circle,
+    rgba(22, 93, 255, 0.10) 0%,
+    rgba(22, 93, 255, 0.045) 45%,
+    transparent 68%
+  );
+}
+
+/* City cards: rest flat, pop forward on hover with a soft overshoot. */
+.doa-city-card {
+  transform: translate3d(0, 0, 0);
+  transition:
+    transform var(--dur-hover) var(--ease-spring),
+    box-shadow var(--dur-hover) var(--ease-standard),
+    filter var(--dur-hover) var(--ease-standard);
+  will-change: transform;
+}
+
+.doa-city-card:hover,
+.doa-city-card:focus-visible {
+  transform: translate3d(0, -10px, 0) scale(1.06);
+  box-shadow: 0 24px 50px rgba(22, 93, 255, 0.28);
+  filter: saturate(1.08) brightness(1.03);
+  z-index: 20;
+  outline: none;
+}
+
+.doa-city-card:active {
+  transform: translate3d(0, -4px, 0) scale(1.02);
+  transition-duration: 120ms;
+}
+
+/* Slow float so the cards feel suspended around the planet. */
+@keyframes doai-card-float {
+  0%, 100% { translate: 0 0; }
+  50%      { translate: 0 -7px; }
+}
+
+.doa-card-float {
+  animation: doai-card-float 6s ease-in-out infinite;
+}
+
+/* Stagger the four cards so they never bob in unison. */
+.doa-card-float-1 { animation-delay: 0s; }
+.doa-card-float-2 { animation-delay: -1.5s; }
+.doa-card-float-3 { animation-delay: -3s; }
+.doa-card-float-4 { animation-delay: -4.5s; }
+
+/* Scroll-in reveal for the hero copy. */
+@keyframes doai-rise {
+  from { opacity: 0; transform: translate3d(0, 22px, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+.doa-rise {
+  animation: doai-rise 720ms var(--ease-standard) both;
+}
+
+.doa-rise-1 { animation-delay: 60ms; }
+.doa-rise-2 { animation-delay: 140ms; }
+.doa-rise-3 { animation-delay: 220ms; }
+.doa-rise-4 { animation-delay: 300ms; }
+.doa-rise-5 { animation-delay: 380ms; }
+
+/* Respect the OS "reduce motion" setting: stop all decorative loops but keep
+   the layout and every interactive state intact. The ASCII globe checks this
+   in JS and renders a single static frame instead of animating. */
+@media (prefers-reduced-motion: reduce) {
+  .doa-card-float,
+  .doa-rise {
+    animation: none !important;
+  }
+  .doa-city-card {
+    transition: none;
+  }
+  .doa-city-card:hover,
+  .doa-city-card:focus-visible {
+    transform: none;
+  }
+}
