@@ -26,8 +26,12 @@ if (team.team && team.team.members.length < 2) {
   }).then(j);
   app = res.application || null;
   if (!app) {
-    const pend = await fetch(`${API}/api/team-applications?userId=user-102`).then(j);
-    app = pend.sent?.find(a => a.teamId === team.team.id && a.status === 'pending') || null;
+    // 待处理申请是李晨发给王嘉敏的：查王嘉敏的收件箱或李晨的发件箱
+    const pendTo = await fetch(`${API}/api/team-applications?userId=user-102`).then(j);
+    const pendFrom = await fetch(`${API}/api/team-applications?userId=user-101`).then(j);
+    app = pendTo.received?.find(a => a.teamId === team.team.id && a.status === 'pending')
+      || pendFrom.sent?.find(a => a.teamId === team.team.id && a.status === 'pending')
+      || null;
   }
   if (app) {
     await fetch(`${API}/api/team-applications/${app.id}/accept`, {

@@ -50,7 +50,7 @@ export const Footer: React.FC = () => {
               </li>
               <li>
                 <button
-                  onClick={() => setActiveRoute('maker')}
+                  onClick={() => setActiveRoute('rules')}
                   className="hover:text-[#165DFF] transition-colors"
                 >
                   {lang === 'zh' ? '双赛道规则指南' : 'Dual Track Guidelines'}

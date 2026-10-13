@@ -249,8 +249,8 @@ export const DashboardView: React.FC = () => {
           </div>
         </div>
 
-        {/* Quick Tabs Bar */}
-        <div className="flex items-center p-1 bg-[#F7F8FA] border border-[#E8EAED] rounded-xl self-start sm:self-center">
+        {/* Quick Tabs Bar — 移动端窄屏横向滚动，避免四个标签挤压断字 */}
+        <div className="flex items-center p-1 bg-[#F7F8FA] border border-[#E8EAED] rounded-xl self-start sm:self-center max-w-full overflow-x-auto">
           {[
             { id: 'passport', label: '数字身份卡 (Passport)' },
             { id: 'registrations', label: '我的报名' },
@@ -260,7 +260,7 @@ export const DashboardView: React.FC = () => {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
-              className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
+              className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all whitespace-nowrap shrink-0 ${
                 activeTab === tab.id
                   ? 'bg-white text-[#0B1B3A] shadow-xs'
                   : 'text-[#666666] hover:text-[#0B1B3A]'
