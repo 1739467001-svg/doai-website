@@ -162,6 +162,10 @@ export const Footer: React.FC = () => {
             <span>Official Global Digital Platform</span>
             <span>·</span>
             <span>Made for AI Creators Worldwide</span>
+            <span aria-hidden="true">·</span>
+            <button onClick={() => setActiveRoute('admin')} className="hover:text-[#165DFF] transition-colors">
+              运营管理
+            </button>
           </div>
         </div>
       </div>

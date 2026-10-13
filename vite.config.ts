@@ -17,6 +17,10 @@ export default defineConfig(() => {
       hmr: process.env.DISABLE_HMR !== 'true',
       // Disable file watching when DISABLE_HMR is true to save CPU during agent edits.
       watch: process.env.DISABLE_HMR === 'true' ? null : {},
+      // 简单后端（server.js, :3001）——公众号同步与扫码签到接口
+      proxy: {
+        '/api': 'http://localhost:3001',
+      },
     },
   };
 });

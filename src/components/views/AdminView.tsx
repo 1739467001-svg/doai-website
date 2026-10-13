@@ -16,9 +16,157 @@ import {
   Database,
   Calendar,
   Ticket,
-  FileSpreadsheet
+  FileSpreadsheet,
+  ScanLine
 } from 'lucide-react';
 import { Registration, RegistrationStatus } from '../../types';
+
+/* ------------------------------------------------------------------ 扫码核销 */
+/* 会议结论 2026-10-13：运营后台对活动进行扫码，前台签到的人扫数字身份码核销。
+ * 后端：server.js —— POST /api/admin/checkin（校验+去重+持久化）、
+ * GET /api/admin/checkins（核销记录）。 */
+
+interface CheckinRecord {
+  code: string;
+  gate: string;
+  holder: string;
+  time: string;
+}
+
+const CheckinPanel: React.FC = () => {
+  const [code, setCode] = useState('');
+  const [gate, setGate] = useState('主入口');
+  const [submitting, setSubmitting] = useState(false);
+  const [feedback, setFeedback] = useState<{ kind: 'ok' | 'dup' | 'err'; text: string } | null>(null);
+  const [records, setRecords] = useState<CheckinRecord[]>([]);
+
+  const loadRecords = () => {
+    fetch('/api/admin/checkins')
+      .then(r => r.json())
+      .then(d => {
+        if (d?.ok) setRecords(d.checkins);
+      })
+      .catch(() => setRecords([]));
+  };
+
+  React.useEffect(loadRecords, []);
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!code.trim() || submitting) return;
+    setSubmitting(true);
+    setFeedback(null);
+    try {
+      const res = await fetch('/api/admin/checkin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: code.trim(), gate }),
+      });
+      const d = await res.json();
+      if (res.ok && d.ok) {
+        setFeedback({ kind: 'ok', text: `核销成功：${d.record.code}（${d.record.gate} · ${d.record.time}）` });
+        setCode('');
+        loadRecords();
+      } else if (res.status === 409) {
+        setFeedback({ kind: 'dup', text: `该凭证已核销过，请勿重复签到（${d.code}）` });
+        setCode('');
+      } else {
+        setFeedback({ kind: 'err', text: d.message || '核销失败' });
+      }
+    } catch {
+      setFeedback({ kind: 'err', text: '后端服务不可用，请确认 server.js 已启动（npm run server）' });
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="pt-8 space-y-6 max-w-3xl">
+      {/* 扫码输入区（模拟扫码枪：光标常驻输入框，回车即提交） */}
+      <form onSubmit={submit} className="doa-card p-6 space-y-4">
+        <div className="flex items-center gap-2">
+          <ScanLine className="w-5 h-5 text-[#165DFF]" />
+          <h3 className="text-base font-bold text-[#0B1B3A]">现场扫码核销</h3>
+          <span className="text-[11px] text-[#98A6BE]">扫描观众数字身份码后自动提交，也可手动输入凭证码</span>
+        </div>
+        <div className="flex flex-col sm:flex-row gap-3">
+          <input
+            autoFocus
+            value={code}
+            onChange={e => setCode(e.target.value)}
+            placeholder="DOAI-PASS-MAKER-8921-VERIFIED"
+            className="flex-1 px-4 py-3 bg-[#F7F8FA] border border-[#E8EAED] rounded-xl text-sm font-mono focus:outline-none focus:border-[#165DFF]"
+          />
+          <select
+            value={gate}
+            onChange={e => setGate(e.target.value)}
+            className="px-4 py-3 bg-[#F7F8FA] border border-[#E8EAED] rounded-xl text-sm"
+          >
+            <option value="主入口">主入口闸机</option>
+            <option value="乐动虹桥">乐动虹桥分会场</option>
+            <option value="德必大虹桥">德必大虹桥分会场</option>
+          </select>
+          <button
+            type="submit"
+            disabled={submitting || !code.trim()}
+            className="px-6 py-3 text-sm font-semibold text-white bg-[#165DFF] hover:bg-[#1453E6] disabled:opacity-40 rounded-xl transition-colors shrink-0"
+          >
+            {submitting ? '核销中…' : '核销签到'}
+          </button>
+        </div>
+
+        {feedback && (
+          <div
+            className={`flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium ${
+              feedback.kind === 'ok'
+                ? 'bg-[#00C48C]/10 text-[#00876A]'
+                : feedback.kind === 'dup'
+                  ? 'bg-[#FF8A1F]/10 text-[#C06200]'
+                  : 'bg-red-500/10 text-red-600'
+            }`}
+          >
+            {feedback.kind === 'ok' ? <CheckCircle2 className="w-4 h-4 shrink-0" /> : <AlertTriangle className="w-4 h-4 shrink-0" />}
+            {feedback.text}
+          </div>
+        )}
+      </form>
+
+      {/* 核销记录 */}
+      <div className="doa-card overflow-hidden">
+        <div className="px-6 py-4 border-b border-[#E8EAED] flex items-center justify-between">
+          <h3 className="text-sm font-bold text-[#0B1B3A]">核销记录（{records.length}）</h3>
+          <button onClick={loadRecords} className="text-xs text-[#165DFF] hover:underline">
+            刷新
+          </button>
+        </div>
+        {records.length === 0 ? (
+          <p className="p-8 text-center text-sm text-[#98A6BE]">暂无核销记录，扫描第一张数字身份码试试</p>
+        ) : (
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="text-left text-[11px] uppercase tracking-wider text-[#98A6BE] border-b border-[#E8EAED]">
+                <th className="px-6 py-3 font-semibold">凭证码</th>
+                <th className="px-4 py-3 font-semibold">持票人</th>
+                <th className="px-4 py-3 font-semibold">闸口</th>
+                <th className="px-6 py-3 font-semibold">时间</th>
+              </tr>
+            </thead>
+            <tbody>
+              {records.map(r => (
+                <tr key={r.code + r.time} className="border-b border-[#F0F2F5] last:border-0">
+                  <td className="px-6 py-3 font-mono text-[12px] text-[#0B1B3A]">{r.code}</td>
+                  <td className="px-4 py-3 text-[#48597A]">{r.holder || '—'}</td>
+                  <td className="px-4 py-3 text-[#48597A]">{r.gate}</td>
+                  <td className="px-6 py-3 text-[#98A6BE] font-mono text-[12px]">{r.time}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+    </div>
+  );
+};
 
 export const AdminView: React.FC = () => {
   const {
@@ -36,7 +184,7 @@ export const AdminView: React.FC = () => {
   } = useApp();
 
   const [activeAdminTab, setActiveAdminTab] = useState<
-    'overview' | 'submissions' | 'square' | 'forums' | 'tickets' | 'cms' | 'broadcast'
+    'overview' | 'checkin' | 'submissions' | 'square' | 'forums' | 'tickets' | 'cms' | 'broadcast'
   >('overview');
 
   // Submissions search & filter
@@ -175,6 +323,7 @@ export const AdminView: React.FC = () => {
       <div className="mt-6 flex items-center gap-2 overflow-x-auto pb-2 text-xs font-semibold border-b border-[#E8EAED]">
         {[
           { id: 'overview', label: '数据大盘与漏斗' },
+          { id: 'checkin', label: '扫码核销' },
           { id: 'submissions', label: `报名评审审核 (${registrations.length})` },
           { id: 'square', label: `广场内容治理 (${recruitments.length})` },
           { id: 'forums', label: `论坛场次管理 (${forums.length})` },
@@ -194,6 +343,9 @@ export const AdminView: React.FC = () => {
           </button>
         ))}
       </div>
+
+      {/* 0. 扫码核销（会议结论 2026-10-13：后台对活动扫码签到） */}
+      {activeAdminTab === 'checkin' && <CheckinPanel />}
 
       {/* 1. Overview & Conversion Funnel */}
       {activeAdminTab === 'overview' && (
