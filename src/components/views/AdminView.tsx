@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import {
   Layers,
@@ -170,7 +170,6 @@ const CheckinPanel: React.FC = () => {
 
 export const AdminView: React.FC = () => {
   const {
-    registrations,
     updateRegistrationStatus,
     cmsData,
     updateCMSData,
@@ -182,6 +181,19 @@ export const AdminView: React.FC = () => {
     setLoginModalOpen,
     quickSwitchRole,
   } = useApp();
+
+  // 报名数据以后端为准（前端提交实时入库）；后端不可用时回退本地演示数据
+  const { registrations: localRegistrations } = useApp();
+  const [backendRegistrations, setBackendRegistrations] = useState<Registration[] | null>(null);
+  useEffect(() => {
+    fetch('/api/registrations')
+      .then(r => r.json())
+      .then(d => {
+        if (d?.ok && Array.isArray(d.registrations)) setBackendRegistrations(d.registrations);
+      })
+      .catch(() => {});
+  }, []);
+  const registrations = backendRegistrations ?? localRegistrations;
 
   const [activeAdminTab, setActiveAdminTab] = useState<
     'overview' | 'checkin' | 'submissions' | 'square' | 'forums' | 'tickets' | 'cms' | 'broadcast'
@@ -354,13 +366,13 @@ export const AdminView: React.FC = () => {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
             <div className="p-6 bg-white rounded-2xl border border-[#E8EAED] shadow-xs">
               <div className="text-xs text-[#888888]">累计页面浏览 (PV)</div>
-              <div className="text-3xl font-bold font-mono text-[#0B1B3A] mt-2">12,480</div>
+              <div className="text-2xl sm:text-3xl font-bold font-mono text-[#0B1B3A] mt-2 break-words">12,480</div>
               <div className="text-[11px] text-[#00C48C] mt-1 font-medium">↑ 18.4% 较上周</div>
             </div>
 
             <div className="p-6 bg-white rounded-2xl border border-[#E8EAED] shadow-xs">
               <div className="text-xs text-[#888888]">报名发起中 (草稿)</div>
-              <div className="text-3xl font-bold font-mono text-[#0B1B3A] mt-2">1,210</div>
+              <div className="text-2xl sm:text-3xl font-bold font-mono text-[#0B1B3A] mt-2 break-words">1,210</div>
               <div className="text-[11px] text-[#888888] mt-1">转化率 9.7%</div>
             </div>
 

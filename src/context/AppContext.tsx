@@ -480,7 +480,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // ---- URL 路由同步：/admin、/forum 等直链可直接打开对应页面 ----
   const KNOWN_ROUTE_BASES = [
     'home', 'conference', 'maker', 'register', 'square', 'forum', 'live',
-    'dashboard', 'admin', 'rules', 'news', 'attend', 'module', 'detail',
+    'dashboard', 'admin', 'rules', 'news', 'attend', 'track', 'module', 'detail',
   ];
   const routeFromLocation = (): string => {
     if (typeof window === 'undefined') return 'home';
@@ -509,6 +509,40 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [policyModalOpen, setPolicyModalOpen] = useState(false);
   const [policyType, setPolicyType] = useState<'terms' | 'privacy' | 'rules'>('terms');
 
+
+  // ---- 后端同步（server.js :3001）：best-effort，失败不阻塞前端 ----
+  const apiPost = (url: string, body: unknown) => {
+    if (typeof window === 'undefined') return;
+    fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    }).catch(() => {
+      /* 后端不可用时静默降级为纯前端模式 */
+    });
+  };
+
+  // 首次挂载：把演示数据同步到后端，管理后台可直接读到同一份报名/凭证
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    fetch('/api/registrations')
+      .then(r => r.json())
+      .then(d => {
+        if (d?.ok && Array.isArray(d.registrations) && d.registrations.length === 0) {
+          apiPost('/api/registrations/sync', { registrations: initialRegistrations });
+        }
+        fetch('/api/tickets')
+          .then(r => r.json())
+          .then(dt => {
+            if (dt?.ok && Array.isArray(dt.tickets) && dt.tickets.length === 0) {
+              initialTickets.forEach(t => apiPost('/api/tickets', t));
+            }
+          })
+          .catch(() => {});
+      })
+      .catch(() => {});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const [registrations, setRegistrations] = useState<Registration[]>(initialRegistrations);
   const [recruitments, setRecruitments] = useState<RecruitmentPost[]>(initialRecruitments);
   const [talents, setTalents] = useState<TalentProfile[]>(initialTalents);
@@ -572,6 +606,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           : r,
       ),
     );
+    apiPost(`/api/registrations/${id}/work`, submission);
   };
 
   const submitRegistration = (data: Omit<Registration, 'id' | 'makerId' | 'status' | 'submittedAt' | 'inviteCode'>) => {
@@ -590,6 +625,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     };
 
     setRegistrations(prev => [newReg, ...prev]);
+    apiPost('/api/registrations', newReg);
 
     // Automatically issue Contestant Digital Ticket (选手票)
     const newTicket: DigitalTicket = {
@@ -606,6 +642,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       issuedAt: new Date().toISOString().replace('T', ' ').substring(0, 16),
     };
     setTickets(prev => [newTicket, ...prev]);
+    apiPost('/api/tickets', newTicket);
 
     // Add confirmation notification
     const newNotif: NotificationItem = {
@@ -638,6 +675,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         return r;
       })
     );
+    // 管理后台审核动作同步到后端持久化
+    apiPost(`/api/admin/registrations/${id}/status`, { status, feedback });
   };
 
   const toggleLikeRecruit = (id: string) => {
@@ -705,6 +744,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       issuedAt: new Date().toISOString().replace('T', ' ').substring(0, 16),
     };
     setTickets(prev => [forumTicket, ...prev]);
+    apiPost('/api/tickets', forumTicket);
 
     const notif: NotificationItem = {
       id: `notif-${Date.now()}`,

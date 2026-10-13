@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
+import { QRCodeSVG } from 'qrcode.react';
+import { TeamPanel } from './TeamPanel';
 import {
   CreditCard,
   QrCode,
@@ -193,12 +195,33 @@ export const DashboardView: React.FC = () => {
     setTimeout(() => setCopiedId(false), 2000);
   };
 
-  const handleSimulateCheckIn = (ticketId: string) => {
-    const success = performCheckIn(ticketId);
-    if (success) {
-      setCheckInNotice('现场核销成功！通行凭证已激活');
-      setTimeout(() => setCheckInNotice(null), 2500);
+  // 选手通行票（Passport 卡二维码的内容来源）
+  const makerTicket = tickets.find(t => t.type === 'maker');
+
+  // 现场核销：走后端校验（重复拦截 / 闸口记录 / 持久化），成功后更新本地状态
+  const handleSimulateCheckIn = async (ticketId: string) => {
+    const ticket = tickets.find(t => t.id === ticketId);
+    if (!ticket) return;
+    try {
+      const res = await fetch('/api/admin/checkin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: ticket.qrCode, gate: '主入口', holder: ticket.holderName }),
+      });
+      const d = await res.json();
+      if (res.ok && d.ok) {
+        performCheckIn(ticketId);
+        setCheckInNotice(`核销成功：${d.record.gate} · ${d.record.time}`);
+      } else if (res.status === 409) {
+        performCheckIn(ticketId);
+        setCheckInNotice('该凭证已核销过（后台记录）');
+      } else {
+        setCheckInNotice(`核销失败：${d.message || '请稍后再试'}`);
+      }
+    } catch {
+      setCheckInNotice('后端服务不可用，请确认 server.js 已启动');
     }
+    setTimeout(() => setCheckInNotice(null), 3000);
   };
 
   return (
@@ -301,9 +324,14 @@ export const DashboardView: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Simulated QR Code for NFC and Gate Check-In */}
+                {/* 入场二维码：编码选手数字身份通行码，闸机扫码核销 */}
                 <div className="p-2.5 bg-white rounded-2xl shadow-sm text-center">
-                  <QrCode className="w-20 h-20 text-[#0B1B3A]" />
+                  <QRCodeSVG
+                    value={makerTicket?.qrCode || `DOAI-PASS-${myRegistration?.makerId || currentUser.id}`}
+                    size={84}
+                    level="M"
+                    className="mx-auto block"
+                  />
                   <div className="text-[8px] font-mono text-[#555555] mt-1 font-bold">NFC READY</div>
                 </div>
               </div>
@@ -354,10 +382,16 @@ export const DashboardView: React.FC = () => {
                     </div>
 
                     <h4 className="text-base font-bold text-[#0B1B3A] mb-1">{ticket.title}</h4>
-                    <div className="text-xs text-[#666666] space-y-1">
-                      <div>有效时间：{ticket.sessionTime}</div>
-                      <div>通行区域：{ticket.venue}</div>
-                      <div className="font-mono text-[11px] text-[#888888]">凭证码：{ticket.qrCode}</div>
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="text-xs text-[#666666] space-y-1">
+                        <div>有效时间：{ticket.sessionTime}</div>
+                        <div>通行区域：{ticket.venue}</div>
+                        <div className="font-mono text-[11px] text-[#888888]">凭证码：{ticket.qrCode}</div>
+                      </div>
+                      {/* 入场二维码：闸机扫码核销 */}
+                      <div className="p-1.5 bg-white border border-[#E8EAED] rounded-lg shrink-0">
+                        <QRCodeSVG value={ticket.qrCode} size={56} level="M" />
+                      </div>
                     </div>
                   </div>
 
@@ -542,61 +576,8 @@ export const DashboardView: React.FC = () => {
         </div>
       )}
 
-      {/* Tab 3: Team Management */}
-      {activeTab === 'team' && (
-        <div className="pt-8 space-y-6">
-          <div className="doa-card p-8 shadow-sm space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#E8EAED]">
-              <div>
-                <h3 className="text-xl font-bold text-[#0B1B3A]">
-                  战队管理：{myRegistration.teamName}
-                </h3>
-                <p className="text-xs text-[#666666] mt-0.5">
-                  成员上限 5 人 · 负责人可生成专属免审邀请码
-                </p>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-[#888888]">6 位专属邀请码：</span>
-                <span className="px-3 py-1 bg-[#165DFF]/10 text-[#165DFF] font-mono font-bold text-xs rounded-lg">
-                  {myRegistration.inviteCode}
-                </span>
-                <button
-                  onClick={() => handleCopyMakerId(myRegistration.inviteCode)}
-                  className="p-1 text-[#666666] hover:text-[#0B1B3A]"
-                  title="复制邀请码"
-                >
-                  {copiedId ? <Check className="w-4 h-4 text-[#00C48C]" /> : <Copy className="w-4 h-4" />}
-                </button>
-              </div>
-            </div>
-
-            {/* Members List */}
-            <div className="space-y-3">
-              <div className="text-xs font-semibold text-[#0B1B3A]">现有成员名单</div>
-              {myRegistration.members.map(member => (
-                <div
-                  key={member.id}
-                  className="flex items-center justify-between p-4 doa-panel text-xs"
-                >
-                  <div className="flex items-center gap-3">
-                    <span className="font-bold text-[#0B1B3A]">{member.name}</span>
-                    <span className="text-[#888888] font-mono">{member.phone}</span>
-                    <span className="px-2.5 py-0.5 bg-white border border-[#E8EAED] rounded-full text-[11px] text-[#555555]">
-                      {member.roleTitle}
-                    </span>
-                    {member.isLeader && (
-                      <span className="text-[10px] font-bold text-[#165DFF] bg-[#165DFF]/10 px-2 py-0.5 rounded-full">
-                        战队队长
-                      </span>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Tab 3: Team Management（后端驱动：建队/移除队员/互关邀请） */}
+      {activeTab === 'team' && <TeamPanel />}
 
       {/* Tab 4: Settings & Privacy */}
       {activeTab === 'settings' && (
