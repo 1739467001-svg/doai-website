@@ -58,7 +58,7 @@ export const Footer: React.FC = () => {
               </li>
               <li>
                 <button
-                  onClick={() => setActiveRoute('register')}
+                  onClick={() => setActiveRoute('maker/tracks')}
                   className="hover:text-[#165DFF] transition-colors"
                 >
                   {lang === 'zh' ? '赛事申报通道' : 'Contest Submission'}

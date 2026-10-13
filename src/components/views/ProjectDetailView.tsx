@@ -60,7 +60,7 @@ export const ProjectDetailView: React.FC<{ id?: string }> = ({ id }) => {
             {copied === 'code' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
             {copied === 'code' ? '已复制' : '复制邀请码'}
           </button>
-          <button type="button" onClick={() => setActiveRoute('register')} className="doa-btn doa-btn-primary">
+          <button type="button" onClick={() => setActiveRoute('maker/tracks')} className="doa-btn doa-btn-primary">
             <FileText className="w-4 h-4" /> 修改申报信息
           </button>
         </>

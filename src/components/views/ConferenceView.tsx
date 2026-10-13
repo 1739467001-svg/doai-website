@@ -353,7 +353,7 @@ export const ConferenceView: React.FC = () => {
           报名参赛完全免费，提交项目申报即可锁定决赛入围评定资格
         </p>
         <button
-          onClick={() => setActiveRoute('register')}
+          onClick={() => setActiveRoute('maker/tracks')}
           className="px-8 py-3.5 text-sm font-semibold text-white bg-[#165DFF] hover:bg-[#1453E6] rounded-full transition-all shadow-md inline-flex items-center gap-2"
         >
           <span>立即免费报名 AI 创客大赛</span>

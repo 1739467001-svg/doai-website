@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import {
   Users,
@@ -15,9 +15,194 @@ import {
   Send,
   ShieldCheck,
   Sparkles,
-  ChevronRight
+  ChevronRight,
+  HeartHandshake,
+  BadgeCheck
 } from 'lucide-react';
 import { RecruitmentPost, TrackType } from '../../types';
+
+
+/* ------------------------------------------------------------------ 名片墙 */
+/* 创客数字名片墙：数据来自后端用户目录，关注/互关走后端 follows API。
+ * 互相关注后即可在「我的 DOAI → 我的战队」发起组队邀请。 */
+
+interface WallUser {
+  id: string;
+  name: string;
+  roleTitle: string;
+  avatar?: string;
+  skills?: string[];
+  city?: string;
+  availableTime?: string;
+  bio?: string;
+  atomclubVerified?: boolean;
+}
+
+const CardWall: React.FC = () => {
+  const { currentUser, setActiveRoute } = useApp();
+  const [users, setUsers] = useState<WallUser[]>([]);
+  const [following, setFollowing] = useState<string[]>([]);
+  const [mutual, setMutual] = useState<string[]>([]);
+  const [busyId, setBusyId] = useState<string | null>(null);
+  const [notice, setNotice] = useState('');
+
+  const refresh = async () => {
+    if (!currentUser) return;
+    try {
+      const [u, f] = await Promise.all([
+        fetch('/api/users').then(r => r.json()),
+        fetch(`/api/follows?userId=${currentUser.id}`).then(r => r.json()),
+      ]);
+      if (u.ok) setUsers(u.users.filter((x: WallUser) => x.id !== currentUser.id));
+      if (f.ok) {
+        setFollowing(f.following);
+        setMutual(f.mutual);
+      }
+    } catch {
+      /* 后端不可用时静默 */
+    }
+  };
+
+  useEffect(() => {
+    refresh();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUser?.id]);
+
+  const toggleFollow = async (user: WallUser) => {
+    if (!currentUser || busyId) return;
+    const isFollowing = following.includes(user.id);
+    setBusyId(user.id);
+    try {
+      const res = await fetch('/api/follows', {
+        method: isFollowing ? 'DELETE' : 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ from: currentUser.id, to: user.id }),
+      });
+      const d = await res.json();
+      if (d.ok) {
+        setNotice(
+          !isFollowing && d.mutual
+            ? `与 ${user.name} 互相关注，可以邀请 TA 加入战队了`
+            : isFollowing
+              ? `已取消关注 ${user.name}`
+              : `已关注 ${user.name}，对方回关后即可互相关注`,
+        );
+        setTimeout(() => setNotice(''), 2600);
+      }
+    } finally {
+      setBusyId(null);
+      refresh();
+    }
+  };
+
+  if (users.length === 0) return null;
+
+  return (
+    <section className="max-w-[1200px] mx-auto px-6 sm:px-8 pt-14">
+      <div className="flex items-end justify-between flex-wrap gap-3 pb-6 border-b border-[#E8EAED]">
+        <div>
+          <div className="text-xs font-semibold text-[#165DFF] tracking-wider uppercase mb-1">
+            DOAI MAKER CARD WALL
+          </div>
+          <h2 className="text-2xl sm:text-3xl font-bold text-[#0B1B3A]">创客名片墙</h2>
+          <p className="text-xs text-[#666666] mt-1.5 flex items-center gap-1.5">
+            <HeartHandshake className="w-3.5 h-3.5 text-[#165DFF]" />
+            <span>发现感兴趣的创作伙伴 · 互相关注后可在「我的战队」发起组队邀请</span>
+          </p>
+        </div>
+        <button
+          onClick={() => setActiveRoute('dashboard/team')}
+          className="px-5 py-2 text-xs font-semibold text-[#165DFF] hover:text-[#1453E6] bg-white hover:bg-[#F5F8FF] border border-[#165DFF]/40 rounded-full transition-colors"
+        >
+          去我的战队邀请 →
+        </button>
+      </div>
+
+      {notice && (
+        <div className="mt-4 p-3 rounded-xl bg-[#00C48C]/10 text-[#00876A] text-xs font-medium">
+          {notice}
+        </div>
+      )}
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-8">
+        {users.map(user => {
+          const iFollow = following.includes(user.id);
+          const weAreMutual = mutual.includes(user.id);
+          return (
+            <div key={user.id} className="doa-card doa-card-hover p-6 flex flex-col gap-4">
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex items-center gap-3 min-w-0">
+                  {user.avatar ? (
+                    <img
+                      src={user.avatar}
+                      alt={user.name}
+                      referrerPolicy="no-referrer"
+                      className="w-12 h-12 rounded-full object-cover border border-[#E8EAED] shrink-0"
+                    />
+                  ) : (
+                    <div className="w-12 h-12 rounded-full bg-[#E4EFFF] text-[#165DFF] font-bold flex items-center justify-center shrink-0">
+                      {user.name.slice(0, 1)}
+                    </div>
+                  )}
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-sm font-bold text-[#0B1B3A] truncate">{user.name}</span>
+                      {user.atomclubVerified && (
+                        <BadgeCheck className="w-3.5 h-3.5 text-[#165DFF] shrink-0" aria-label="atomclub 已认证" />
+                      )}
+                    </div>
+                    <div className="text-[11px] text-[#888888] truncate">{user.roleTitle}</div>
+                  </div>
+                </div>
+                {weAreMutual && (
+                  <span className="text-[10px] font-bold text-[#165DFF] bg-[#165DFF]/10 px-2 py-0.5 rounded-full shrink-0">
+                    互相关注
+                  </span>
+                )}
+              </div>
+
+              {user.bio && (
+                <p className="text-xs text-[#6B7C9B] leading-relaxed line-clamp-3">{user.bio}</p>
+              )}
+
+              {user.skills && user.skills.length > 0 && (
+                <div className="flex flex-wrap gap-1.5">
+                  {user.skills.map(s => (
+                    <span
+                      key={s}
+                      className="px-2 py-0.5 text-[10px] font-medium text-[#48597A] bg-[#F7FAFF] border border-[#E3ECFA] rounded"
+                    >
+                      {s}
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              <div className="mt-auto pt-3 border-t border-[#F0F2F5] flex items-center justify-between gap-2 text-[11px] text-[#888888]">
+                <span className="flex items-center gap-1 truncate">
+                  <MapPin className="w-3 h-3 shrink-0" />
+                  {user.city || '—'}
+                  {user.availableTime ? ` · ${user.availableTime}` : ''}
+                </span>
+                <button
+                  onClick={() => toggleFollow(user)}
+                  disabled={busyId === user.id}
+                  className={`px-3.5 py-1.5 rounded-full font-semibold text-xs border transition-colors shrink-0 disabled:opacity-40 ${
+                    iFollow
+                      ? 'text-[#666666] border-[#E8EAED] hover:text-red-500 hover:border-red-200'
+                      : 'text-[#165DFF] border-[#165DFF]/40 hover:bg-[#165DFF]/5'
+                  }`}
+                >
+                  {iFollow ? '取消关注' : '+ 关注'}
+                </button>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </section>
+  );
+};
 
 export const SquareView: React.FC = () => {
   const {
@@ -345,6 +530,9 @@ export const SquareView: React.FC = () => {
           </div>
         )}
       </section>
+
+      {/* 创客名片墙（项目墙下方） */}
+      <CardWall />
 
       {/* Modal: Publish Recruitment */}
       {publishModalOpen && (

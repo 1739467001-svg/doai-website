@@ -46,7 +46,7 @@ export const HomeView: React.FC = () => {
       icon: FileText,
       iconColor: 'text-[#165DFF]',
       iconBg: 'bg-[#165DFF]/10',
-      action: () => setActiveRoute('register'),
+      action: () => setActiveRoute('maker/tracks'),
     },
     {
       id: 'team',
@@ -206,7 +206,7 @@ export const HomeView: React.FC = () => {
               <div className="doa-rise doa-rise-4 flex flex-wrap items-center gap-2.5 lg:gap-3 pt-1">
                 <button
                   type="button"
-                  onClick={() => setActiveRoute('register')}
+                  onClick={() => setActiveRoute('maker/tracks')}
                   className="group px-6 py-2.5 lg:px-7 lg:py-3 text-[12px] lg:text-sm font-semibold text-white bg-[#165DFF] hover:bg-[#1453E6] rounded-full shadow-[0_8px_20px_rgba(22,93,255,0.28)] hover:shadow-[0_12px_28px_rgba(22,93,255,0.34)] transition-all flex items-center gap-1.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#165DFF] focus-visible:ring-offset-2 active:scale-[0.97]"
                 >
                   <span>报名参赛</span>
@@ -665,7 +665,7 @@ export const HomeView: React.FC = () => {
               <button
                 onClick={() => {
                   setDetailModalItem(null);
-                  setActiveRoute('register');
+                  setActiveRoute('maker/tracks');
                 }}
                 className="px-5 py-2 text-xs font-semibold text-white bg-[#165DFF] hover:bg-[#1453E6] rounded-full"
               >

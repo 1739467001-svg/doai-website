@@ -172,7 +172,7 @@ export const NewsView: React.FC = () => {
         { label: '覆盖类别', value: `${newsCategories.length - 1} 类` },
       ]}
       actions={
-        <button type="button" onClick={() => setActiveRoute('register')} className="doa-btn doa-btn-primary">
+        <button type="button" onClick={() => setActiveRoute('maker/tracks')} className="doa-btn doa-btn-primary">
           报名参赛 <ArrowRight className="w-4 h-4" />
         </button>
       }

@@ -109,7 +109,8 @@ export const RouterView: React.FC = () => {
     case 'conference':
       return <ConferenceView />;
     case 'maker':
-      return <MakerView />;
+      // maker/tracks → 赛事总览并定位到双赛道设置
+      return <MakerView scrollTo={sub} />;
     case 'register':
       return <RegisterView />;
     case 'square':

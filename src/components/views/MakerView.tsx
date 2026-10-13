@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
 import {
   Trophy,
@@ -15,7 +15,13 @@ import {
   AlertTriangle
 } from 'lucide-react';
 
-export const MakerView: React.FC = () => {
+/* scrollTo: 'tracks' → 落地后平滑滚动到「双赛道设置」（报名参赛 CTA 统一先看赛道） */
+export const MakerView: React.FC<{ scrollTo?: string | null }> = ({ scrollTo }) => {
+  useEffect(() => {
+    if (!scrollTo) return;
+    const el = document.getElementById(`maker-${scrollTo}`);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, [scrollTo]);
   const { lang, setActiveRoute, openPolicy } = useApp();
 
 
@@ -71,7 +77,7 @@ export const MakerView: React.FC = () => {
 
           <div className="pt-4 flex items-center gap-4">
             <button
-              onClick={() => setActiveRoute('register')}
+              onClick={() => setActiveRoute('maker/tracks')}
               className="px-8 py-3.5 text-sm font-semibold text-white bg-[#165DFF] hover:bg-[#1453E6] rounded-full transition-all shadow-md inline-flex items-center gap-2"
             >
               <span>立即免费报名参赛</span>

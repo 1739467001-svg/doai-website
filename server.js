@@ -57,14 +57,58 @@ const now = () => new Date().toISOString().replace('T', ' ').substring(0, 19);
 
 function seed() {
   if (load('users').length === 0) {
+    // 用户目录 = 战队成员/队长 + 人才名片档案（名片墙数据源，含头像/技能/意向）
     save('users', [
-      { id: 'user-101', name: '李晨 Alex Chen', roleTitle: '算法架构', avatarSeed: 'lchen' },
-      { id: 'user-102', name: '王嘉敏 (Jasmine)', roleTitle: '全栈架构师', avatarSeed: 'jm' },
-      { id: 'user-103', name: '韩立 (Henry)', roleTitle: '产品与商业化', avatarSeed: 'hl' },
-      { id: 'user-201', name: '周志恒 Dr. Zhou', roleTitle: '机器视觉专家', avatarSeed: 'zzh' },
-      { id: 'user-301', name: '孙博远 (David)', roleTitle: '金融工程', avatarSeed: 'sby' },
-      { id: 'user-401', name: '陈昊 Mark Chen', roleTitle: 'Independent Creative Dev', avatarSeed: 'ch' },
-      { id: 'user-402', name: '林晚晴', roleTitle: '具身智能研究员', avatarSeed: 'lwq' },
+      { id: 'user-101', name: '李晨 Alex Chen', roleTitle: '算法架构' },
+      { id: 'user-102', name: '王嘉敏 (Jasmine)', roleTitle: '全栈架构师' },
+      { id: 'user-103', name: '韩立 (Henry)', roleTitle: '产品与商业化' },
+      { id: 'user-201', name: '周志恒 Dr. Zhou', roleTitle: '机器视觉专家' },
+      { id: 'user-301', name: '孙博远 (David)', roleTitle: '金融工程' },
+      {
+        id: 'user-401',
+        name: '陈昊 Mark Chen',
+        roleTitle: '全栈主程 / 可视化架构',
+        avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=160&auto=format&fit=crop&q=80',
+        skills: ['WebGL / Three.js', 'React', 'Node.js', '微前端架构'],
+        city: '深圳 Shenzhen',
+        availableTime: '15 小时/周 (周末全天)',
+        bio: '8 年全栈与图形学经验，曾主导亿级数据流实时可视化中台，擅长将复杂的 AI 推理链路包装成极简高级的交互产品。',
+        atomclubVerified: true,
+      },
+      { id: 'user-402', name: '林晚晴', roleTitle: '具身智能研究员' },
+      {
+        id: 'tal-1',
+        name: '王羽涵 Vivian Wang',
+        roleTitle: '算法科学家 / 模型优化',
+        avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=160&auto=format&fit=crop&q=80',
+        skills: ['Agent 架构', '强化学习 RLHF', 'PyTorch', '长上下文模型'],
+        city: '北京 Beijing',
+        availableTime: '20 小时/周',
+        bio: '清华大学计算机系在读，主攻大模型规划与具身决策。希望加入有突破性技术审美的极客队伍。',
+        atomclubVerified: true,
+      },
+      {
+        id: 'tal-3',
+        name: 'Elena Rostova',
+        roleTitle: '硬件与机器人控制',
+        avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=160&auto=format&fit=crop&q=80',
+        skills: ['ROS 2', 'SLAM', '具身控制', 'C++ / Rust'],
+        city: '上海 (支持远程)',
+        availableTime: '25 小时/周',
+        bio: 'Robotics Researcher focusing on multimodal tactile feedback. Seeking maker projects bridging digital brains with physical actuation.',
+        atomclubVerified: true,
+      },
+      {
+        id: 'tal-4',
+        name: '林小雅 Zoe Lin',
+        roleTitle: '产品负责人 / 商业策略',
+        avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=160&auto=format&fit=crop&q=80',
+        skills: ['AI 原生产品设计', '用户体验研究', '增长模型', 'Prompt 工程'],
+        city: '杭州 Hangzhou',
+        availableTime: '18 小时/周',
+        bio: '前一线科技公司 AI Lab 资深产品经理，深度参与过 2 款百万级 MAU 原生 AI 应用孵化，精通产品逻辑、商业画布与路演表达。',
+        atomclubVerified: true,
+      },
     ]);
   }
   if (load('teams').length === 0) {

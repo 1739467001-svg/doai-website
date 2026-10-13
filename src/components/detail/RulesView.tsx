@@ -172,7 +172,7 @@ export const RulesView: React.FC = () => {
         { label: '入围数量', value: contest.finalistCount },
       ]}
       actions={
-        <button type="button" onClick={() => setActiveRoute('register')} className="doa-btn doa-btn-primary">
+        <button type="button" onClick={() => setActiveRoute('maker/tracks')} className="doa-btn doa-btn-primary">
           立即报名参赛 <ArrowRight className="w-4 h-4" />
         </button>
       }
