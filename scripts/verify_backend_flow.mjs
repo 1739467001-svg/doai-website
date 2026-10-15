@@ -80,7 +80,7 @@ console.log('2. 凭证核销(按钮→后端):', checkin.found && checkin.ok ? '
 await page.goto('http://localhost:3000/dashboard/team', { waitUntil: 'networkidle2' });
 await sleep(1500);
 const teamState = await page.evaluate(() => ({
-  hasTeam: document.body.textContent.includes('战队管理：Synapse Core'),
+  hasTeam: document.body.textContent.includes('战队管理') && document.body.textContent.includes('Synapse Core'),
   hasRemove: document.body.textContent.includes('移出'),
   hasMutualBadge: document.body.textContent.includes('互相关注'),
   hasPending: document.body.textContent.includes('待对方处理'),

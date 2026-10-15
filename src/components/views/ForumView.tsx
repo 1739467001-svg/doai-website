@@ -11,7 +11,7 @@ import {
 } from 'lucide-react';
 
 export const ForumView: React.FC = () => {
-  const { lang, t, forums, bookForum, cancelForum, setActiveRoute } = useApp();
+  const { lang, t, forums, bookForum, cancelForum, setActiveRoute, tr } = useApp();
 
   const [filterSlot, setFilterSlot] = useState<'all' | 'morning' | 'afternoon' | 'allday'>('all');
 
@@ -41,11 +41,11 @@ export const ForumView: React.FC = () => {
               DOAI FORUM & INTELLECTUAL SYMPOSIUM
             </div>
             <h1 className="text-3xl sm:text-4xl font-bold text-[#0B1B3A]">
-              DOAI Forum 思想交流中心
+              {tr('DOAI Forum 思想交流中心', 'DOAI Forum — Ideas Hub')}
             </h1>
             <p className="text-xs text-[#666666] mt-1.5 flex items-center gap-1.5">
               <ShieldCheck className="w-3.5 h-3.5 text-[#00C48C]" />
-              <span>18 个分会场 · 11/15 全天并行 7—8 场 · 名额制免费预约 · 凭证自动存入 DOAI Passport</span>
+              <span>{tr('18 个分会场 · 11/15 全天并行 7—8 场 · 名额制免费预约 · 凭证自动存入 DOAI Passport', '18 venues · Nov 15, 7–8 parallel sessions · free seat booking · pass stored in DOAI Passport')}</span>
             </p>
           </div>
 
@@ -64,16 +64,16 @@ export const ForumView: React.FC = () => {
         {/* Overview strip — what the 18 sub-venues are and how booking works */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mt-8 mb-2">
           {[
-            { label: '分会场', value: '18 个', note: '统一 DOAI 命名体系' },
-            { label: '场次总量', value: '30—40 场', note: '两天合计' },
-            { label: '举办时间', value: '11/15', note: '乐动虹桥 1F—3F 与德必园区' },
-            { label: '预约方式', value: '免费选座', note: '开场前 48 小时可取消' },
+            { label: '分会场', labelEn: 'Venues', value: '18 个', valueEn: '18', note: '统一 DOAI 命名体系', noteEn: 'Unified naming' },
+            { label: '场次总量', labelEn: 'Sessions', value: '30—40 场', valueEn: '30–40', note: '两天合计', noteEn: 'Across both days' },
+            { label: '举办时间', labelEn: 'When', value: '11/15', valueEn: '11/15', note: '乐动虹桥 1F—3F 与德必园区', noteEn: 'LeDoong 1F–3F & Dobe Park' },
+            { label: '预约方式', labelEn: 'Booking', value: '免费选座', valueEn: 'Free seats', note: '开场前 48 小时可取消', noteEn: 'Free cancellation up to 48h before' },
           ].map((st, i) => (
             <div key={i} className="doa-card p-5">
               <div className="text-[11px] uppercase tracking-wider text-[#98A6BE] font-semibold mb-1.5">
-                {st.label}
+                {tr(st.label, st.labelEn)}
               </div>
-              <div className="text-xl font-extrabold text-[#0B1B3A] tracking-tight tabular-nums">{st.value}</div>
+              <div className="text-xl font-extrabold text-[#0B1B3A] tracking-tight tabular-nums">{tr(st.value, st.valueEn)}</div>
               <div className="text-[11px] text-[#6B7C9B] mt-1">{st.note}</div>
             </div>
           ))}
@@ -81,12 +81,12 @@ export const ForumView: React.FC = () => {
 
         {/* Filter Chips Bar */}
         <div className="mt-6 flex flex-wrap items-center gap-2 text-xs">
-          <span className="text-[#888888] text-[11px] mr-1">举办时段:</span>
+          <span className="text-[#888888] text-[11px] mr-1">{tr('举办时段', 'Time')}:</span>
           {[
-            { id: 'all', label: '全部场次', count: forums.length },
-            { id: 'morning', label: '上午场', count: forums.filter(f => slotOf(f.time) === 'morning').length },
-            { id: 'afternoon', label: '下午场', count: forums.filter(f => slotOf(f.time) === 'afternoon').length },
-            { id: 'allday', label: '全天场', count: forums.filter(f => slotOf(f.time) === 'allday').length },
+            { id: 'all', label: '全部场次', labelEn: 'All', count: forums.length },
+            { id: 'morning', label: '上午场', labelEn: 'Morning', count: forums.filter(f => slotOf(f.time) === 'morning').length },
+            { id: 'afternoon', label: '下午场', labelEn: 'Afternoon', count: forums.filter(f => slotOf(f.time) === 'afternoon').length },
+            { id: 'allday', label: '全天场', labelEn: 'All day', count: forums.filter(f => slotOf(f.time) === 'allday').length },
           ].map(tab => (
             <button
               key={tab.id}
@@ -97,7 +97,7 @@ export const ForumView: React.FC = () => {
                   : 'bg-[#F7F8FA] text-[#666666] hover:text-[#0B1B3A] border border-[#E8EAED]'
               }`}
             >
-              {tab.label}
+              {tr(tab.label, tab.labelEn)}
               <span className="ml-1.5 opacity-70">{tab.count}</span>
             </button>
           ))}
@@ -115,7 +115,7 @@ export const ForumView: React.FC = () => {
               <div>
                 {/* Meta details */}
                 <div className="flex items-center justify-between text-xs text-[#888888] mb-3">
-                  <span className="font-bold text-[#165DFF]">{session.track}</span>
+                  <span className="font-bold text-[#165DFF]">{tr(session.track, session.track === '产业赛道' ? 'Industry' : session.track === '自由赛道' ? 'Creator' : session.track)}</span>
                   <div className="flex items-center gap-1">
                     <Calendar className="w-3.5 h-3.5" />
                     <span>{session.date}</span>
@@ -141,7 +141,7 @@ export const ForumView: React.FC = () => {
                 {/* Speakers Lineup */}
                 <div className="space-y-2 mb-6">
                   <div className="text-[11px] font-semibold text-[#888888] uppercase tracking-wider">
-                    特邀嘉宾阵容
+                    {tr('特邀嘉宾阵容', 'Speakers')}
                   </div>
                   <div className="flex flex-wrap gap-4">
                     {session.speakers.map(speaker => (
@@ -170,7 +170,7 @@ export const ForumView: React.FC = () => {
                     <span>{session.venue}</span>
                   </div>
                   <div className="text-[11px] text-[#888888]">
-                    已预约席位：<span className="font-mono font-semibold text-[#0B1B3A]">{session.bookedCount}</span> / {session.capacity}
+                    {tr('已预约席位', 'Booked')}: <span className="font-mono font-semibold text-[#0B1B3A]">{session.bookedCount}</span> / {session.capacity}
                   </div>
                 </div>
 
@@ -185,7 +185,7 @@ export const ForumView: React.FC = () => {
                         onClick={() => cancelForum(session.id)}
                         className="text-xs text-[#888888] hover:text-red-500 transition-colors"
                       >
-                        取消
+                        {tr('取消', 'Cancel')}
                       </button>
                     </div>
                   ) : (
@@ -198,7 +198,7 @@ export const ForumView: React.FC = () => {
                           : 'bg-[#165DFF] hover:bg-[#1453E6] text-white'
                       }`}
                     >
-                      {session.bookedCount >= session.capacity ? '席位已约满' : t.forum.reserveBtn}
+                      {session.bookedCount >= session.capacity ? tr('席位已约满', 'Full') : (lang === 'en' ? 'Reserve a Seat' : t.forum.reserveBtn)}
                     </button>
                   )}
                 </div>

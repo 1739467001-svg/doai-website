@@ -16,7 +16,7 @@ import {
 import { TrackType, TeamMember } from '../../types';
 
 export const RegisterView: React.FC = () => {
-  const { lang, currentUser, setLoginModalOpen, submitRegistration, setActiveRoute, activeRoute } = useApp();
+  const { lang, currentUser, setLoginModalOpen, submitRegistration, setActiveRoute, activeRoute, tr } = useApp();
 
   // 从赛道详情页带过来：register/industry、register/creator
   const routeTrack = activeRoute.split('/')[1];
@@ -43,7 +43,7 @@ export const RegisterView: React.FC = () => {
 
   // Step 3: Project State
   const [projectName, setProjectName] = useState('NeuroFlow 自适应多智能体协作中枢');
-  const [track, setTrack] = useState<TrackType>(initialTrack);
+  const [track] = useState<TrackType>(initialTrack);
   const [projectSummary, setProjectSummary] = useState(
     '基于动态拓扑与共识算法的分布式自主智能体协作协议，显著降低复杂多任务下的 LLM 通信损耗与幻觉。'
   );
@@ -143,7 +143,7 @@ export const RegisterView: React.FC = () => {
         <div className="text-xs font-semibold text-[#165DFF] tracking-wider uppercase mb-1">
           DOAI 2026 OFFICIAL REGISTRATION
         </div>
-        <h1 className="text-3xl font-bold text-[#0B1B3A]">赛事项目申报通道</h1>
+        <h1 className="text-3xl font-bold text-[#0B1B3A]">{tr('赛事项目申报通道', 'Contest Registration')}</h1>
         <p className="text-xs text-[#666666] mt-1.5 flex items-center justify-center gap-1">
           <ShieldCheck className="w-3.5 h-3.5 text-[#00C48C]" />
           <span>全程免费申报 · 截止时间前支持无限次编辑保存 · 知识产权 100% 归团队所有</span>
@@ -152,10 +152,10 @@ export const RegisterView: React.FC = () => {
         {/* Steps Breadcrumbs */}
         <div className="flex items-center justify-center gap-2 sm:gap-4 mt-8 text-xs font-semibold">
           {[
-            { num: 1, label: '01 申报人信息' },
-            { num: 2, label: '02 参赛模式' },
-            { num: 3, label: '03 项目与作品' },
-            { num: 4, label: '04 完成与凭证' },
+            { num: 1, label: '01 申报人信息', labelEn: '01 Applicant' },
+            { num: 2, label: '02 参赛模式', labelEn: '02 Entry Type' },
+            { num: 3, label: '03 项目与作品', labelEn: '03 Project' },
+            { num: 4, label: '04 完成与凭证', labelEn: '04 Done' },
           ].map(s => (
             <div key={s.num} className="flex items-center gap-2">
               <span
@@ -174,7 +174,7 @@ export const RegisterView: React.FC = () => {
                   currentStep === s.num ? 'text-[#0B1B3A]' : 'text-neutral-400'
                 }`}
               >
-                {s.label}
+                {tr(s.label, s.labelEn)}
               </span>
               {s.num < 4 && <span className="text-neutral-300 mx-1">→</span>}
             </div>
@@ -196,13 +196,13 @@ export const RegisterView: React.FC = () => {
           {currentStep === 1 && (
             <div className="space-y-6 animate-in fade-in duration-200">
               <h3 className="text-lg font-bold text-[#0B1B3A] pb-2 border-b border-[#E8EAED]">
-                01. 申报人基础信息
+                {tr('01. 申报人基础信息', '01. Applicant Information')}
               </h3>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
                   <label className="block text-xs font-semibold text-[#0B1B3A] mb-1.5">
-                    真实姓名 / 常用昵称 <span className="text-red-500">*</span>
+                    {tr('真实姓名 / 常用昵称', 'Name / Nickname')} <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
@@ -216,7 +216,7 @@ export const RegisterView: React.FC = () => {
 
                 <div>
                   <label className="block text-xs font-semibold text-[#0B1B3A] mb-1.5">
-                    联系电话 (取自登录账户，不可更改)
+                    {tr('联系电话 (取自登录账户，不可更改)', 'Phone (from your account, read-only)')}
                   </label>
                   <input
                     type="text"
@@ -230,7 +230,7 @@ export const RegisterView: React.FC = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
                   <label className="block text-xs font-semibold text-[#0B1B3A] mb-1.5">
-                    常驻城市 <span className="text-red-500">*</span>
+                    {tr('常驻城市', 'City')} <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
@@ -244,7 +244,7 @@ export const RegisterView: React.FC = () => {
 
                 <div>
                   <label className="block text-xs font-semibold text-[#0B1B3A] mb-1.5">
-                    特长技能标签
+                    {tr('特长技能标签', 'Skills')}
                   </label>
                   <input
                     type="text"
@@ -261,7 +261,7 @@ export const RegisterView: React.FC = () => {
                   type="submit"
                   className="px-8 py-3 text-xs font-semibold text-white bg-[#165DFF] hover:bg-[#1453E6] rounded-full transition-all shadow-sm flex items-center gap-1.5"
                 >
-                  <span>下一步：参赛模式</span>
+                  <span>{tr('下一步：参赛模式', 'Next: Entry Type')}</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
@@ -272,7 +272,7 @@ export const RegisterView: React.FC = () => {
           {currentStep === 2 && (
             <div className="space-y-6 animate-in fade-in duration-200">
               <h3 className="text-lg font-bold text-[#0B1B3A] pb-2 border-b border-[#E8EAED]">
-                02. 参赛模式与团队成员 (2–5人)
+                {tr('02. 参赛模式与团队成员 (2–5人)', '02. Entry Type & Team (2–5 members)')}
               </h3>
 
               {/* Individual or Team Selector */}
@@ -287,8 +287,8 @@ export const RegisterView: React.FC = () => {
                   }`}
                 >
                   <Users className="w-5 h-5 text-[#165DFF] mb-2" />
-                  <div className="text-sm font-bold text-[#0B1B3A]">战队联合参赛 (推荐)</div>
-                  <div className="text-xs text-[#666666] mt-0.5">2-5 人组队，角色互补优势更明显</div>
+                  <div className="text-sm font-bold text-[#0B1B3A]">{tr('战队联合参赛 (推荐)', 'Team Entry (Recommended)')}</div>
+                  <div className="text-xs text-[#666666] mt-0.5">{tr('2-5 人组队，角色互补优势更明显', '2–5 makers with complementary roles')}</div>
                 </button>
 
                 <button
@@ -301,8 +301,8 @@ export const RegisterView: React.FC = () => {
                   }`}
                 >
                   <User className="w-5 h-5 text-[#00C48C] mb-2" />
-                  <div className="text-sm font-bold text-[#0B1B3A]">个人独立参赛</div>
-                  <div className="text-xs text-[#666666] mt-0.5">一人全栈冲刺，独立扛鼎</div>
+                  <div className="text-sm font-bold text-[#0B1B3A]">{tr('个人独立参赛', 'Solo Entry')}</div>
+                  <div className="text-xs text-[#666666] mt-0.5">{tr('一人全栈冲刺，独立扛鼎', 'One maker, full-stack sprint')}</div>
                 </button>
               </div>
 
@@ -310,7 +310,7 @@ export const RegisterView: React.FC = () => {
                 <div className="space-y-5 pt-2">
                   <div>
                     <label className="block text-xs font-semibold text-[#0B1B3A] mb-1.5">
-                      战队名称 <span className="text-red-500">*</span>
+                      {tr('战队名称', 'Team Name')} <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="text"
@@ -325,8 +325,8 @@ export const RegisterView: React.FC = () => {
                   {/* Team Members List */}
                   <div>
                     <div className="flex items-center justify-between text-xs font-semibold text-[#0B1B3A] mb-2">
-                      <span>已添加队员 ({members.length}/5)</span>
-                      <span className="text-[#888888] font-normal">队长可生成邀请码让队友免审加入</span>
+                      <span>{tr('已添加队员', 'Members')} ({members.length}/5)</span>
+                      <span className="text-[#888888] font-normal">{tr('队长可生成邀请码让队友免审加入', 'Leader can share an invite code')}</span>
                     </div>
 
                     <div className="space-y-2">
@@ -339,11 +339,11 @@ export const RegisterView: React.FC = () => {
                             <span className="font-semibold text-[#0B1B3A]">{m.name}</span>
                             <span className="text-[#888888]">{m.phone}</span>
                             <span className="px-2 py-0.5 rounded-full text-[11px] bg-white border border-[#E8EAED] text-[#555555]">
-                              {m.roleTitle}
+                              {tr(m.roleTitle, m.roleTitle)}
                             </span>
                             {m.isLeader && (
                               <span className="text-[10px] font-bold text-[#165DFF] bg-[#165DFF]/10 px-2 py-0.5 rounded-full">
-                                项目队长
+                                {tr('项目队长', 'Leader')}
                               </span>
                             )}
                           </div>
@@ -365,28 +365,28 @@ export const RegisterView: React.FC = () => {
                     {members.length < 5 && (
                       <div className="mt-3 p-4 bg-white border border-dashed border-[#E8EAED] rounded-xl space-y-3">
                         <div className="text-xs font-semibold text-[#666666]">
-                          + 快速添加队友信息
+                          {tr('+ 快速添加队友信息', '+ Quick add teammate')}
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                           <input
                             type="text"
                             value={newMemberName}
                             onChange={e => setNewMemberName(e.target.value)}
-                            placeholder="队员姓名"
+                            placeholder={tr('队员姓名', 'Name')}
                             className="px-3 py-2 bg-[#F7F8FA] border border-[#E8EAED] rounded-lg text-xs"
                           />
                           <input
                             type="tel"
                             value={newMemberPhone}
                             onChange={e => setNewMemberPhone(e.target.value)}
-                            placeholder="队员手机号"
+                            placeholder={tr('队员手机号', 'Phone')}
                             className="px-3 py-2 bg-[#F7F8FA] border border-[#E8EAED] rounded-lg text-xs"
                           />
                           <input
                             type="text"
                             value={newMemberRole}
                             onChange={e => setNewMemberRole(e.target.value)}
-                            placeholder="分工角色 (如: 嵌入式)"
+                            placeholder={tr('分工角色 (如: 嵌入式)', 'Role (e.g. Embedded)')}
                             className="px-3 py-2 bg-[#F7F8FA] border border-[#E8EAED] rounded-lg text-xs"
                           />
                         </div>
@@ -395,7 +395,7 @@ export const RegisterView: React.FC = () => {
                           onClick={handleAddMember}
                           className="px-4 py-1.5 text-xs font-semibold text-[#165DFF] bg-[#165DFF]/10 rounded-lg hover:bg-[#165DFF]/15 transition-colors"
                         >
-                          确认加入队员
+                          {tr('确认加入队员', 'Add Member')}
                         </button>
                       </div>
                     )}
@@ -410,14 +410,14 @@ export const RegisterView: React.FC = () => {
                   className="px-6 py-2.5 text-xs font-semibold text-[#666666] hover:text-[#0B1B3A] transition-colors flex items-center gap-1"
                 >
                   <ArrowLeft className="w-4 h-4" />
-                  <span>返回上一步</span>
+                  <span>{tr('返回上一步', 'Back')}</span>
                 </button>
 
                 <button
                   type="submit"
                   className="px-8 py-3 text-xs font-semibold text-white bg-[#165DFF] hover:bg-[#1453E6] rounded-full transition-all shadow-sm flex items-center gap-1.5"
                 >
-                  <span>下一步：项目与作品</span>
+                  <span>{tr('下一步：项目与作品', 'Next: Project')}</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
@@ -428,46 +428,35 @@ export const RegisterView: React.FC = () => {
           {currentStep === 3 && (
             <div className="space-y-6 animate-in fade-in duration-200">
               <h3 className="text-lg font-bold text-[#0B1B3A] pb-2 border-b border-[#E8EAED]">
-                03. 申报项目信息（作品链接在报名成功后于「提交作品」中填写）
+                {tr('03. 申报项目信息（作品链接在报名成功后于「提交作品」中填写）', '03. Project (work links are submitted after registration)')}
               </h3>
 
-              {/* Track Selector */}
-              <div>
-                <label className="block text-xs font-semibold text-[#0B1B3A] mb-2">
-                  申报赛道 <span className="text-red-500">*</span>
-                </label>
-                <div className="grid grid-cols-2 gap-4">
-                  <button
-                    type="button"
-                    onClick={() => setTrack('industry')}
-                    className={`p-4 rounded-xl border text-left transition-all ${
+              {/* 申报赛道：只读展示（由赛道详情页带入，不再重复选择） */}
+              <div className="flex items-center justify-between p-4 rounded-xl border border-[#E8EAED] bg-[#F7F8FA]">
+                <div className="flex items-center gap-3">
+                  <span className="text-xs font-semibold text-[#0B1B3A]">{tr('申报赛道', 'Track')}</span>
+                  <span
+                    className={`px-3 py-1 rounded-full text-xs font-bold ${
                       track === 'industry'
-                        ? 'border-[#165DFF] bg-[#165DFF]/5'
-                        : 'border-[#E8EAED] bg-[#F7F8FA]'
+                        ? 'bg-[#165DFF]/10 text-[#165DFF]'
+                        : 'bg-[#00C48C]/10 text-[#00A57A]'
                     }`}
                   >
-                    <div className="text-sm font-bold text-[#0B1B3A]">产业赛道 (AI + Industry)</div>
-                    <div className="text-[11px] text-[#666666] mt-0.5">落地真实商业场景与企业生产力</div>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => setTrack('creator')}
-                    className={`p-4 rounded-xl border text-left transition-all ${
-                      track === 'creator'
-                        ? 'border-[#00C48C] bg-[#00C48C]/5'
-                        : 'border-[#E8EAED] bg-[#F7F8FA]'
-                    }`}
-                  >
-                    <div className="text-sm font-bold text-[#0B1B3A]">自由赛道 (AI Creator)</div>
-                    <div className="text-[11px] text-[#666666] mt-0.5">原生 Agent、开源基础设施与智能硬件</div>
-                  </button>
+                    {track === 'industry' ? tr('产业赛道 · AI + Industry', 'Industry Track · AI + Industry') : tr('自由赛道 · AI Creator', 'Creator Track · AI Creator')}
+                  </span>
                 </div>
+                <button
+                  type="button"
+                  onClick={() => setActiveRoute('maker/tracks')}
+                  className="text-[11px] font-semibold text-[#888888] hover:text-[#165DFF] transition-colors"
+                >
+                  {tr('更换赛道 →', 'Change track →')}
+                </button>
               </div>
 
               <div>
                 <label className="block text-xs font-semibold text-[#0B1B3A] mb-1.5">
-                  项目名称 <span className="text-red-500">*</span>
+                  {tr('项目名称', 'Project Name')} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -481,7 +470,7 @@ export const RegisterView: React.FC = () => {
 
               <div>
                 <label className="block text-xs font-semibold text-[#0B1B3A] mb-1.5">
-                  一句话介绍与核心技术方案 <span className="text-red-500">*</span>
+                  {tr('一句话介绍与核心技术方案', 'Summary & Core Approach')} <span className="text-red-500">*</span>
                 </label>
                 <textarea
                   rows={3}
@@ -508,14 +497,14 @@ export const RegisterView: React.FC = () => {
                   className="px-6 py-2.5 text-xs font-semibold text-[#666666] hover:text-[#0B1B3A] transition-colors flex items-center gap-1"
                 >
                   <ArrowLeft className="w-4 h-4" />
-                  <span>返回上一步</span>
+                  <span>{tr('返回上一步', 'Back')}</span>
                 </button>
 
                 <button
                   type="submit"
                   className="px-8 py-3 text-xs font-semibold text-white bg-[#165DFF] hover:bg-[#1453E6] rounded-full transition-all shadow-md flex items-center gap-1.5"
                 >
-                  <span>立即提交申报 · 生成 Maker ID</span>
+                  <span>{tr('立即提交申报 · 生成 Maker ID', 'Submit · Get Maker ID')}</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
@@ -530,7 +519,7 @@ export const RegisterView: React.FC = () => {
               </div>
 
               <div>
-                <h3 className="text-2xl font-bold text-[#0B1B3A]">赛事申报提交成功！</h3>
+                <h3 className="text-2xl font-bold text-[#0B1B3A]">{tr('赛事申报提交成功！', 'Registration Submitted!')}</h3>
                 <p className="text-xs text-[#666666] mt-1">
                   您的项目已进入机审通道，系统将在 3 个工作日内完成专家初审
                 </p>
@@ -585,14 +574,14 @@ export const RegisterView: React.FC = () => {
                   onClick={() => setActiveRoute('dashboard/registrations')}
                   className="px-6 py-2.5 text-xs font-semibold text-white bg-[#165DFF] hover:bg-[#1453E6] rounded-full transition-all shadow-sm"
                 >
-                  下一步：提交作品（视频 / 可访问 / GitHub 链接） →
+                  {tr('下一步：提交作品（视频 / 可访问 / GitHub 链接） →', 'Next: Submit Work (Video / Live URL / GitHub) →')}
                 </button>
                 <button
                   type="button"
                   onClick={() => setActiveRoute('dashboard')}
                   className="px-6 py-2.5 text-xs font-semibold text-[#0B1B3A] hover:text-[#165DFF] bg-white border border-[#E8EAED] rounded-full transition-colors"
                 >
-                  前往个人中心查看审核进度
+                  {tr('前往个人中心查看审核进度', 'View status in My DOAI')}
                 </button>
               </div>
             </div>

@@ -32,8 +32,10 @@ await sleep(500);
 await clickText('下一步：项目与作品');
 await sleep(500);
 const step2 = await page.evaluate(() => {
-  const active = [...document.querySelectorAll('button')].find(b => b.className.includes('border-[#165DFF]') && b.textContent.includes('产业赛道'));
-  return { url: location.pathname, trackPreselected: !!active };
+  // 新行为：赛道只读展示（来自赛道详情页），不可再选
+  const chip = [...document.querySelectorAll('span')].find(sp => sp.className.includes('rounded-full') && sp.textContent.includes('产业赛道'));
+  const hasSelector = [...document.querySelectorAll('button')].some(b => b.textContent.trim() === '产业赛道 (AI + Industry)');
+  return { url: location.pathname, trackPreselected: !!chip && !hasSelector };
 });
 console.log('2. 报名页赛道预选(产业):', step2.trackPreselected ? 'PASS' : 'FAIL', '| url:', step2.url);
 

@@ -30,6 +30,10 @@ interface PassType {
   perks: string[];
   needsSeat: boolean;
   badge: string;
+  badgeEn?: string;
+  audienceEn?: string;
+  priceEn?: string;
+  quotaEn?: string;
 }
 
 const PASS_TYPES: PassType[] = [
@@ -37,9 +41,9 @@ const PASS_TYPES: PassType[] = [
     id: 'pass-full',
     name: '全程通票',
     nameEn: 'Full Pass',
-    audience: '所有公众与创客',
-    price: '免费',
-    quota: '不限量',
+    audience: '所有公众与创客', audienceEn: 'All visitors & makers',
+    price: '免费', priceEn: 'Free',
+    quota: '不限量', quotaEn: 'Unlimited',
     perks: [
       '11/14 德必园区签到与开幕主会场（需选座）',
       '11/15 乐动虹桥决赛路演厅（需选座）',
@@ -48,15 +52,15 @@ const PASS_TYPES: PassType[] = [
       '展商展位区与樊登书店求职功能区',
     ],
     needsSeat: true,
-    badge: '推荐',
+    badge: '推荐', badgeEn: 'Recommended',
   },
   {
     id: 'pass-day2',
     name: '公众开放日',
     nameEn: 'Open Day',
-    audience: '面向普通观众与家庭',
-    price: '免费',
-    quota: '不限量',
+    audience: '面向普通观众与家庭', audienceEn: 'General public & families',
+    price: '免费', priceEn: 'Free',
+    quota: '不限量', quotaEn: 'Unlimited',
     perks: [
       '11/15 全天游园会、市集与 AI 互动大厅',
       '选手作品布展区自由参观',
@@ -64,15 +68,15 @@ const PASS_TYPES: PassType[] = [
       '不含开幕主会场与决赛路演厅席位',
     ],
     needsSeat: false,
-    badge: '免预约',
+    badge: '免预约', badgeEn: 'No booking',
   },
   {
     id: 'pass-forum',
     name: '分论坛选座',
     nameEn: 'Forums Only',
-    audience: '有明确议题关注的观众',
-    price: '免费',
-    quota: '按场次容量',
+    audience: '有明确议题关注的观众', audienceEn: 'Focused forum-goers',
+    price: '免费', priceEn: 'Free',
+    quota: '按场次容量', quotaEn: 'Per-session capacity',
     perks: [
       '18 个分会场按场次选座预约',
       '同一时段可预约 1 场，场次间可连排',
@@ -80,15 +84,15 @@ const PASS_TYPES: PassType[] = [
       '预约成功自动生成电子入场凭证',
     ],
     needsSeat: true,
-    badge: '需选座',
+    badge: '需选座', badgeEn: 'Seat pick',
   },
   {
     id: 'pass-media',
     name: '媒体 / 行业观摩',
     nameEn: 'Media & Industry',
-    audience: '媒体、投资机构、产业方',
-    price: '免费',
-    quota: '审核制',
+    audience: '媒体、投资机构、产业方', audienceEn: 'Media, VCs, industry',
+    price: '免费', priceEn: 'Free',
+    quota: '审核制', quotaEn: 'By application',
     perks: [
       '开幕主会场与决赛路演厅优先席位',
       '德必园区海外线上评审室观摩',
@@ -96,14 +100,14 @@ const PASS_TYPES: PassType[] = [
       '需提交机构信息，组委会 3 个工作日内审核',
     ],
     needsSeat: true,
-    badge: '审核制',
+    badge: '审核制', badgeEn: 'Review',
   },
 ];
 
 /* ------------------------------------------------------------ 页面 */
 
 export const AttendView: React.FC = () => {
-  const { currentUser, setLoginModalOpen, setActiveRoute, tickets, setTickets, setNotifications } = useApp();
+  const { currentUser, setLoginModalOpen, setActiveRoute, tickets, setTickets, setNotifications, tr } = useApp();
 
   const [selectedPass, setSelectedPass] = useState<string>('pass-full');
   const [seatPicks, setSeatPicks] = useState<Record<string, boolean>>({});
@@ -116,10 +120,10 @@ export const AttendView: React.FC = () => {
   /* Seat options = the sessions that actually need capacity control. */
   const seatOptions = useMemo(
     () => [
-      { id: 'seat-open', label: '开幕主会场', when: '11/14 13:00—17:30', place: '德必大虹桥园区', cap: 400 },
-      { id: 'seat-roadshow', label: '决赛路演厅', when: '11/15 09:30—16:00', place: '乐动虹桥 1F 路演厅', cap: 320 },
-      { id: 'seat-orbit', label: '逐梦星河 · 商业航天论坛', when: '11/15 全天', place: '乐动虹桥 2F 航天馆', cap: 180 },
-      { id: 'seat-afterparty', label: 'After Party 创客社交之夜', when: '11/14 18:30—21:30', place: '德必大虹桥园区', cap: 300 },
+      { id: 'seat-open', label: '开幕主会场', labelEn: 'Opening Main Hall', when: '11/14 13:00—17:30', place: '德必大虹桥园区', placeEn: 'Dobe Park', cap: 400 },
+      { id: 'seat-roadshow', label: '决赛路演厅', labelEn: 'Finals Hall', when: '11/15 09:30—16:00', place: '乐动虹桥 1F 路演厅', placeEn: 'LeDoong 1F', cap: 320 },
+      { id: 'seat-orbit', label: '逐梦星河 · 商业航天论坛', labelEn: 'Aerospace Forum', when: '11/15', place: '乐动虹桥 2F 航天馆', placeEn: 'LeDoong 2F', cap: 180 },
+      { id: 'seat-afterparty', label: 'After Party 创客社交之夜', labelEn: 'After Party Night', when: '11/14 18:30—21:30', place: '德必大虹桥园区', placeEn: 'Dobe Park', cap: 300 },
     ],
     []
   );
@@ -213,10 +217,13 @@ export const AttendView: React.FC = () => {
     return (
       <DetailShell
         backRoute="conference"
-        backLabel="返回大会介绍"
+        backLabel={tr('返回大会介绍', 'Back to Conference')}
         eyebrow="REGISTERED"
         title="报名成功"
-        subtitle={`已为你生成「${pass.name}」电子入场凭证，可在「我的 DOAI · 电子凭证」查看与出示。`}
+        subtitle={tr(
+          `已为你生成「${pass.name}」电子入场凭证，可在「我的 DOAI · 电子凭证」查看与出示。`,
+          `Your "${pass.nameEn}" digital pass is ready — view it in My DOAI.`,
+        )}
       >
         <div className="doa-card p-8 sm:p-10 max-w-2xl">
           <div className="flex items-center gap-3 mb-6">
@@ -224,7 +231,7 @@ export const AttendView: React.FC = () => {
               <Check className="w-6 h-6" />
             </span>
             <div>
-              <div className="font-bold text-[#0B1B3A] text-lg">{pass.name}</div>
+              <div className="font-bold text-[#0B1B3A] text-lg">{tr(pass.name, pass.nameEn)}</div>
               <div className="text-[13px] text-[#6B7C9B]">凭电子凭证现场扫码入场，全程免费</div>
             </div>
           </div>
@@ -269,19 +276,22 @@ export const AttendView: React.FC = () => {
   return (
     <DetailShell
       backRoute="conference"
-      backLabel="返回大会介绍"
+      backLabel={tr('返回大会介绍', 'Back to Conference')}
       eyebrow="ATTENDANCE"
-      title="大会报名"
-      subtitle={`${event.dateRange} · ${event.city} · 双会场步行 ${venueWalking()}。参会全程免费，凭电子凭证入场。`}
+      title={tr('大会报名', 'Attend DOAI')}
+      subtitle={tr(
+          `${event.dateRange} · ${event.city} · 双会场步行 ${venueWalking()}。参会全程免费，凭电子凭证入场。`,
+          'Nov 14–15 · Shanghai · two venues a short walk apart. Free entry with a digital pass.',
+        )}
       meta={[
-        { label: '大会日期', value: event.dateLabel },
-        { label: '会场', value: '德必大虹桥园区 × 乐动虹桥' },
-        { label: '报名费用', value: '免费' },
-        { label: '已持有凭证', value: `${myPassTickets.length} 张` },
+        { label: tr('大会日期', 'Dates'), value: event.dateLabel },
+        { label: tr('会场', 'Venues'), value: tr('德必大虹桥园区 × 乐动虹桥', 'Dobe Park × LeDoong') },
+        { label: tr('报名费用', 'Fee'), value: tr('免费', 'Free') },
+        { label: tr('已持有凭证', 'My Passes'), value: `${myPassTickets.length}` },
       ]}
       actions={
         <a href="#attend-form" className="doa-btn doa-btn-primary">
-          <Ticket className="w-4 h-4" /> 立即报名参会
+          <Ticket className="w-4 h-4" /> {tr('立即报名参会', 'Register to Attend')}
         </a>
       }
     >
@@ -289,15 +299,15 @@ export const AttendView: React.FC = () => {
       <section className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-10">
         <div className="doa-card p-6 lg:col-span-2">
           <h2 className="text-lg font-bold text-[#0B1B3A] mb-4 flex items-center gap-2">
-            <Sparkles className="w-4.5 h-4.5 text-[#165DFF]" /> 参会须知
+            <Sparkles className="w-4.5 h-4.5 text-[#165DFF]" /> {tr('参会须知', 'Good to Know')}
           </h2>
           <ul className="space-y-3 text-[13px] text-[#48597A] leading-relaxed">
             {[
-              '报名、参会、市集与游园全程免费，不设任何付费通道。',
-              '开幕主会场、决赛路演厅与分会场均需选座预约，席位有限先到先得。',
-              '游园会、市集、AI 互动区与展商展位区对公众开放，无需预约。',
-              '凭电子凭证现场扫码入场，无需打印，也可出示「我的 DOAI」中的二维码。',
-              '如行程有变，请在活动开始前 48 小时取消预约，以便将名额释放给其他观众。',
+              tr('报名、参会、市集与游园全程免费，不设任何付费通道。', 'Registration, entry, fair and market are entirely free.'),
+              tr('开幕主会场、决赛路演厅与分会场均需选座预约，席位有限先到先得。', 'Main hall, finals hall and forums need seat booking — first come, first served.'),
+              tr('游园会、市集、AI 互动区与展商展位区对公众开放，无需预约。', 'Fairground, market, AI zones and exhibitors are open without booking.'),
+              tr('凭电子凭证现场扫码入场，无需打印，也可出示「我的 DOAI」中的二维码。', 'Scan your digital pass at the gate — or show the QR in My DOAI.'),
+              tr('如行程有变，请在活动开始前 48 小时取消预约，以便将名额释放给其他观众。', 'Plans changed? Cancel up to 48h before to release your seat.'),
             ].map((t, i) => (
               <li key={i} className="flex items-start gap-2.5">
                 <Check className="w-4 h-4 text-[#165DFF] shrink-0 mt-0.5" />
@@ -308,12 +318,12 @@ export const AttendView: React.FC = () => {
         </div>
 
         <div className="doa-card p-6 space-y-4">
-          <h2 className="text-lg font-bold text-[#0B1B3A]">便民信息</h2>
+          <h2 className="text-lg font-bold text-[#0B1B3A]">{tr('便民信息', 'Visitor Info')}</h2>
           {[
-            { icon: Baby, label: '亲子友好', desc: '11/15 游园会设亲子体验区' },
-            { icon: Accessibility, label: '无障碍', desc: '两会场均有无障碍通道与电梯' },
-            { icon: Coffee, label: '餐饮', desc: '长宁味道市集 8—12 家本地餐饮' },
-            { icon: MapPin, label: '接驳', desc: '两会场步行 8—10 分钟，现场设引导' },
+            { icon: Baby, label: '亲子友好', labelEn: 'Family friendly', desc: '11/15 游园会设亲子体验区', descEn: 'Family zone at the fair on 11/15' },
+            { icon: Accessibility, label: '无障碍', labelEn: 'Accessible', desc: '两会场均有无障碍通道与电梯', descEn: 'Accessible routes & lifts at both venues' },
+            { icon: Coffee, label: '餐饮', labelEn: 'Food', desc: '长宁味道市集 8—12 家本地餐饮', descEn: '8–12 local food stalls at the market' },
+            { icon: MapPin, label: '接驳', labelEn: 'Shuttle', desc: '两会场步行 8—10 分钟，现场设引导', descEn: 'Venues 8–10 min walk apart, guided' },
           ].map((r, i) => {
             const Icon = r.icon;
             return (
@@ -322,8 +332,8 @@ export const AttendView: React.FC = () => {
                   <Icon className="w-4 h-4" />
                 </span>
                 <div>
-                  <div className="text-[13px] font-semibold text-[#1A2B4D]">{r.label}</div>
-                  <div className="text-[12px] text-[#6B7C9B]">{r.desc}</div>
+                  <div className="text-[13px] font-semibold text-[#1A2B4D]">{tr(r.label, r.labelEn)}</div>
+                  <div className="text-[12px] text-[#6B7C9B]">{tr(r.desc, r.descEn)}</div>
                 </div>
               </div>
             );
@@ -335,7 +345,7 @@ export const AttendView: React.FC = () => {
       <section className="mb-10">
         <div className="mb-5">
           <div className="doa-eyebrow mb-2.5">PASS TYPES</div>
-          <h2 className="text-2xl font-extrabold text-[#0B1B3A] tracking-tight">选择参会类型</h2>
+          <h2 className="text-2xl font-extrabold text-[#0B1B3A] tracking-tight">{tr('选择参会类型', 'Choose a Pass')}</h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {PASS_TYPES.map(p => {
@@ -356,19 +366,19 @@ export const AttendView: React.FC = () => {
                       <h3 className="font-bold text-[#0B1B3A] text-base">{p.name}</h3>
                       <span className="text-[11px] font-mono text-[#98A6BE]">{p.nameEn}</span>
                     </div>
-                    <div className="text-[12px] text-[#6B7C9B] mt-0.5">{p.audience}</div>
+                    <div className="text-[12px] text-[#6B7C9B] mt-0.5">{tr(p.audience, p.audienceEn)}</div>
                   </div>
                   <span
                     className="shrink-0 text-[11px] font-bold px-2 py-0.5 rounded-full"
                     style={{ background: '#E4EFFF', color: '#165DFF' }}
                   >
-                    {p.badge}
+                    {tr(p.badge, p.badgeEn)}
                   </span>
                 </div>
 
                 <div className="flex items-baseline gap-2 mb-3">
-                  <span className="text-2xl font-extrabold text-[#00B487]">{p.price}</span>
-                  <span className="text-[12px] text-[#98A6BE]">· 名额 {p.quota}</span>
+                  <span className="text-2xl font-extrabold text-[#00B487]">{tr(p.price, p.priceEn)}</span>
+                  <span className="text-[12px] text-[#98A6BE]">· {tr("名额", "quota")} {tr(p.quota, p.quotaEn)}</span>
                 </div>
 
                 <ul className="space-y-1.5">
@@ -422,10 +432,10 @@ export const AttendView: React.FC = () => {
                     {on && <Check className="w-3 h-3 text-white" />}
                   </span>
                   <div className="min-w-0">
-                    <div className="font-bold text-[#1A2B4D] text-sm">{s.label}</div>
+                    <div className="font-bold text-[#1A2B4D] text-sm">{tr(s.label, s.labelEn)}</div>
                     <div className="text-[12px] text-[#6B7C9B] mt-1 flex flex-wrap items-center gap-x-3 gap-y-1">
                       <span className="flex items-center gap-1"><Calendar className="w-3 h-3" /> {s.when}</span>
-                      <span className="flex items-center gap-1"><MapPin className="w-3 h-3" /> {s.place}</span>
+                      <span className="flex items-center gap-1"><MapPin className="w-3 h-3" /> {tr(s.place, s.placeEn)}</span>
                       <span className="flex items-center gap-1"><Users className="w-3 h-3" /> 容量 {s.cap}</span>
                     </div>
                   </div>
@@ -487,7 +497,7 @@ export const AttendView: React.FC = () => {
               <div className="space-y-1.5 text-[13px] text-[#48597A]">
                 <div className="flex justify-between gap-4">
                   <span>参会类型</span>
-                  <span className="font-semibold text-[#1A2B4D]">{pass.name}</span>
+                  <span className="font-semibold text-[#1A2B4D]">{tr(pass.name, pass.nameEn)}</span>
                 </div>
                 <div className="flex justify-between gap-4">
                   <span>费用</span>

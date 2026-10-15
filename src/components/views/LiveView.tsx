@@ -25,7 +25,7 @@ interface Danmaku {
 }
 
 export const LiveView: React.FC = () => {
-  const { lang, t, currentUser, setLoginModalOpen } = useApp();
+  const { lang, t, currentUser, setLoginModalOpen, tr } = useApp();
 
   const [activeVenue, setActiveVenue] = useState<'main' | 'agent' | 'hardware' | 'global'>('main');
   const [audioOnly, setAudioOnly] = useState(false);
@@ -135,7 +135,7 @@ export const LiveView: React.FC = () => {
               }`}
             >
               {subscribed ? <Check className="w-3.5 h-3.5" /> : <Bell className="w-3.5 h-3.5" />}
-              <span>{subscribed ? t.live.subscribed : t.live.subscribeRemind}</span>
+              <span>{subscribed ? (lang === 'en' ? 'Reminder On' : t.live.subscribed) : (lang === 'en' ? 'Notify When Live' : t.live.subscribeRemind)}</span>
             </button>
           </div>
         </div>
@@ -181,7 +181,7 @@ export const LiveView: React.FC = () => {
                         : 'bg-transparent text-neutral-400'
                     }`}
                   >
-                    弹幕: {danmakuEnabled ? '开' : '关'}
+                    {tr('弹幕', 'Danmaku')}: {danmakuEnabled ? tr('开', 'ON') : tr('关', 'OFF')}
                   </button>
                 </div>
               </div>
@@ -280,7 +280,7 @@ export const LiveView: React.FC = () => {
                   className="px-6 py-2.5 text-xs font-semibold text-white bg-[#165DFF] hover:bg-[#1453E6] rounded-xl transition-colors flex items-center gap-1.5"
                 >
                   <Send className="w-3.5 h-3.5" />
-                  <span>发射</span>
+                  <span>{tr('发射', 'Send')}</span>
                 </button>
               </form>
             </div>
@@ -288,7 +288,7 @@ export const LiveView: React.FC = () => {
 
           {/* Right: Venue Channels & Schedule */}
           <div className="space-y-4">
-            <h3 className="text-sm font-bold text-[#0B1B3A]">多路直播信号分流</h3>
+            <h3 className="text-sm font-bold text-[#0B1B3A]">{tr('多路直播信号分流', 'Multi-Venue Streams')}</h3>
 
             <div className="space-y-3">
               {[
@@ -322,7 +322,7 @@ export const LiveView: React.FC = () => {
 
             {/* Broadcast Advisory Box */}
             <div className="p-4 doa-panel text-xs text-[#666666] space-y-1.5">
-              <div className="font-semibold text-[#0B1B3A]">直播合规与回放说明</div>
+              <div className="font-semibold text-[#0B1B3A]">{tr('直播合规与回放说明', 'Replays & Guidelines')}</div>
               <p className="text-[11px] leading-relaxed">
                 全场视频录像将在直播结束后 24 小时内剪辑上线。用户弹幕发言受敏感词过滤保护，营造开放包容的技术交流场域。
               </p>

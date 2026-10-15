@@ -71,7 +71,7 @@ const api = async <T,>(url: string, init?: RequestInit): Promise<T> => {
 };
 
 export const TeamPanel: React.FC = () => {
-  const { currentUser, setNotificationDrawerOpen } = useApp();
+  const { currentUser, setNotificationDrawerOpen, tr } = useApp();
   const me = currentUser!;
   const isLeader = (t: Team | null) => !!t && t.leaderId === me.id;
 
@@ -314,17 +314,17 @@ export const TeamPanel: React.FC = () => {
         <div className="doa-card p-8 space-y-5">
           <div className="flex items-center gap-2">
             <Users className="w-5 h-5 text-[#165DFF]" />
-            <h3 className="text-lg font-bold text-[#0B1B3A]">创建我的战队</h3>
+            <h3 className="text-lg font-bold text-[#0B1B3A]">{tr('创建我的战队', 'Create My Team')}</h3>
           </div>
           <p className="text-xs text-[#666666] leading-relaxed">
-            还没有战队。创建后你将成为队长：可以邀请成员、移出队员；队员上限 5 人。
+            {tr('还没有战队。创建后你将成为队长：可以邀请成员、移出队员；队员上限 5 人。', 'No team yet. As captain you can invite and remove members; up to 5 people.')}
           </p>
           {creating ? (
             <form onSubmit={handleCreateTeam} className="space-y-4 pt-2">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-semibold text-[#0B1B3A] mb-1.5">
-                    战队名称 <span className="text-red-500">*</span>
+                    {tr('战队名称', 'Team Name')} <span className="text-red-500">*</span>
                   </label>
                   <input
                     required
@@ -335,20 +335,20 @@ export const TeamPanel: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-[#0B1B3A] mb-1.5">参赛赛道</label>
+                  <label className="block text-xs font-semibold text-[#0B1B3A] mb-1.5">{tr('参赛赛道', 'Track')}</label>
                   <div className="grid grid-cols-2 gap-2">
-                    {(['creator', 'industry'] as TrackType[]).map(tr => (
+                    {(['creator', 'industry'] as TrackType[]).map(trackOpt => (
                       <button
-                        key={tr}
+                        key={trackOpt}
                         type="button"
-                        onClick={() => setNewTeamTrack(tr)}
+                        onClick={() => setNewTeamTrack(trackOpt)}
                         className={`px-3 py-2.5 rounded-xl text-xs font-semibold border transition-all ${
-                          newTeamTrack === tr
+                          newTeamTrack === trackOpt
                             ? 'border-[#165DFF] bg-[#165DFF]/5 text-[#165DFF]'
                             : 'border-[#E8EAED] bg-[#F7F8FA] text-[#666666]'
                         }`}
                       >
-                        {tr === 'creator' ? '自由赛道' : '产业赛道'}
+                        {trackOpt === 'creator' ? tr('自由赛道', 'Creator Track') : tr('产业赛道', 'Industry Track')}
                       </button>
                     ))}
                   </div>
@@ -391,11 +391,11 @@ export const TeamPanel: React.FC = () => {
                   <span className="w-9 h-9 rounded-xl bg-[#165DFF] text-white flex items-center justify-center text-sm font-extrabold shrink-0">
                     {team.name.slice(0, 1)}
                   </span>
-                  <span className="truncate">战队管理：{team.name}</span>
+                  <span className="truncate">{tr('战队管理', 'Team')}: {team.name}</span>
                 </h3>
                 <p className="text-xs text-[#666666] mt-0.5">
                   {team.track === 'creator' ? '自由赛道' : '产业赛道'} · 成员 {team.members.length}/5 ·
-                  组队申请需双方互相关注
+                  {tr('组队申请需双方互相关注', 'Invites require mutual follows')}
                 </p>
                 {team.desc && (
                   <p className="text-xs text-[#98A6BE] mt-1">{team.desc}</p>
@@ -408,10 +408,10 @@ export const TeamPanel: React.FC = () => {
                     className="px-3 py-1.5 text-xs font-semibold text-[#165DFF] hover:bg-[#165DFF]/10 border border-[#165DFF]/30 rounded-full transition-colors flex items-center gap-1"
                   >
                     <Settings2 className="w-3.5 h-3.5" />
-                    编辑战队
+                    {tr('编辑战队', 'Edit Team')}
                   </button>
                 )}
-                <span className="text-xs text-[#888888]">邀请码：</span>
+                <span className="text-xs text-[#888888]">{tr('邀请码', 'Invite code')}:</span>
                 <span className="px-3 py-1 bg-[#165DFF]/10 text-[#165DFF] font-mono font-bold text-xs rounded-lg">
                   {team.inviteCode}
                 </span>
@@ -421,10 +421,10 @@ export const TeamPanel: React.FC = () => {
             {/* 编辑战队表单（队长） */}
             {editing && (
               <form onSubmit={handleSaveEdit} className="p-5 doa-panel space-y-4">
-                <div className="text-xs font-bold text-[#0B1B3A]">编辑战队信息</div>
+                <div className="text-xs font-bold text-[#0B1B3A]">{tr('编辑战队信息', 'Edit Team Info')}</div>
                 <div>
                   <label className="block text-xs font-semibold text-[#0B1B3A] mb-1.5">
-                    战队名称 <span className="text-red-500">*</span>
+                    {tr('战队名称', 'Team Name')} <span className="text-red-500">*</span>
                     <span className="ml-2 font-normal text-[#98A6BE]">标识取名称首字，自动生成</span>
                   </label>
                   <input
@@ -454,14 +454,14 @@ export const TeamPanel: React.FC = () => {
                     disabled={busyId === 'save-edit'}
                     className="px-6 py-2.5 text-xs font-semibold text-white bg-[#165DFF] hover:bg-[#1453E6] rounded-full disabled:opacity-50"
                   >
-                    保存
+                    {tr('保存', 'Save')}
                   </button>
                   <button
                     type="button"
                     onClick={() => setEditing(false)}
                     className="px-6 py-2.5 text-xs font-semibold text-[#666666]"
                   >
-                    取消
+                    {tr('取消', 'Cancel')}
                   </button>
                 </div>
               </form>
@@ -469,7 +469,7 @@ export const TeamPanel: React.FC = () => {
 
             {/* 成员列表 */}
             <div className="space-y-3">
-              <div className="text-xs font-semibold text-[#0B1B3A]">现有成员名单</div>
+              <div className="text-xs font-semibold text-[#0B1B3A]">{tr('现有成员名单', 'Members')}</div>
               {team.members.map(member => (
                 <div key={member.id} className="flex items-center justify-between p-4 doa-panel text-xs">
                   <div className="flex items-center gap-3 flex-wrap">
@@ -479,10 +479,10 @@ export const TeamPanel: React.FC = () => {
                     </span>
                     {member.isLeader ? (
                       <span className="text-[10px] font-bold text-[#165DFF] bg-[#165DFF]/10 px-2 py-0.5 rounded-full">
-                        战队队长
+                        {tr('战队队长', 'Captain')}
                       </span>
                     ) : (
-                      <span className="text-[10px] text-[#98A6BE]">队员</span>
+                      <span className="text-[10px] text-[#98A6BE]">{tr('队员', 'Member')}</span>
                     )}
                   </div>
                   {isLeader(team) && !member.isLeader && (
@@ -492,7 +492,7 @@ export const TeamPanel: React.FC = () => {
                       className="flex items-center gap-1 text-neutral-400 hover:text-red-500 transition-colors disabled:opacity-40"
                     >
                       <UserMinus className="w-3.5 h-3.5" />
-                      移出
+                      {tr('移出', 'Remove')}
                     </button>
                   )}
                 </div>
@@ -508,7 +508,7 @@ export const TeamPanel: React.FC = () => {
                 disabled={busyId === 'leave'}
                 className="px-4 py-2 text-xs font-semibold text-red-600 hover:bg-red-50 border border-red-200 rounded-full transition-colors disabled:opacity-40"
               >
-                {isLeader(team) ? '解散战队' : '退出战队'}
+                {isLeader(team) ? tr('解散战队', 'Disband Team') : tr('退出战队', 'Leave Team')}
               </button>
             </div>
           </div>
@@ -518,7 +518,7 @@ export const TeamPanel: React.FC = () => {
             <div className="doa-card p-8 space-y-4">
               <div className="flex items-center gap-2">
                 <Inbox className="w-5 h-5 text-[#FF8A1F]" />
-                <h3 className="text-base font-bold text-[#0B1B3A]">收到的组队申请（{received.length}）</h3>
+                <h3 className="text-base font-bold text-[#0B1B3A]">{tr('收到的组队申请', 'Invitations Received')}（{received.length}）</h3>
               </div>
               {received.map(app_ => (
                 <div key={app_.id} className="p-4 doa-panel text-xs space-y-2">
@@ -556,11 +556,11 @@ export const TeamPanel: React.FC = () => {
             <div className="flex items-center justify-between flex-wrap gap-2">
               <div className="flex items-center gap-2">
                 <HeartHandshake className="w-5 h-5 text-[#165DFF]" />
-                <h3 className="text-base font-bold text-[#0B1B3A]">邀请创客加入战队</h3>
+                <h3 className="text-base font-bold text-[#0B1B3A]">{tr('邀请创客加入战队', 'Invite Makers to Join')}</h3>
               </div>
               <span className="text-[11px] text-[#98A6BE]">
                 <HeartHandshake className="w-3 h-3 inline mr-1" />
-                互相关注后才能发送组队申请
+                {tr('互相关注后才能发送组队申请', 'Mutual follow required to send invites')}
               </span>
             </div>
 
@@ -578,7 +578,7 @@ export const TeamPanel: React.FC = () => {
                         <span className="font-bold text-[#0B1B3A] truncate">{user.name}</span>
                         {inMyTeam && (
                           <span className="text-[10px] font-bold text-[#00C48C] bg-[#00C48C]/10 px-2 py-0.5 rounded-full shrink-0">
-                            队内成员
+                            {tr('队内成员', 'On team')}
                           </span>
                         )}
                         {weAreMutual && !inMyTeam && (
@@ -633,7 +633,7 @@ export const TeamPanel: React.FC = () => {
           {/* ---- 我发出的申请 ---- */}
           {sent.length > 0 && (
             <div className="doa-card p-8 space-y-3">
-              <h3 className="text-base font-bold text-[#0B1B3A]">我发出的组队申请（{sent.length}）</h3>
+              <h3 className="text-base font-bold text-[#0B1B3A]">{tr('我发出的组队申请', 'My Invites')}（{sent.length}）</h3>
               {sent.map(app_ => (
                 <div key={app_.id} className="flex items-center justify-between p-3.5 doa-panel text-xs">
                   <span>
@@ -649,7 +649,7 @@ export const TeamPanel: React.FC = () => {
                           : 'bg-[#FF8A1F]/10 text-[#C06200]'
                     }`}
                   >
-                    {app_.status === 'accepted' ? '已同意' : app_.status === 'declined' ? '已拒绝' : '待处理'}
+                    {app_.status === 'accepted' ? tr('已同意', 'Accepted') : app_.status === 'declined' ? tr('已拒绝', 'Declined') : tr('待处理', 'Pending')}
                   </span>
                 </div>
               ))}

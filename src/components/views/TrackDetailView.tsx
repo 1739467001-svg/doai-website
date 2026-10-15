@@ -25,10 +25,12 @@ const TRACK_META: Record<
   TrackType,
   {
     name: string;
+    nameEn?: string;
     en: string;
     color: string;
     icon: React.FC<{ className?: string }>;
     tagline: string;
+    taglineEn?: string;
     positioning: string;
     directions: { title: string; desc: string }[];
     reviewFocus: string;
@@ -36,11 +38,12 @@ const TRACK_META: Record<
   }
 > = {
   industry: {
-    name: '产业赛道',
+    name: '产业赛道', nameEn: 'Industry Track',
     en: 'AI + Industry',
     color: '#165DFF',
     icon: Cpu,
     tagline: '命题制解题 · 企业真实场景 · 优先落地孵化',
+    taglineEn: 'Real business briefs · priority incubation',
     positioning:
       '联合长宁区龙头企业发布真实业务命题，参赛团队定向解题。重点考察 AI 技术在真实产业场景中的落地能力与商业闭环，获奖项目优先对接企业采购订单与德必园区落地孵化资源。',
     directions: [
@@ -56,10 +59,11 @@ const TRACK_META: Record<
     ],
   },
   creator: {
-    name: '自由赛道',
+    name: '自由赛道', nameEn: 'Creator Track',
     en: 'AI Creator',
     color: '#00C48C',
     icon: Layers,
+    taglineEn: 'Open briefs · maker spirit · breakthrough-first',
     tagline: '开放命题 · 极客精神 · 技术突破优先',
     positioning:
       '不限产业方向，鼓励底层算法突破、原生 Agent 应用与商业模式创新。路演 + 评选 + 投资对接一站式完成，为最具极客精神的创造者提供直达资本与社区的通道。',
@@ -79,7 +83,7 @@ const TRACK_META: Record<
 };
 
 export const TrackDetailView: React.FC<{ track?: string }> = ({ track }) => {
-  const { setActiveRoute } = useApp();
+  const { setActiveRoute, tr } = useApp();
   const trackId: TrackType = track === 'industry' ? 'industry' : 'creator';
   const meta = TRACK_META[trackId];
   const Icon = meta.icon;
@@ -98,7 +102,7 @@ export const TrackDetailView: React.FC<{ track?: string }> = ({ track }) => {
             className="text-xs font-semibold text-[#666666] hover:text-[#165DFF] transition-colors flex items-center gap-1 mb-8"
           >
             <ArrowLeft className="w-4 h-4" />
-            返回赛事中心
+            {tr('返回赛事中心', 'Back to Contest')}
           </button>
 
           <div className="flex items-start gap-6">
@@ -111,7 +115,7 @@ export const TrackDetailView: React.FC<{ track?: string }> = ({ track }) => {
             <div className="space-y-3">
               <div className="flex items-center gap-3 flex-wrap">
                 <h1 className="text-4xl font-bold text-[#0B1B3A] tracking-tight">
-                  {meta.name}
+                  {tr(meta.name, meta.nameEn)}
                 </h1>
                 <span
                   className="text-sm font-bold px-3 py-1 rounded-full"
@@ -120,7 +124,7 @@ export const TrackDetailView: React.FC<{ track?: string }> = ({ track }) => {
                   {meta.en}
                 </span>
               </div>
-              <p className="text-base text-[#48597A]">{meta.tagline}</p>
+              <p className="text-base text-[#48597A]">{tr(meta.tagline, meta.taglineEn)}</p>
               <p className="text-sm text-[#666666] leading-relaxed max-w-3xl">{meta.positioning}</p>
             </div>
           </div>
@@ -131,10 +135,10 @@ export const TrackDetailView: React.FC<{ track?: string }> = ({ track }) => {
               className="px-10 py-4 text-base font-semibold text-white rounded-full transition-all shadow-lg flex items-center gap-2 hover:shadow-xl active:scale-[0.98]"
               style={{ background: meta.color }}
             >
-              立即报名
+              {tr('立即报名', 'Register Now')}
               <ArrowRight className="w-5 h-5" />
             </button>
-            <span className="text-xs text-[#888888]">报名截止 2026/10/31 · 全程免费</span>
+            <span className="text-xs text-[#888888]">{tr('报名截止 2026/10/31 · 全程免费', 'Deadline 2026/10/31 · Free entry')}</span>
           </div>
         </div>
       </section>
@@ -144,7 +148,7 @@ export const TrackDetailView: React.FC<{ track?: string }> = ({ track }) => {
         <section>
           <div className="flex items-center gap-2.5 mb-6">
             <Target className="w-5 h-5" style={{ color: meta.color }} />
-            <h2 className="text-2xl font-bold text-[#0B1B3A]">命题方向</h2>
+            <h2 className="text-2xl font-bold text-[#0B1B3A]">{tr('命题方向', 'Track Directions')}</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {meta.directions.map(d => (
@@ -161,7 +165,7 @@ export const TrackDetailView: React.FC<{ track?: string }> = ({ track }) => {
           <div className="doa-card p-7">
             <div className="flex items-center gap-2.5 mb-4">
               <Scale className="w-5 h-5" style={{ color: meta.color }} />
-              <h2 className="text-lg font-bold text-[#0B1B3A]">评审侧重</h2>
+              <h2 className="text-lg font-bold text-[#0B1B3A]">{tr('评审侧重', 'Judging Focus')}</h2>
             </div>
             <p className="text-sm text-[#48597A] leading-relaxed mb-4">
               本赛道重点考量：<strong style={{ color: meta.color }}>{meta.reviewFocus}</strong>
@@ -184,7 +188,7 @@ export const TrackDetailView: React.FC<{ track?: string }> = ({ track }) => {
           <div className="doa-card p-7">
             <div className="flex items-center gap-2.5 mb-4">
               <CheckCircle2 className="w-5 h-5" style={{ color: meta.color }} />
-              <h2 className="text-lg font-bold text-[#0B1B3A]">申报要求</h2>
+              <h2 className="text-lg font-bold text-[#0B1B3A]">{tr('申报要求', 'Requirements')}</h2>
             </div>
             <ul className="space-y-3">
               {meta.requirements.map((r, i) => (
@@ -201,8 +205,8 @@ export const TrackDetailView: React.FC<{ track?: string }> = ({ track }) => {
         <section>
           <div className="flex items-center gap-2.5 mb-6">
             <FileText className="w-5 h-5" style={{ color: meta.color }} />
-            <h2 className="text-2xl font-bold text-[#0B1B3A]">赛题设置</h2>
-            <span className="text-xs text-[#98A6BE]">完整赛制说明见「赛题与赛制」页</span>
+            <h2 className="text-2xl font-bold text-[#0B1B3A]">{tr('赛题设置', 'Challenge Briefs')}</h2>
+            <span className="text-xs text-[#98A6BE]">{tr('完整赛制说明见「赛题与赛制」页', 'See the Tracks & Rules page for full rules')}</span>
           </div>
           <div className="space-y-4">
             {briefs.length === 0 ? (
@@ -216,7 +220,7 @@ export const TrackDetailView: React.FC<{ track?: string }> = ({ track }) => {
                     <div className="flex items-center gap-2 mb-1.5">
                       <span className="text-[11px] font-mono text-[#98A6BE]">{b.code}</span>
                       <span className="text-[11px] font-semibold text-[#00B48C] bg-[#00B48C]/10 px-2 py-0.5 rounded-full">
-                        申报中
+                        {tr('申报中', 'Open')}
                       </span>
                     </div>
                     <h3 className="text-base font-bold text-[#0B1B3A]">{b.title}</h3>
@@ -227,7 +231,7 @@ export const TrackDetailView: React.FC<{ track?: string }> = ({ track }) => {
                   </div>
                   <div className="text-right shrink-0">
                     <div className="text-[11px] text-[#98A6BE] flex items-center gap-1 justify-end">
-                      <Clock className="w-3.5 h-3.5" /> 提交截止
+                      <Clock className="w-3.5 h-3.5" /> {tr('提交截止', 'Deadline')}
                     </div>
                     <div className="text-sm font-bold font-mono text-[#0B1B3A]">
                       {b.deadline.slice(5).replace('-', '/')}
@@ -254,7 +258,7 @@ export const TrackDetailView: React.FC<{ track?: string }> = ({ track }) => {
             className="mt-8 px-12 py-4 text-base font-semibold text-white rounded-full transition-all shadow-lg inline-flex items-center gap-2 hover:shadow-xl active:scale-[0.98]"
             style={{ background: meta.color }}
           >
-            立即报名 {meta.name}
+            {tr('立即报名', 'Register Now')} {meta.name}
             <ArrowRight className="w-5 h-5" />
           </button>
         </section>

@@ -18,8 +18,146 @@ import {
   Check,
   Smartphone,
   ExternalLink,
-  ChevronRight
+  ChevronRight,
+  RefreshCw,
+  ImagePlus,
 } from 'lucide-react';
+
+/* ------------------------------------------------------------------
+ * 个人资料编辑：改名 / 自定义头像 / AtomClub 头像一键同步
+ * （点击头像也可直接同步 AtomClub 头像；自定义头像与名字可随时覆盖）
+ * ------------------------------------------------------------------ */
+const ProfileEditor: React.FC = () => {
+  const { currentUser, setCurrentUser, saveProfile, tr } = useApp();
+  const me = currentUser!;
+  const [name, setName] = useState(me.name);
+  const [avatarUrl, setAvatarUrl] = useState(me.avatar);
+  const [notice, setNotice] = useState('');
+  const [syncing, setSyncing] = useState(false);
+
+  // 挂载后后端覆盖加载完成时（或外部同步头像后），本地输入跟随最新资料
+  useEffect(() => {
+    setName(me.name);
+    setAvatarUrl(me.avatar);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [me.name, me.avatar]);
+
+  const flash = (msg: string) => {
+    setNotice(msg);
+    setTimeout(() => setNotice(''), 2600);
+  };
+
+  const syncAtomClub = async () => {
+    setSyncing(true);
+    try {
+      const res = await fetch(`/api/atomclub/avatar?userId=${me.id}`);
+      const d = await res.json();
+      if (res.ok && d.ok) {
+        setAvatarUrl(d.avatar);
+        saveProfile({ avatar: d.avatar });
+        setCurrentUser({ ...me, avatar: d.avatar });
+        flash('已同步 AtomClub 头像');
+      } else {
+        flash(d.message || '同步失败');
+      }
+    } catch {
+      flash('后端服务不可用');
+    } finally {
+      setSyncing(false);
+    }
+  };
+
+  const handleSave = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!name.trim()) return;
+    saveProfile({ name: name.trim(), avatar: avatarUrl.trim() });
+    flash('个人资料已保存');
+  };
+
+  return (
+    <div className="doa-card p-8 shadow-sm space-y-6">
+      <h3 className="text-lg font-bold text-[#0B1B3A] pb-4 border-b border-[#E8EAED]">
+        {tr('个人资料', 'Profile')}
+      </h3>
+
+      <div className="flex flex-col sm:flex-row items-start gap-6">
+        {/* 头像：点击即同步 AtomClub */}
+        <div className="flex flex-col items-center gap-2 shrink-0">
+          <button
+            type="button"
+            onClick={syncAtomClub}
+            disabled={syncing || !me.atomclubBound}
+            title={me.atomclubBound ? '点击同步 AtomClub 头像' : '未绑定 AtomClub'}
+            className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-[#E3ECFA] hover:border-[#A9CCFF] transition-colors group disabled:cursor-default"
+          >
+            <img
+              src={avatarUrl}
+              alt={me.name}
+              referrerPolicy="no-referrer"
+              className="w-full h-full object-cover"
+            />
+            {me.atomclubBound && (
+              <span className="absolute inset-0 bg-[#0B1B3A]/45 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                <RefreshCw className={`w-5 h-5 text-white ${syncing ? 'animate-spin' : ''}`} />
+              </span>
+            )}
+          </button>
+          {me.atomclubBound ? (
+            <button
+              type="button"
+              onClick={syncAtomClub}
+              disabled={syncing}
+              className="text-[11px] font-semibold text-[#165DFF] hover:underline disabled:opacity-50 flex items-center gap-1"
+            >
+              <RefreshCw className={`w-3 h-3 ${syncing ? 'animate-spin' : ''}`} />
+              {tr('同步 AtomClub 头像', 'Sync AtomClub Avatar')}
+            </button>
+          ) : (
+            <span className="text-[11px] text-[#98A6BE]">{tr('未绑定 AtomClub', 'Not linked to AtomClub')}</span>
+          )}
+        </div>
+
+        <form onSubmit={handleSave} className="flex-1 space-y-4 w-full">
+          <div>
+            <label className="block text-xs font-semibold text-[#0B1B3A] mb-1.5">
+              {tr('昵称', 'Name')} <span className="text-red-500">*</span>
+            </label>
+            <input
+              required
+              maxLength={30}
+              value={name}
+              onChange={e => setName(e.target.value)}
+              className="w-full px-4 py-2.5 bg-[#F7F8FA] border border-[#E8EAED] rounded-xl text-sm focus:outline-none focus:border-[#165DFF]"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-semibold text-[#0B1B3A] mb-1.5">
+              <ImagePlus className="w-3.5 h-3.5 inline mr-1 -mt-0.5" />
+              {tr('自定义头像链接', 'Custom Avatar URL')}
+              <span className="ml-2 font-normal text-[#98A6BE]">留空保持当前头像，保存后全站生效</span>
+            </label>
+            <input
+              type="url"
+              value={avatarUrl}
+              onChange={e => setAvatarUrl(e.target.value)}
+              placeholder="https://…"
+              className="w-full px-4 py-2.5 bg-[#F7F8FA] border border-[#E8EAED] rounded-xl text-sm font-mono focus:outline-none focus:border-[#165DFF]"
+            />
+          </div>
+          {notice && (
+            <div className="p-3 rounded-xl bg-[#00C48C]/10 text-[#00876A] text-xs font-medium">{notice}</div>
+          )}
+          <button
+            type="submit"
+            className="px-6 py-2.5 text-xs font-semibold text-white bg-[#165DFF] hover:bg-[#1453E6] rounded-full transition-colors"
+          >
+            {tr('保存资料', 'Save Profile')}
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+};
 
 /* ------------------------------------------------------------------
  * 提交作品表单（会议 2026-10-13）：报名成功后提交三个链接
@@ -28,7 +166,7 @@ import {
 const SubmitWorkForm: React.FC<{ registrationId: string; onDone?: () => void }> = ({
   registrationId,
 }) => {
-  const { submitWork } = useApp();
+  const { submitWork, tr } = useApp();
   const [videoUrl, setVideoUrl] = useState('');
   const [demoUrl, setDemoUrl] = useState('');
   const [githubUrl, setGithubUrl] = useState('');
@@ -75,14 +213,14 @@ const SubmitWorkForm: React.FC<{ registrationId: string; onDone?: () => void }> 
     >
       <div className="flex items-center gap-2">
         <AlertCircle className="w-4 h-4 text-[#FF8A1F]" />
-        <div className="text-xs font-bold text-[#0B1B3A]">提交作品</div>
+        <div className="text-xs font-bold text-[#0B1B3A]">{tr('提交作品', 'Submit Work')}</div>
         <span className="text-[11px] text-[#98A6BE]">作品提交窗口：11/03 — 11/07 · 仅接受链接，不收文件</span>
       </div>
 
       <div className="space-y-3">
         <div>
           <label className="block text-xs font-semibold text-[#0B1B3A] mb-1">
-            1. Demo 视频链接 <span className="text-red-500">*</span>
+            {tr('1. Demo 视频链接', '1. Demo Video URL')} <span className="text-red-500">*</span>
             <span className="ml-2 font-normal text-[#888888]">支持 Bilibili / 腾讯视频 / YouTube</span>
           </label>
           <input
@@ -96,7 +234,7 @@ const SubmitWorkForm: React.FC<{ registrationId: string; onDone?: () => void }> 
         </div>
         <div>
           <label className="block text-xs font-semibold text-[#0B1B3A] mb-1">
-            2. 可访问链接（在线 Demo / 官网） <span className="text-red-500">*</span>
+            {tr('2. 可访问链接（在线 Demo / 官网）', '2. Live URL (online demo / site)')} <span className="text-red-500">*</span>
           </label>
           <input
             type="url"
@@ -109,7 +247,7 @@ const SubmitWorkForm: React.FC<{ registrationId: string; onDone?: () => void }> 
         </div>
         <div>
           <label className="block text-xs font-semibold text-[#0B1B3A] mb-1">
-            3. GitHub 仓库链接 <span className="text-red-500">*</span>
+            {tr('3. GitHub 仓库链接', '3. GitHub Repo URL')} <span className="text-red-500">*</span>
           </label>
           <input
             type="url"
@@ -133,7 +271,7 @@ const SubmitWorkForm: React.FC<{ registrationId: string; onDone?: () => void }> 
         type="submit"
         className="w-full py-3 text-xs font-semibold text-white bg-[#165DFF] hover:bg-[#1453E6] rounded-xl transition-colors"
       >
-        提交作品
+        {tr('提交作品', 'Submit Work')}
       </button>
     </form>
   );
@@ -152,6 +290,7 @@ export const DashboardView: React.FC = () => {
     setActiveRoute,
     activeRoute,
     submitWork,
+    tr,
   } = useApp();
 
   // 支持子路由直链：dashboard/registrations 等（报名成功后「去提交作品」用）
@@ -241,7 +380,7 @@ export const DashboardView: React.FC = () => {
               {currentUser.atomclubBound && (
                 <span className="text-[11px] font-semibold text-[#00C48C] bg-[#00C48C]/10 px-2 py-0.5 rounded-full flex items-center gap-1">
                   <ShieldCheck className="w-3 h-3" />
-                  <span>atomclub 已绑定</span>
+                  <span>{tr('atomclub 已绑定', 'atomclub linked')}</span>
                 </span>
               )}
             </div>
@@ -252,10 +391,10 @@ export const DashboardView: React.FC = () => {
         {/* Quick Tabs Bar — 移动端窄屏横向滚动，避免四个标签挤压断字 */}
         <div className="flex items-center p-1 bg-[#F7F8FA] border border-[#E8EAED] rounded-xl self-start sm:self-center max-w-full overflow-x-auto">
           {[
-            { id: 'passport', label: '数字身份卡 (Passport)' },
-            { id: 'registrations', label: '我的报名' },
-            { id: 'team', label: '我的战队' },
-            { id: 'settings', label: '资料与隐私' },
+            { id: 'passport', label: '数字身份卡 (Passport)', labelEn: 'Passport' },
+            { id: 'registrations', label: '我的报名', labelEn: 'My Entries' },
+            { id: 'team', label: '我的战队', labelEn: 'My Team' },
+            { id: 'settings', label: '资料与隐私', labelEn: 'Profile & Privacy' },
           ].map(tab => (
             <button
               key={tab.id}
@@ -266,7 +405,7 @@ export const DashboardView: React.FC = () => {
                   : 'text-[#666666] hover:text-[#0B1B3A]'
               }`}
             >
-              {tab.label}
+              {tr(tab.label, tab.labelEn)}
             </button>
           ))}
         </div>
@@ -351,13 +490,13 @@ export const DashboardView: React.FC = () => {
             </div>
 
             <p className="text-center text-[11px] text-[#888888] mt-3">
-              现场入场时向工作人员出示二维码核销，或贴近 NFC 胸牌闸机感应通行
+              {tr('现场入场时向工作人员出示二维码核销，或贴近 NFC 胸牌闸机感应通行', 'Show the QR at the gate or tap the NFC reader to enter.')}
             </p>
           </div>
 
           {/* Digital Tickets (选手票 / 论坛预约) */}
           <div className="space-y-4">
-            <h3 className="text-lg font-bold text-[#0B1B3A]">我的电子通行凭证</h3>
+            <h3 className="text-lg font-bold text-[#0B1B3A]">{tr('我的电子通行凭证', 'My Digital Passes')}</h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {tickets.map(ticket => (
@@ -368,7 +507,7 @@ export const DashboardView: React.FC = () => {
                   <div>
                     <div className="flex items-center justify-between text-xs text-[#888888] mb-2">
                       <span className="font-semibold text-[#165DFF]">
-                        {ticket.type === 'maker' ? '选手全场通行票' : '分论坛预约票'}
+                        {ticket.type === 'maker' ? tr('选手全场通行票', 'Maker All-Access Pass') : tr('分论坛预约票', 'Forum Reservation')}
                       </span>
                       <span
                         className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${
@@ -377,16 +516,16 @@ export const DashboardView: React.FC = () => {
                             : 'bg-[#00C48C]/10 text-[#00C48C]'
                         }`}
                       >
-                        {ticket.status === 'checked_in' ? '已现场核销' : '有效凭证'}
+                        {ticket.status === 'checked_in' ? tr('已现场核销', 'Checked In') : tr('有效凭证', 'Valid')}
                       </span>
                     </div>
 
                     <h4 className="text-base font-bold text-[#0B1B3A] mb-1">{ticket.title}</h4>
                     <div className="flex items-start justify-between gap-4">
                       <div className="text-xs text-[#666666] space-y-1">
-                        <div>有效时间：{ticket.sessionTime}</div>
-                        <div>通行区域：{ticket.venue}</div>
-                        <div className="font-mono text-[11px] text-[#888888]">凭证码：{ticket.qrCode}</div>
+                        <div>{tr('有效时间', 'Valid')}: {ticket.sessionTime}</div>
+                        <div>{tr('通行区域', 'Access')}: {ticket.venue}</div>
+                        <div className="font-mono text-[11px] text-[#888888]">{tr('凭证码', 'Code')}: {ticket.qrCode}</div>
                       </div>
                       {/* 入场二维码：闸机扫码核销 */}
                       <div className="p-1.5 bg-white border border-[#E8EAED] rounded-lg shrink-0">
@@ -402,7 +541,7 @@ export const DashboardView: React.FC = () => {
                         onClick={() => handleSimulateCheckIn(ticket.id)}
                         className="px-3.5 py-1.5 text-xs font-semibold text-[#165DFF] hover:bg-[#165DFF]/10 rounded-full border border-[#165DFF]/30 transition-colors"
                       >
-                        模拟现场闸机扫码核销
+                        {tr('模拟现场闸机扫码核销', 'Simulate Gate Check-in')}
                       </button>
                     )}
                   </div>
@@ -414,7 +553,7 @@ export const DashboardView: React.FC = () => {
           {/* Exchanged Digital Name Cards Box */}
           <div className="space-y-4">
             <h3 className="text-lg font-bold text-[#0B1B3A]">
-              已互换的名片盒 ({exchangedCards.length})
+              {tr('已互换的名片盒', 'Exchanged Cards')} ({exchangedCards.length})
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -546,7 +685,7 @@ export const DashboardView: React.FC = () => {
               <div className="p-5 doa-panel space-y-2">
                 <div className="font-semibold text-[#0B1B3A] text-xs flex items-center gap-1.5">
                   <CheckCircle2 className="w-4 h-4 text-[#00C48C]" />
-                  <span>作品已提交（{myRegistration.submission.submittedAt}）</span>
+                  <span>{tr('作品已提交', 'Work submitted')}（{myRegistration.submission.submittedAt}）</span>
                 </div>
                 <div className="grid grid-cols-1 gap-1.5 text-xs pt-1">
                   {[
@@ -582,17 +721,20 @@ export const DashboardView: React.FC = () => {
       {/* Tab 4: Settings & Privacy */}
       {activeTab === 'settings' && (
         <div className="pt-8 max-w-2xl space-y-6">
+          {/* 个人资料：改名 / 自定义头像 / AtomClub 同步 */}
+          <ProfileEditor />
+
           <div className="doa-card p-8 shadow-sm space-y-6">
             <h3 className="text-lg font-bold text-[#0B1B3A] pb-4 border-b border-[#E8EAED]">
-              创客资料与广场隐私设置
+              {tr('创客资料与广场隐私设置', 'Profile & Community Privacy')}
             </h3>
 
             <div className="space-y-4">
               <div className="flex items-center justify-between p-4 doa-panel">
                 <div>
-                  <div className="text-xs font-bold text-[#0B1B3A]">在组队广场公开展示我的人才卡</div>
+                  <div className="text-xs font-bold text-[#0B1B3A]">{tr('在组队广场公开展示我的人才卡', 'Show my card on the Maker Wall')}</div>
                   <div className="text-[11px] text-[#666666]">
-                    开启后，其他创客可在人才市场查阅您的特长并向您发送战队邀请
+                    {tr('开启后，其他创客可在人才市场查阅您的特长并向您发送战队邀请', 'Others can find your card and send team invites.')}
                   </div>
                 </div>
                 <input
@@ -607,9 +749,9 @@ export const DashboardView: React.FC = () => {
 
               <div className="flex items-center justify-between p-4 doa-panel">
                 <div>
-                  <div className="text-xs font-bold text-[#0B1B3A]">允许名片交换</div>
+                  <div className="text-xs font-bold text-[#0B1B3A]">{tr('允许名片交换', 'Allow card exchange')}</div>
                   <div className="text-[11px] text-[#666666]">
-                    开启后，现场及线上创客可向您发起数字名片交换请求
+                    {tr('开启后，现场及线上创客可向您发起数字名片交换请求', 'Makers can send you card exchange requests.')}
                   </div>
                 </div>
                 <input
@@ -623,7 +765,7 @@ export const DashboardView: React.FC = () => {
               </div>
 
               <div className="p-4 doa-panel space-y-2 text-xs">
-                <div className="font-semibold text-[#0B1B3A]">atomclub.cn 账号统一关联</div>
+                <div className="font-semibold text-[#0B1B3A]">{tr('atomclub.cn 账号统一关联', 'atomclub.cn Account Link')}</div>
                 <p className="text-[11px] text-[#666666]">
                   您的 DOAI 创客身份已与 atomclub.cn 手机主体保持双向绑定，如需注销仅清除 DOAI 赛事历史数据，主体账号不受影响。
                 </p>
@@ -634,7 +776,7 @@ export const DashboardView: React.FC = () => {
           {/* 退出登录（会议结论 2026-10-13：我的 DOAI 需要退出登录入口） */}
           <div className="doa-card p-8 flex items-center justify-between gap-4">
             <div>
-              <h3 className="text-sm font-bold text-[#0B1B3A]">退出登录</h3>
+              <h3 className="text-sm font-bold text-[#0B1B3A]">{tr('退出登录', 'Sign Out')}</h3>
               <p className="text-[11px] text-[#666666] mt-0.5">
                 退出后将返回官网首页，报名与战队数据保留在账号中
               </p>
@@ -646,7 +788,7 @@ export const DashboardView: React.FC = () => {
               }}
               className="px-5 py-2.5 text-xs font-semibold text-red-600 hover:text-white hover:bg-red-500 border border-red-300 hover:border-red-500 rounded-full transition-colors shrink-0"
             >
-              退出登录
+              {tr('退出登录', 'Sign Out')}
             </button>
           </div>
         </div>

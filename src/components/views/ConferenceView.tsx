@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 
 export const ConferenceView: React.FC = () => {
-  const { lang, setActiveRoute } = useApp();
+  const { lang, setActiveRoute, tr } = useApp();
   const [activeDay, setActiveDay] = useState<'day1' | 'day2'>('day1');
 
 
@@ -69,19 +69,19 @@ export const ConferenceView: React.FC = () => {
       <section className="max-w-[1200px] mx-auto px-6 sm:px-8 py-10">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-8">
           {[
-            { label: '大会时间', value: '11.14 — 11.15', note: '周六 — 周日 · 两天' },
-            { label: '线下人流', value: '2000—4000', note: '人次 · 线上辐射 10 万+' },
-            { label: '分会场', value: '18 个', note: '两天合计 30—40 场' },
-            { label: '演讲嘉宾', value: '80—120', note: '位 · 含至少 1 位海外专家' },
+            { label: '大会时间', labelEn: 'When', value: '11.14 — 11.15', note: '周六 — 周日 · 两天', noteEn: 'Sat — Sun · 2 days' },
+            { label: '线下人流', labelEn: 'On-site', value: '2000—4000', note: '人次 · 线上辐射 10 万+', noteEn: 'attendees · 100k+ online reach' },
+            { label: '分会场', labelEn: 'Venues', value: '18', note: '两天合计 30—40 场', noteEn: '30–40 sessions over 2 days' },
+            { label: '演讲嘉宾', labelEn: 'Speakers', value: '80—120', note: '位 · 含至少 1 位海外专家', noteEn: 'incl. 1+ international expert' },
           ].map((st, i) => (
             <div key={i} className="doa-card p-5">
               <div className="text-[11px] uppercase tracking-wider text-[#98A6BE] font-semibold mb-1.5">
-                {st.label}
+                {tr(st.label, st.labelEn)}
               </div>
               <div className="text-xl sm:text-2xl font-extrabold text-[#0B1B3A] tracking-tight tabular-nums">
                 {st.value}
               </div>
-              <div className="text-[11px] text-[#6B7C9B] mt-1">{st.note}</div>
+              <div className="text-[11px] text-[#6B7C9B] mt-1">{tr(st.note, st.noteEn)}</div>
             </div>
           ))}
         </div>

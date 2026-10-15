@@ -7,14 +7,14 @@ import {
 } from 'lucide-react';
 
 export const ForumDetailView: React.FC<{ id?: string }> = ({ id }) => {
-  const { forums, bookForum, cancelForum, currentUser, setLoginModalOpen, setActiveRoute, cmsData } = useApp();
+  const { forums, bookForum, cancelForum, currentUser, setLoginModalOpen, setActiveRoute, cmsData, tr } = useApp();
   const [saved, setSaved] = useState(false);
   const [copied, setCopied] = useState(false);
 
   const session = forums.find(f => f.id === id);
 
   if (!session) {
-    return <NotFound what="该分论坛" backRoute="forum" backLabel="返回分论坛列表" />;
+    return <NotFound what={tr('该分论坛', 'This forum')} backRoute="forum" backLabel={tr('返回分论坛列表', 'Back to Forums')} />;
   }
 
   const lang = 'zh' as const;
@@ -46,7 +46,7 @@ export const ForumDetailView: React.FC<{ id?: string }> = ({ id }) => {
   return (
     <DetailShell
       backRoute="forum"
-      backLabel="返回分论坛列表"
+      backLabel={tr('返回分论坛列表', 'Back to Forums')}
       eyebrow={session.track}
       title={lang === 'zh' ? session.title : session.titleEn}
       subtitle={lang === 'zh' ? session.description : session.descriptionEn}
@@ -69,7 +69,7 @@ export const ForumDetailView: React.FC<{ id?: string }> = ({ id }) => {
               </>
             ) : (
               <>
-                <Ticket className="w-4 h-4" /> 预约席位
+                <Ticket className="w-4 h-4" /> {tr('预约席位', 'Reserve a Seat')}
               </>
             )}
           </button>

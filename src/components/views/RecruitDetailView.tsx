@@ -6,13 +6,13 @@ import {
 } from 'lucide-react';
 
 const stageMeta = {
-  idea: { label: '构思阶段', desc: '还在想法验证期，需要早期合伙人一起把方向跑通。', color: '#722ED1' },
-  prototype: { label: '原型阶段', desc: '已有可运行原型，正在补齐工程与体验细节。', color: '#165DFF' },
-  demo: { label: 'Demo 阶段', desc: '核心链路已跑通，需要补齐规模化与商业化能力。', color: '#00B487' },
+  idea: { label: '构思阶段', labelEn: 'Idea', desc: '还在想法验证期，需要早期合伙人一起把方向跑通。', color: '#722ED1' },
+  prototype: { label: '原型阶段', labelEn: 'Prototype', desc: '已有可运行原型，正在补齐工程与体验细节。', color: '#165DFF' },
+  demo: { label: 'Demo 阶段', labelEn: 'Demo', desc: '核心链路已跑通，需要补齐规模化与商业化能力。', color: '#00B487' },
 } as const;
 
 export const RecruitDetailView: React.FC<{ id?: string }> = ({ id }) => {
-  const { recruitments, currentUser, setLoginModalOpen, setActiveRoute, toggleLikeRecruit } = useApp();
+  const { recruitments, currentUser, setLoginModalOpen, setActiveRoute, toggleLikeRecruit, tr } = useApp();
 
   const [applied, setApplied] = useState(false);
   const [form, setForm] = useState({ name: '', skills: '', message: '' });
@@ -39,15 +39,15 @@ export const RecruitDetailView: React.FC<{ id?: string }> = ({ id }) => {
   return (
     <DetailShell
       backRoute="square/recruit"
-      backLabel="返回组队广场"
-      eyebrow={`${post.track === 'industry' ? '产业赛道' : '自由赛道'} · ${stage.label}`}
+      backLabel={tr('返回组队广场', 'Back to Team Square')}
+      eyebrow={`${post.track === 'industry' ? tr('产业赛道', 'Industry') : tr('自由赛道', 'Creator')} · ${tr(stage.label, stage.labelEn)}`}
       title={post.title}
       subtitle={post.summary}
       meta={[
-        { label: '发起人', value: post.leader.name },
-        { label: '所在城市', value: post.city },
-        { label: '协作方式', value: post.isRemote ? '可远程' : '需到场' },
-        { label: '已有申请', value: `${post.applicationsCount} 人` },
+        { label: tr('发起人', 'Founder'), value: post.leader.name },
+        { label: tr('所在城市', 'City'), value: post.city },
+        { label: tr('协作方式', 'Collaboration'), value: post.isRemote ? tr('可远程', 'Remote OK') : tr('需到场', 'On-site') },
+        { label: tr('已有申请', 'Applicants'), value: `${post.applicationsCount}` },
       ]}
       actions={
         <>
@@ -58,10 +58,10 @@ export const RecruitDetailView: React.FC<{ id?: string }> = ({ id }) => {
             className="doa-btn doa-btn-ghost"
           >
             <Heart className={`w-4 h-4 ${post.hasLiked ? 'fill-[#FF4D4F] text-[#FF4D4F]' : ''}`} />
-            {post.hasLiked ? '已心动' : '心动'} · {post.likes}
+            {post.hasLiked ? tr('已心动', 'Liked') : tr('心动', 'Like')} · {post.likes}
           </button>
           <a href="#apply" className="doa-btn doa-btn-primary">
-            <Send className="w-4 h-4" /> {applied ? '已投递' : '申请加入'}
+            <Send className="w-4 h-4" /> {applied ? tr('已投递', 'Sent') : tr('申请加入', 'Apply to Join')}
           </a>
         </>
       }
@@ -70,7 +70,7 @@ export const RecruitDetailView: React.FC<{ id?: string }> = ({ id }) => {
         <div className="lg:col-span-2 space-y-6">
           {/* Project stage */}
           <section className="doa-card p-6 sm:p-7">
-            <h2 className="text-lg font-bold text-[#0B1B3A] mb-4">项目现状</h2>
+            <h2 className="text-lg font-bold text-[#0B1B3A] mb-4">{tr('项目现状', 'Project Status')}</h2>
             <div className="flex items-start gap-4">
               <span
                 className="shrink-0 w-11 h-11 rounded-2xl flex items-center justify-center text-white text-sm font-bold"
@@ -90,7 +90,7 @@ export const RecruitDetailView: React.FC<{ id?: string }> = ({ id }) => {
 
           {/* Open roles */}
           <section className="doa-card p-6 sm:p-7">
-            <h2 className="text-lg font-bold text-[#0B1B3A] mb-5">正在招募的角色</h2>
+            <h2 className="text-lg font-bold text-[#0B1B3A] mb-5">{tr('正在招募的角色', 'Roles Wanted')}</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {post.neededRoles.map((role, i) => (
                 <div key={i} className="flex items-center gap-3 p-4 rounded-2xl bg-[#F7FAFF] border border-[#E3ECFA]">
@@ -106,7 +106,7 @@ export const RecruitDetailView: React.FC<{ id?: string }> = ({ id }) => {
           {/* Skills */}
           <section className="doa-card p-6 sm:p-7">
             <h2 className="text-lg font-bold text-[#0B1B3A] mb-4 flex items-center gap-2">
-              <Wrench className="w-4.5 h-4.5 text-[#165DFF]" /> 技术栈
+              <Wrench className="w-4.5 h-4.5 text-[#165DFF]" /> {tr('技术栈', 'Tech Stack')}
             </h2>
             <div className="flex flex-wrap gap-2">
               {post.skills.map((s, i) => (

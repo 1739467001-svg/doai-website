@@ -39,7 +39,7 @@ interface WallUser {
 }
 
 const CardWall: React.FC = () => {
-  const { currentUser, setActiveRoute } = useApp();
+  const { currentUser, setActiveRoute, tr } = useApp();
   const [users, setUsers] = useState<WallUser[]>([]);
   const [following, setFollowing] = useState<string[]>([]);
   const [mutual, setMutual] = useState<string[]>([]);
@@ -104,17 +104,17 @@ const CardWall: React.FC = () => {
           <div className="text-xs font-semibold text-[#165DFF] tracking-wider uppercase mb-1">
             DOAI MAKER CARD WALL
           </div>
-          <h2 className="text-2xl sm:text-3xl font-bold text-[#0B1B3A]">创客名片墙</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold text-[#0B1B3A]">{tr('创客名片墙', 'Maker Card Wall')}</h2>
           <p className="text-xs text-[#666666] mt-1.5 flex items-center gap-1.5">
             <HeartHandshake className="w-3.5 h-3.5 text-[#165DFF]" />
-            <span>发现感兴趣的创作伙伴 · 互相关注后可在「我的战队」发起组队邀请</span>
+            <span>{tr('发现感兴趣的创作伙伴 · 互相关注后可在「我的战队」发起组队邀请', 'Discover makers — mutual follows unlock team invites in My Team')}</span>
           </p>
         </div>
         <button
           onClick={() => setActiveRoute('dashboard/team')}
           className="px-5 py-2 text-xs font-semibold text-[#165DFF] hover:text-[#1453E6] bg-white hover:bg-[#F5F8FF] border border-[#165DFF]/40 rounded-full transition-colors"
         >
-          去我的战队邀请 →
+          {tr('去我的战队邀请 →', 'Invite from My Team →')}
         </button>
       </div>
 
@@ -193,7 +193,7 @@ const CardWall: React.FC = () => {
                       : 'text-[#165DFF] border-[#165DFF]/40 hover:bg-[#165DFF]/5'
                   }`}
                 >
-                  {iFollow ? '取消关注' : '+ 关注'}
+                  {iFollow ? tr('取消关注', 'Unfollow') : tr('+ 关注', '+ Follow')}
                 </button>
               </div>
             </div>
@@ -208,6 +208,7 @@ export const SquareView: React.FC = () => {
   const {
     lang,
     t,
+    tr,
     recruitments,
     setRecruitments,
     currentUser,
@@ -325,11 +326,11 @@ export const SquareView: React.FC = () => {
               DOAI CREATOR NETWORK
             </div>
             <h1 className="text-3xl sm:text-4xl font-bold text-[#0B1B3A]">
-              组队广场
+              {tr('组队广场', 'Team Square')}
             </h1>
             <p className="text-xs text-[#666666] mt-1.5 flex items-center gap-1.5">
               <ShieldCheck className="w-3.5 h-3.5 text-[#00C48C]" />
-              <span>严格遵循项目保密原则：报名项目不公开展示，仅发布合规招募需求与人才经历</span>
+              <span>{tr('严格遵循项目保密原则：报名项目不公开展示，仅发布合规招募需求与人才经历', 'Projects stay confidential — only compliant recruitment posts and profiles are shown.')}</span>
             </p>
           </div>
 
@@ -369,7 +370,7 @@ export const SquareView: React.FC = () => {
 
         {/* Filter Chips Bar (Clean interactive buttons with instant filtering) */}
         <div className="mt-4 flex flex-wrap items-center gap-2 text-xs py-2">
-          <span className="text-[#888888] text-[11px] mr-1">赛道方向:</span>
+          <span className="text-[#888888] text-[11px] mr-1">{tr('赛道方向', 'Track')}:</span>
           {['all', 'industry', 'creator'].map(track => (
             <button
               key={track}
@@ -380,12 +381,12 @@ export const SquareView: React.FC = () => {
                   : 'bg-[#F7F8FA] text-[#666666] hover:text-[#0B1B3A] border border-[#E8EAED]'
               }`}
             >
-              {track === 'all' ? '全部赛道' : track === 'industry' ? '产业赛道' : '自由赛道'}
+              {track === 'all' ? tr('全部赛道', 'All') : track === 'industry' ? tr('产业赛道', 'Industry') : tr('自由赛道', 'Creator')}
             </button>
           ))}
 
-          <span className="text-[#888888] text-[11px] ml-3 mr-1">角色方向:</span>
-          {['all', '算法', '前端', '后端', '硬件', '产品'].map(role => (
+          <span className="text-[#888888] text-[11px] ml-3 mr-1">{tr('角色方向', 'Role')}:</span>
+          {[['all', 'All'], ['算法', 'Algo'], ['前端', 'Frontend'], ['后端', 'Backend'], ['硬件', 'Hardware'], ['产品', 'Product']].map(([role, roleEn]) => (
             <button
               key={role}
               onClick={() => setSelectedRole(role)}
@@ -395,12 +396,12 @@ export const SquareView: React.FC = () => {
                   : 'bg-[#F7F8FA] text-[#666666] hover:text-[#0B1B3A] border border-[#E8EAED]'
               }`}
             >
-              {role === 'all' ? '全部角色' : role}
+              {role === 'all' ? tr('全部角色', 'All') : tr(role, roleEn)}
             </button>
           ))}
 
-          <span className="text-[#888888] text-[11px] ml-3 mr-1">城市分布:</span>
-          {['all', '深圳', '北京', '上海', '杭州'].map(city => (
+          <span className="text-[#888888] text-[11px] ml-3 mr-1">{tr('城市分布', 'City')}:</span>
+          {[['all', 'All'], ['深圳', 'Shenzhen'], ['北京', 'Beijing'], ['上海', 'Shanghai'], ['杭州', 'Hangzhou']].map(([city, cityEn]) => (
             <button
               key={city}
               onClick={() => setSelectedCity(city)}
@@ -410,7 +411,7 @@ export const SquareView: React.FC = () => {
                   : 'bg-[#F7F8FA] text-[#666666] hover:text-[#0B1B3A] border border-[#E8EAED]'
               }`}
             >
-              {city === 'all' ? '全域' : city}
+              {city === 'all' ? tr('全域', 'All') : tr(city, cityEn)}
             </button>
           ))}
         </div>
@@ -660,7 +661,7 @@ export const SquareView: React.FC = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-in fade-in duration-150">
           <div className="relative w-full max-w-md bg-white rounded-3xl p-6 shadow-floating border border-[#E8EAED]">
             <div className="flex items-center justify-between pb-3 border-b border-[#E8EAED] mb-3">
-              <h3 className="text-base font-bold text-[#0B1B3A]">申请加入战队</h3>
+              <h3 className="text-base font-bold text-[#0B1B3A]">{tr('申请加入战队', 'Apply to Join')}</h3>
               <button
                 onClick={() => setApplyModalOpen(false)}
                 className="p-1.5 text-[#888888] hover:text-[#0B1B3A] rounded-full"
@@ -672,7 +673,7 @@ export const SquareView: React.FC = () => {
             {appliedSuccess ? (
               <div className="text-center py-8 space-y-3">
                 <CheckCircle2 className="w-12 h-12 text-[#00C48C] mx-auto" />
-                <h4 className="text-base font-bold text-[#0B1B3A]">申请已提交！</h4>
+                <h4 className="text-base font-bold text-[#0B1B3A]">{tr('申请已提交！', 'Application Sent!')}</h4>
                 <p className="text-xs text-[#666666]">队长将收到站内信审核提醒，48 小时内处理</p>
               </div>
             ) : (
@@ -701,13 +702,13 @@ export const SquareView: React.FC = () => {
                     onClick={() => setApplyModalOpen(false)}
                     className="px-4 py-2 text-xs font-semibold text-[#666666]"
                   >
-                    取消
+                    {tr('取消', 'Cancel')}
                   </button>
                   <button
                     type="submit"
                     className="px-6 py-2 text-xs font-semibold text-white bg-[#165DFF] hover:bg-[#1453E6] rounded-full"
                   >
-                    发送加入申请
+                    {tr('发送加入申请', 'Send Application')}
                   </button>
                 </div>
               </form>

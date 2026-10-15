@@ -34,7 +34,7 @@ const PersonCard: React.FC<{ p: Person; size?: 'lg' | 'sm' }> = ({ p, size = 'sm
 );
 
 export const PeopleSection: React.FC = () => {
-  const { setActiveRoute } = useApp();
+  const { setActiveRoute, tr } = useApp();
   const [openGroup, setOpenGroup] = useState<string | null>(null);
 
   return (
@@ -45,11 +45,11 @@ export const PeopleSection: React.FC = () => {
           <div>
             <div className="doa-eyebrow mb-3">PRESIDIUMS</div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0B1B3A] tracking-tight">
-              大赛主席团
+              {tr('大赛主席团', 'Presidium')}
             </h2>
             <p className="text-[13px] text-[#6B7C9B] mt-2 max-w-xl leading-relaxed">
-              主席团由主办方、产业方与学术代表组成，负责赛事方向与赛制制定。
-              <span className="text-[#98A6BE]">（嘉宾名单依姓氏笔画排序，排名不分主次）</span>
+              {tr('主席团由主办方、产业方与学术代表组成，负责赛事方向与赛制制定。', 'Organizers, industry and academia shaping the contest direction and rules.')}
+              <span className="text-[#98A6BE]">{tr('（嘉宾名单依姓氏笔画排序，排名不分主次）', '(listed alphabetically, no ranking)')}</span>
             </p>
           </div>
           <button
@@ -57,7 +57,7 @@ export const PeopleSection: React.FC = () => {
             onClick={() => setActiveRoute('conference')}
             className="shrink-0 text-[13px] font-semibold text-[#165DFF] hover:underline"
           >
-            了解更多 →
+            {tr('了解更多 →', 'Learn more →')}
           </button>
         </div>
 
@@ -74,10 +74,10 @@ export const PeopleSection: React.FC = () => {
           <div>
             <div className="doa-eyebrow mb-3">JURY</div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0B1B3A] tracking-tight">
-              专家评委团
+              {tr('专家评委团', 'Jury')}
             </h2>
             <p className="text-[13px] text-[#6B7C9B] mt-2 max-w-xl leading-relaxed">
-              评审团 12—15 名，由五类代表构成，覆盖政府、产业、投资、技术与主办方视角。
+              {tr('评审团 12—15 名，由五类代表构成，覆盖政府、产业、投资、技术与主办方视角。', 'A 12–15 member jury across government, industry, investment, technology and organizers.')}
             </p>
           </div>
         </div>
@@ -99,11 +99,11 @@ export const PeopleSection: React.FC = () => {
         <div className="doa-panel p-6 mb-6">
           <div className="flex items-center gap-2 mb-3">
             <BadgeCheck className="w-4 h-4 text-[#165DFF]" />
-            <h3 className="font-bold text-[#0B1B3A] text-sm">核心评审维度（五维一体）</h3>
+            <h3 className="font-bold text-[#0B1B3A] text-sm">{tr('核心评审维度（五维一体）', 'Core Criteria')}</h3>
           </div>
           <div className="flex flex-wrap gap-2">
-            {['技术创新性', '商业可行性', '产业适配度', '团队与落地力', '需求匹配度'].map(d => (
-              <span key={d} className="doa-chip">{d}</span>
+            {[['技术创新性', 'Tech novelty'], ['商业可行性', 'Viability'], ['产业适配度', 'Industry fit'], ['团队与落地力', 'Execution'], ['需求匹配度', 'Problem fit']].map(d => (
+              <span key={d[0]} className="doa-chip">{tr(d[0], d[1])}</span>
             ))}
           </div>
         </div>
@@ -151,7 +151,7 @@ export const PeopleSection: React.FC = () => {
                       onClick={() => setOpenGroup(g.title)}
                       className="text-[12px] font-semibold text-[#165DFF] hover:underline pt-1"
                     >
-                      展开全部 {groupJudges.length} 名 →
+                      {tr('展开全部', 'Show all')} {groupJudges.length} →
                     </button>
                   )}
                 </div>
@@ -167,10 +167,10 @@ export const PeopleSection: React.FC = () => {
           <div>
             <div className="doa-eyebrow mb-3">PARTNERS</div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0B1B3A] tracking-tight">
-              生态伙伴
+              {tr('生态伙伴', 'Ecosystem Partners')}
             </h2>
             <p className="text-[13px] text-[#6B7C9B] mt-2 max-w-xl leading-relaxed">
-              主办、联合主办、支持单位、场地与内容合作方，以及 3 个海外分会场。
+              {tr('主办、联合主办、支持单位、场地与内容合作方，以及 3 个海外分会场。', 'Hosts, co-hosts, supporters, venue and content partners, plus 3 overseas venues.')}
             </p>
           </div>
         </div>

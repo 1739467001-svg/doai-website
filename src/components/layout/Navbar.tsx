@@ -28,42 +28,43 @@ export const Navbar: React.FC = () => {
   interface MenuItem {
     key: string;
     label: string;
+    labelEn?: string;
     hasDropdown: boolean;
     route?: string;
-    children?: { label: string; route: string }[];
+    children?: { label: string; labelEn?: string; route: string }[];
   }
 
   const menuItems: MenuItem[] = [
-    { key: 'home', label: '首页', hasDropdown: false },
+    { key: 'home', label: '首页', labelEn: 'Home', hasDropdown: false },
     {
       key: 'conference',
-      label: '大会介绍',
+      label: '大会介绍', labelEn: 'Conference',
       hasDropdown: true,
       route: 'conference',
       children: [
-        { label: '分论坛', route: 'forum' },
-        { label: '大会报名', route: 'attend' },
-        { label: '活动动态', route: 'news' },
+        { label: '分论坛', labelEn: 'Forums', route: 'forum' },
+        { label: '大会报名', labelEn: 'Attend', route: 'attend' },
+        { label: '活动动态', labelEn: 'News', route: 'news' },
       ],
     },
     {
       key: 'maker',
-      label: '赛事中心',
+      label: '赛事中心', labelEn: 'Contest',
       hasDropdown: true,
       route: 'maker',
       children: [
-        { label: '赛事总览', route: 'maker' },
-        { label: '赛题与赛制', route: 'rules' },
+        { label: '赛事总览', labelEn: 'Overview', route: 'maker' },
+        { label: '赛题与赛制', labelEn: 'Tracks & Rules', route: 'rules' },
       ],
     },
     {
       key: 'square',
-      label: '创客社区',
+      label: '创客社区', labelEn: 'Community',
       hasDropdown: false,
       route: 'square',
     },
-    { key: 'live', label: '直播中心', hasDropdown: false },
-    { key: 'dashboard', label: '我的 DOAI', hasDropdown: false },
+    { key: 'live', label: '直播中心', labelEn: 'Live', hasDropdown: false },
+    { key: 'dashboard', label: '我的 DOAI', labelEn: 'My DOAI', hasDropdown: false },
   ];
 
 
@@ -173,7 +174,7 @@ export const Navbar: React.FC = () => {
                       isActive ? 'text-[#165DFF] font-semibold' : 'text-[#333333]'
                     }`}
                   >
-                    <span>{item.label}</span>
+                    <span>{lang === 'en' && item.labelEn ? item.labelEn : item.label}</span>
                     {item.hasDropdown && (
                       <ChevronDown
                         className={`w-3.5 h-3.5 text-[#999999] transition-transform duration-200 ${
@@ -200,7 +201,7 @@ export const Navbar: React.FC = () => {
                           }}
                           className="w-full text-left px-3.5 py-2 text-xs font-medium text-[#444444] hover:text-[#165DFF] hover:bg-[#F7F8FA] rounded-xl transition-colors"
                         >
-                          {child.label}
+                          {lang === 'en' && child.labelEn ? child.labelEn : child.label}
                         </button>
                       ))}
                     </div>
@@ -318,7 +319,7 @@ export const Navbar: React.FC = () => {
                         active ? 'text-[#165DFF]' : 'text-[#0B1B3A]'
                       }`}
                     >
-                      <span>{item.label}</span>
+                      <span>{lang === 'en' && item.labelEn ? item.labelEn : item.label}</span>
                       {item.hasDropdown && (
                         <ChevronDown
                           className={`w-4 h-4 text-[#98A6BE] transition-transform duration-200 ${
@@ -341,7 +342,7 @@ export const Navbar: React.FC = () => {
                             }}
                             className="block w-full text-left px-3 py-2.5 text-[14px] text-[#48597A] hover:text-[#165DFF] rounded-lg hover:bg-[#F2F7FF] transition-colors min-h-[44px] flex items-center"
                           >
-                            {child.label}
+                            {lang === 'en' && child.labelEn ? child.labelEn : child.label}
                           </button>
                         ))}
                       </div>
@@ -354,7 +355,7 @@ export const Navbar: React.FC = () => {
                   register CTAs now live inside their own sections. */}
               <div className="pt-4 pb-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-[13px] font-semibold text-[#0B1B3A]">语言 / Language</span>
+                  <span className="text-[13px] font-semibold text-[#0B1B3A]">{lang === 'en' ? 'Language' : '语言 / Language'}</span>
                   <LangToggle />
                 </div>
               </div>
@@ -370,7 +371,7 @@ export const Navbar: React.FC = () => {
             <div className="flex items-center justify-between pb-3 border-b border-[#E8EAED] mb-4">
               <div className="flex items-center gap-2 text-xs font-bold text-[#0B1B3A]">
                 <Search className="w-4 h-4 text-[#165DFF]" />
-                <span>站内全量搜索</span>
+                <span>{lang === 'en' ? 'Site Search' : '站内全量搜索'}</span>
               </div>
               <button
                 onClick={() => setSearchOpen(false)}
@@ -386,13 +387,13 @@ export const Navbar: React.FC = () => {
                 autoFocus
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                placeholder="搜索分论坛主题、参赛团队、嘉宾、赛道规则..."
+                placeholder={lang === 'en' ? 'Search forums, teams, speakers, rules...' : '搜索分论坛主题、参赛团队、嘉宾、赛道规则...'}
                 className="w-full px-4 py-3 bg-[#F7F8FA] border border-[#E8EAED] rounded-xl text-xs focus:outline-none focus:bg-white focus:border-[#165DFF]"
               />
             </div>
 
             <div className="mt-4 space-y-2">
-              <div className="text-[11px] font-semibold text-[#888888]">热搜推荐：</div>
+              <div className="text-[11px] font-semibold text-[#888888]">{lang === 'en' ? 'Trending:' : '热搜推荐：'}</div>
               <div className="flex flex-wrap gap-2 text-xs">
                 {['产业赛道', '自由赛道', '18个分会场', 'After Party', '长宁味道市集', '创投引力场'].map(tag => (
                   <button

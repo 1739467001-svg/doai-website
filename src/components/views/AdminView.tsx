@@ -34,6 +34,7 @@ interface CheckinRecord {
 }
 
 const CheckinPanel: React.FC = () => {
+  const { tr } = useApp();
   const [code, setCode] = useState('');
   const [gate, setGate] = useState('主入口');
   const [submitting, setSubmitting] = useState(false);
@@ -86,8 +87,8 @@ const CheckinPanel: React.FC = () => {
       <form onSubmit={submit} className="doa-card p-6 space-y-4">
         <div className="flex items-center gap-2">
           <ScanLine className="w-5 h-5 text-[#165DFF]" />
-          <h3 className="text-base font-bold text-[#0B1B3A]">现场扫码核销</h3>
-          <span className="text-[11px] text-[#98A6BE]">扫描观众数字身份码后自动提交，也可手动输入凭证码</span>
+          <h3 className="text-base font-bold text-[#0B1B3A]">{tr('现场扫码核销', 'Gate Check-in')}</h3>
+          <span className="text-[11px] text-[#98A6BE]">{tr('扫描观众数字身份码后自动提交，也可手动输入凭证码', 'Scan a maker pass code, or type it manually')}</span>
         </div>
         <div className="flex flex-col sm:flex-row gap-3">
           <input
@@ -111,7 +112,7 @@ const CheckinPanel: React.FC = () => {
             disabled={submitting || !code.trim()}
             className="px-6 py-3 text-sm font-semibold text-white bg-[#165DFF] hover:bg-[#1453E6] disabled:opacity-40 rounded-xl transition-colors shrink-0"
           >
-            {submitting ? '核销中…' : '核销签到'}
+            {submitting ? tr('核销中…', 'Checking…') : tr('核销签到', 'Check In')}
           </button>
         </div>
 
@@ -134,21 +135,21 @@ const CheckinPanel: React.FC = () => {
       {/* 核销记录 */}
       <div className="doa-card overflow-hidden">
         <div className="px-6 py-4 border-b border-[#E8EAED] flex items-center justify-between">
-          <h3 className="text-sm font-bold text-[#0B1B3A]">核销记录（{records.length}）</h3>
+          <h3 className="text-sm font-bold text-[#0B1B3A]">{tr('核销记录', 'Records')}（{records.length}）</h3>
           <button onClick={loadRecords} className="text-xs text-[#165DFF] hover:underline">
             刷新
           </button>
         </div>
         {records.length === 0 ? (
-          <p className="p-8 text-center text-sm text-[#98A6BE]">暂无核销记录，扫描第一张数字身份码试试</p>
+          <p className="p-8 text-center text-sm text-[#98A6BE]">{tr('暂无核销记录，扫描第一张数字身份码试试', 'No check-ins yet — scan the first pass to begin.')}</p>
         ) : (
           <table className="w-full text-sm">
             <thead>
               <tr className="text-left text-[11px] uppercase tracking-wider text-[#98A6BE] border-b border-[#E8EAED]">
-                <th className="px-6 py-3 font-semibold">凭证码</th>
-                <th className="px-4 py-3 font-semibold">持票人</th>
-                <th className="px-4 py-3 font-semibold">闸口</th>
-                <th className="px-6 py-3 font-semibold">时间</th>
+                <th className="px-6 py-3 font-semibold">{tr('凭证码', 'Code')}</th>
+                <th className="px-4 py-3 font-semibold">{tr('持票人', 'Holder')}</th>
+                <th className="px-4 py-3 font-semibold">{tr('闸口', 'Gate')}</th>
+                <th className="px-6 py-3 font-semibold">{tr('时间', 'Time')}</th>
               </tr>
             </thead>
             <tbody>
@@ -180,6 +181,7 @@ export const AdminView: React.FC = () => {
     currentUser,
     setLoginModalOpen,
     quickSwitchRole,
+    tr,
   } = useApp();
 
   // 报名数据以后端为准（前端提交实时入库）；后端不可用时回退本地演示数据
@@ -326,7 +328,7 @@ export const AdminView: React.FC = () => {
             className="px-4 py-2 text-xs font-semibold text-[#0B1B3A] bg-white border border-[#E8EAED] hover:bg-[#F7F8FA] rounded-xl transition-colors flex items-center gap-1.5"
           >
             <Download className="w-3.5 h-3.5" />
-            <span>导出报名数据 (CSV)</span>
+            <span>{tr('导出报名数据 (CSV)', 'Export CSV')}</span>
           </button>
         </div>
       </div>
@@ -334,13 +336,13 @@ export const AdminView: React.FC = () => {
       {/* Admin Navigation Tabs */}
       <div className="mt-6 flex items-center gap-2 overflow-x-auto pb-2 text-xs font-semibold border-b border-[#E8EAED]">
         {[
-          { id: 'overview', label: '数据大盘与漏斗' },
-          { id: 'checkin', label: '扫码核销' },
-          { id: 'submissions', label: `报名评审审核 (${registrations.length})` },
-          { id: 'square', label: `广场内容治理 (${recruitments.length})` },
-          { id: 'forums', label: `论坛场次管理 (${forums.length})` },
-          { id: 'cms', label: 'CMS 首页配置' },
-          { id: 'broadcast', label: '全员站内信推送' },
+          { id: 'overview', label: '数据大盘与漏斗', labelEn: 'Overview' },
+          { id: 'checkin', label: '扫码核销', labelEn: 'Check-in' },
+          { id: 'submissions', label: `报名评审审核 (${registrations.length})`, labelEn: `Submissions (${registrations.length})` },
+          { id: 'square', label: `广场内容治理 (${recruitments.length})`, labelEn: `Community (${recruitments.length})` },
+          { id: 'forums', label: `论坛场次管理 (${forums.length})`, labelEn: `Forums (${forums.length})` },
+          { id: 'cms', label: 'CMS 首页配置', labelEn: 'CMS' },
+          { id: 'broadcast', label: '全员站内信推送', labelEn: 'Broadcast' },
         ].map(tab => (
           <button
             key={tab.id}
@@ -351,7 +353,7 @@ export const AdminView: React.FC = () => {
                 : 'bg-[#F7F8FA] text-[#666666] hover:text-[#0B1B3A] border border-[#E8EAED]'
             }`}
           >
-            {tab.label}
+            {tr(tab.label, tab.labelEn)}
           </button>
         ))}
       </div>

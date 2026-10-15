@@ -28,6 +28,7 @@ const statusMeta = {
 
 const BriefCard: React.FC<{ b: ContestBrief }> = ({ b }) => {
   const [open, setOpen] = useState(false);
+  const { tr } = useApp();
   const tm = trackMeta[b.track];
   const sm = statusMeta[b.status];
 
@@ -79,7 +80,7 @@ const BriefCard: React.FC<{ b: ContestBrief }> = ({ b }) => {
         <div className="px-6 sm:px-7 pb-7 pt-1 border-t border-[#EFF5FF] space-y-6 animate-in slide-in-from-top-1 duration-200">
           <section>
             <h4 className="flex items-center gap-2 text-[13px] font-bold text-[#1A2B4D] mb-2.5">
-              <FileText className="w-4 h-4 text-[#165DFF]" /> 赛题背景
+              <FileText className="w-4 h-4 text-[#165DFF]" /> {tr('赛题背景', 'Background')}
             </h4>
             <p className="text-[13px] text-[#48597A] leading-[1.85]">{b.background}</p>
           </section>
@@ -152,7 +153,7 @@ const BriefCard: React.FC<{ b: ContestBrief }> = ({ b }) => {
 /* ------------------------------------------------------------------ 页面 */
 
 export const RulesView: React.FC = () => {
-  const { setActiveRoute } = useApp();
+  const { setActiveRoute, tr } = useApp();
   const [openRule, setOpenRule] = useState<string | null>(contestRules[0]?.id ?? null);
   const [trackFilter, setTrackFilter] = useState<'all' | 'industry' | 'creator'>('all');
 
@@ -161,15 +162,15 @@ export const RulesView: React.FC = () => {
   return (
     <DetailShell
       backRoute="maker"
-      backLabel="返回赛事中心"
+      backLabel={tr('返回赛事中心', 'Back to Contest')}
       eyebrow="BRIEFS & RULES"
-      title="赛题与赛制"
+      title={tr('赛题与赛制', 'Tracks & Rules')}
       subtitle={contest.tagline}
       meta={[
-        { label: '赛道', value: '双赛道' },
-        { label: '赛题', value: `${contestBriefs.length} 个` },
-        { label: '决赛赛制', value: contest.format },
-        { label: '入围数量', value: contest.finalistCount },
+        { label: tr('赛道', 'Tracks'), value: tr('双赛道', 'Dual tracks') },
+        { label: tr('赛题', 'Briefs'), value: `${contestBriefs.length}` },
+        { label: tr('决赛赛制', 'Finals'), value: tr(contest.format, '8-min pitch + 5-min Q&A') },
+        { label: tr('入围数量', 'Finalists'), value: contest.finalistCount },
       ]}
       actions={
         <button type="button" onClick={() => setActiveRoute('maker/tracks')} className="doa-btn doa-btn-primary">

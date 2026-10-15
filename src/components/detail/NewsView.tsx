@@ -83,6 +83,7 @@ const WxArticleCard: React.FC<{ item: WxArticle }> = ({ item }) => (
 /** 站内公告卡片：横排层级重设计 */
 const ArticleCard: React.FC<{ item: NewsItem; featured?: boolean }> = ({ item, featured }) => {
   const [open, setOpen] = useState(false);
+  const { tr } = useApp();
   const c = catColor[item.category];
 
   return (
@@ -127,7 +128,7 @@ const ArticleCard: React.FC<{ item: NewsItem; featured?: boolean }> = ({ item, f
           aria-expanded={open}
           className="mt-3 inline-flex items-center gap-1 text-[13px] font-semibold text-[#165DFF] hover:underline"
         >
-          {open ? '收起' : '阅读全文'}
+          {open ? tr('收起', 'Collapse') : tr('阅读全文', 'Read more')}
           <ChevronDown className={`w-3.5 h-3.5 transition-transform ${open ? 'rotate-180' : ''}`} />
         </button>
       </div>
@@ -136,7 +137,7 @@ const ArticleCard: React.FC<{ item: NewsItem; featured?: boolean }> = ({ item, f
 };
 
 export const NewsView: React.FC = () => {
-  const { setActiveRoute } = useApp();
+  const { setActiveRoute, tr } = useApp();
   const [cat, setCat] = useState<string>('全部');
   const [wxArticles, setWxArticles] = useState<WxArticle[] | null>(null);
 
@@ -162,14 +163,14 @@ export const NewsView: React.FC = () => {
   return (
     <DetailShell
       backRoute="conference"
-      backLabel="返回大会介绍"
+      backLabel={tr('返回大会介绍', 'Back to Conference')}
       eyebrow="NEWS & UPDATES"
-      title="活动动态"
-      subtitle="组委会公告、赛事进展、分会场与合作动态，第一时间在这里更新。"
+      title={tr('活动动态', 'News & Updates')}
+      subtitle={tr('组委会公告、赛事进展、分会场与合作动态，第一时间在这里更新。', 'Announcements, contest progress, forums and partnerships — updated here first.')}
       meta={[
-        { label: '动态总数', value: `${news.length} 条` },
-        { label: '最近更新', value: news[0]?.date ?? '—' },
-        { label: '覆盖类别', value: `${newsCategories.length - 1} 类` },
+        { label: tr('动态总数', 'Posts'), value: `${news.length}` },
+        { label: tr('最近更新', 'Latest'), value: news[0]?.date ?? '—' },
+        { label: tr('覆盖类别', 'Categories'), value: `${newsCategories.length - 1}` },
       ]}
       actions={
         <button type="button" onClick={() => setActiveRoute('maker/tracks')} className="doa-btn doa-btn-primary">
@@ -181,14 +182,14 @@ export const NewsView: React.FC = () => {
       <section className="mb-10">
         <div className="flex items-center gap-2 mb-4">
           <span className="w-1 h-4 bg-[#00C48C] rounded-full" aria-hidden="true" />
-          <h2 className="text-base font-bold text-[#0B1B3A]">公众号动态</h2>
-          <span className="text-[11px] text-[#98A6BE]">同步自官方微信公众号 · 点击前往原文</span>
+          <h2 className="text-base font-bold text-[#0B1B3A]">{tr('公众号动态', 'From WeChat')}</h2>
+          <span className="text-[11px] text-[#98A6BE]">{tr('同步自官方微信公众号 · 点击前往原文', 'Synced from our official WeChat · click to read')}</span>
         </div>
         {wxArticles === null ? (
           <div className="doa-card h-40 animate-pulse bg-[#F7FAFF]" aria-hidden="true" />
         ) : wxArticles.length === 0 ? (
           <div className="doa-panel p-8 text-center text-sm text-[#6B7C9B]">
-            公众号动态暂时拉取不到，稍后再来看看
+            {tr('公众号动态暂时拉取不到，稍后再来看看', 'WeChat feed unavailable right now — check back soon.')}
           </div>
         ) : (
           <div className="space-y-4">
@@ -202,7 +203,7 @@ export const NewsView: React.FC = () => {
       {/* category filter */}
       <div className="flex items-center gap-2 flex-wrap mb-8">
         <span className="w-1 h-4 bg-[#165DFF] rounded-full mr-1" aria-hidden="true" />
-        <h2 className="text-base font-bold text-[#0B1B3A] mr-2">官方公告</h2>
+        <h2 className="text-base font-bold text-[#0B1B3A] mr-2">{tr('官方公告', 'Official')}</h2>
         {newsCategories.map(c => (
           <button
             key={c}
@@ -222,7 +223,7 @@ export const NewsView: React.FC = () => {
       {list.length === 0 ? (
         <div className="doa-panel p-12 text-center">
           <Megaphone className="w-8 h-8 text-[#C0CBDD] mx-auto mb-3" />
-          <p className="text-sm text-[#6B7C9B]">该分类暂无动态</p>
+          <p className="text-sm text-[#6B7C9B]">{tr('该分类暂无动态', 'Nothing here yet.')}</p>
         </div>
       ) : (
         <div className="space-y-4">

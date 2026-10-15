@@ -33,7 +33,7 @@ app.use(express.json());
 
 /* ------------------------------ JSON 存储 ------------------------------ */
 
-const STORE_FILES = ['registrations', 'tickets', 'checkins', 'teams', 'users', 'follows', 'applications'];
+const STORE_FILES = ['registrations', 'tickets', 'checkins', 'teams', 'users', 'follows', 'applications', 'profiles'];
 
 function load(name) {
   try {
@@ -572,6 +572,46 @@ app.post('/api/team-applications/:id/decline', (req, res) => {
   app_.handledAt = now();
   save('applications', apps);
   res.json({ ok: true });
+});
+
+/* ------------------------------ 个人资料（我的 DOAI 编辑） ------------------------------ */
+/* 用户可自定义名字与头像；绑定了 atomclub 的用户可一键同步那边的头像。
+ * profiles.json 存自定义覆盖；AtomClub 侧头像是外部账号体系数据，
+ * 这里用固定映射模拟（与本地头像不同，同步后肉眼可见变化）。 */
+
+const ATOMCLUB_AVATARS = {
+  'user-101': 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=320&auto=format&fit=crop&q=80',
+};
+
+app.get('/api/atomclub/avatar', (req, res) => {
+  const userId = String(req.query.userId || '');
+  const avatar = ATOMCLUB_AVATARS[userId];
+  if (!avatar) return res.status(404).json({ ok: false, message: '该账号未绑定 AtomClub' });
+  res.json({ ok: true, avatar, source: 'atomclub' });
+});
+
+app.get('/api/profile', (req, res) => {
+  const userId = String(req.query.userId || '');
+  const profiles = load('profiles');
+  const override = profiles.find(p => p.userId === userId) || null;
+  res.json({ ok: true, profile: override });
+});
+
+app.post('/api/profile', (req, res) => {
+  const { userId, name, avatar } = req.body || {};
+  if (!userId) return res.status(400).json({ ok: false, message: 'userId 必填' });
+  const profiles = load('profiles');
+  const idx = profiles.findIndex(p => p.userId === userId);
+  const override = {
+    userId,
+    name: name !== undefined ? String(name).trim().slice(0, 30) : profiles[idx]?.name,
+    avatar: avatar !== undefined ? String(avatar).trim() : profiles[idx]?.avatar,
+    updatedAt: now(),
+  };
+  if (idx >= 0) profiles[idx] = override;
+  else profiles.push(override);
+  save('profiles', profiles);
+  res.json({ ok: true, profile: override });
 });
 
 /* ------------------------------ 健康检查 ------------------------------ */

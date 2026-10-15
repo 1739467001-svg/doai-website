@@ -57,6 +57,8 @@ interface AppContextType {
   bookForum: (id: string) => boolean;
   cancelForum: (id: string) => void;
   quickSwitchRole: (role: 'visitor' | 'maker' | 'admin') => void;
+  saveProfile: (patch: { name?: string; avatar?: string }) => void;
+  tr: (zh: string, en?: string) => string;
   performCheckIn: (ticketId: string) => boolean;
 }
 
@@ -477,6 +479,22 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const [currentUser, setCurrentUser] = useState<User | null>(initialUser);
 
+  // 加载后端保存的自定义资料覆盖（改名/换头像持久化）
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    fetch(`/api/profile?userId=${initialUser.id}`)
+      .then(r => r.json())
+      .then(d => {
+        if (d?.ok && d.profile && (d.profile.name || d.profile.avatar)) {
+          setCurrentUser(prev =>
+            prev ? { ...prev, name: d.profile.name || prev.name, avatar: d.profile.avatar || prev.avatar } : prev,
+          );
+        }
+      })
+      .catch(() => {});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // ---- URL 路由同步：/admin、/forum 等直链可直接打开对应页面 ----
   const KNOWN_ROUTE_BASES = [
     'home', 'conference', 'maker', 'register', 'square', 'forum', 'live',
@@ -793,6 +811,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return success;
   };
 
+  const saveProfile = (patch: { name?: string; avatar?: string }) => {
+    setCurrentUser(prev => (prev ? { ...prev, ...patch } : prev));
+    apiPost('/api/profile', { userId: initialUser.id, ...patch });
+  };
+
+  const tr = (zh: string, en?: string) => (lang === 'zh' ? zh : (en ?? zh));
+
   const quickSwitchRole = (role: 'visitor' | 'maker' | 'admin') => {
     if (role === 'visitor') {
       setCurrentUser(null);
@@ -861,6 +886,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         bookForum,
         cancelForum,
         quickSwitchRole,
+        saveProfile,
+        tr,
         performCheckIn,
       }}
     >

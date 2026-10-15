@@ -16,6 +16,7 @@ const ROUTES = [
   'square', 'live', 'dashboard', 'dashboard/team', 'dashboard/registrations', 'admin',
 ];
 
+const EN = process.env.LANG_MODE === 'en';
 const browser = await puppeteer.launch({
   executablePath: CHROME,
   headless: 'new',
@@ -25,6 +26,11 @@ const browser = await puppeteer.launch({
 let issues = 0;
 for (const vp of VIEWPORTS) {
   const page = await browser.newPage();
+  if (EN) {
+    await page.evaluateOnNewDocument(() => {
+      try { localStorage.setItem('doai_lang', 'en'); } catch { /* noop */ }
+    });
+  }
   await page.setViewport({ width: vp.width, height: vp.height, deviceScaleFactor: 1 });
   for (const route of ROUTES) {
     await page.goto(`http://localhost:3000/${route === 'home' ? '' : route}`, {
