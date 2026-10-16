@@ -26,7 +26,8 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PORT = process.env.PORT || 3001;
-const DATA_DIR = path.join(__dirname, 'data');
+// Vercel Serverless 文件系统只读，运行时数据写到 /tmp
+const DATA_DIR = process.env.VERCEL ? '/tmp/doai-data' : path.join(__dirname, 'data');
 
 const app = express();
 app.use(express.json());
@@ -618,6 +619,11 @@ app.post('/api/profile', (req, res) => {
 
 app.get('/api/health', (_req, res) => res.json({ ok: true, ts: Date.now() }));
 
-app.listen(PORT, () => {
-  console.log(`[doai-server] listening on http://localhost:${PORT}`);
-});
+// 本地开发：node server.js 直接监听；Vercel 上由 api/[...path].js 引用 app
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`[doai-server] listening on http://localhost:${PORT}`);
+  });
+}
+
+export default app;
