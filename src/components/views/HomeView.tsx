@@ -5,12 +5,9 @@ import forumPanel from '../../assets/images/forum_panel_1790923996404.jpg';
 import eveningParty from '../../assets/images/evening_after_party_1790924737645.jpg';
 import { useApp } from '../../context/AppContext';
 import { PeopleSection } from '../sections/PeopleSection';
-import { AsciiGlobe } from '../common/AsciiGlobe';
 import { DoAiLogo } from '../common/DoAiLogo';
-import cityShanghai from '../../assets/images/city_shanghai_1790924759447.jpg';
-import cityFlorence from '../../assets/images/city_florence_1790924778811.jpg';
-import citySingapore from '../../assets/images/city_singapore_1790924769287.jpg';
-import cityHongkong from '../../assets/images/city_hongkong_1790924787371.jpg';
+import heroGlobeVideo from '../../assets/video/hero-globe.mp4';
+import heroGlobePoster from '../../assets/video/hero-globe-poster.jpg';
 import {
   ArrowRight,
   Play,
@@ -133,164 +130,103 @@ export const HomeView: React.FC = () => {
   return (
     <div className="pt-[72px] bg-white text-[#0B1B3A] overflow-hidden">
       {/* =========================================================================
-          1. HERO SECTION — the site's own light paper look, with one new
-          resident: a real-time ASCII earth (globe-cli style, built from real
-          Natural Earth coastline data, drag to spin). No terminal chrome — the
-          globe sits directly on the light background. City cards orbit it on
-          xl screens.
+          1. HERO SECTION — full-bleed looping globe film as the backdrop.
+          Copy sits over the pale sky on the left; the film's own globe and
+          city skyline carry the right side. Poster covers the first paint.
          ========================================================================= */}
       <section className="relative overflow-hidden bg-white text-[#0B1B3A]">
-        {/* Simplified light backdrop: paper white into the faintest sky, plus
-            one faint blueprint grid and two soft brand glows. */}
+        {/* Background: looping globe film — muted, autoplay, seamless loop.
+            Poster (a 2s frame) covers the first paint so there is no flash. */}
+        <video
+          className="absolute inset-0 w-full h-full object-cover"
+          src={heroGlobeVideo}
+          poster={heroGlobePoster}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          aria-hidden="true"
+        />
+        {/* 白色提亮渐变：左侧文字区对比度更高，右侧保留影片原貌 */}
         <div
           aria-hidden="true"
           className="absolute inset-0"
           style={{
             background:
-              'linear-gradient(165deg, #FFFFFF 0%, #F5F9FF 52%, #EAF2FF 100%)',
-          }}
-        />
-        <div aria-hidden="true" className="absolute inset-0 doa-hero-grid" />
-        <div
-          aria-hidden="true"
-          className="absolute -top-48 right-[-12%] w-[54rem] h-[54rem] rounded-full pointer-events-none"
-          style={{
-            background:
-              'radial-gradient(circle, rgba(22,93,255,0.10) 0%, rgba(22,93,255,0.04) 45%, transparent 70%)',
-          }}
-        />
-        <div
-          aria-hidden="true"
-          className="absolute bottom-[-35%] left-[-16%] w-[42rem] h-[42rem] rounded-full pointer-events-none"
-          style={{
-            background:
-              'radial-gradient(circle, rgba(0,196,140,0.07) 0%, transparent 62%)',
+              'linear-gradient(100deg, rgba(255,255,255,0.72) 0%, rgba(255,255,255,0.42) 38%, rgba(255,255,255,0.10) 68%)',
           }}
         />
 
-        <div className="relative z-10 max-w-[1200px] mx-auto px-6 md:px-10 pt-28 sm:pt-32 lg:pt-36 pb-16 sm:pb-20 lg:pb-24">
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.15fr] gap-10 lg:gap-10 items-center">
-            {/* ---------- Copy ---------- */}
-            <div className="space-y-4 lg:space-y-5">
-              <div className="doa-rise doa-rise-1 flex items-center gap-2">
-                <span className="h-px w-7 bg-[#165DFF]/70" aria-hidden="true" />
-                <span className="text-[11px] lg:text-xs font-semibold text-[#165DFF] tracking-[0.28em]">
-                  {tr('智 汇 长 宁 · 创 享 全 球', 'CHANGNING · AI FOR EVERY MAKER')}
-                </span>
-              </div>
-
-              <h1 className="doa-rise doa-rise-2 leading-[0.98]">
-                {/* The official DOAi lockup, drawn in code — smooth beziers,
-                    no traced ragged edges. */}
-                <span className="block text-[#141B45]">
-                  <DoAiLogo className="h-[62px] sm:h-[76px] lg:h-[92px]" />
-                </span>
-                <span className="block text-[17px] sm:text-[22px] lg:text-[28px] font-black text-[#0B1B3A] tracking-[-0.01em] uppercase leading-[1.2] mt-3">
-                  Global AI Makers
-                </span>
-                <span className="block text-[17px] sm:text-[22px] lg:text-[28px] font-black text-[#0B1B3A] tracking-[-0.01em] uppercase leading-[1.2]">
-                  Conference
-                </span>
-                <span className="block text-[22px] sm:text-[30px] lg:text-[38px] font-bold text-[#1a2b4d] tracking-[-0.02em] leading-[1.15] mt-1.5">
-                  {tr('Dobe全球 AI 创客大会', 'DOBE Global AI Makers Conference')}
-                </span>
-              </h1>
-
-              <div className="doa-rise doa-rise-3 space-y-1">
-                <div className="text-[15px] sm:text-[17px] lg:text-[19px] font-bold text-[#0B1B3A]">
-                  {tr('AI 造物，人人创客', 'Build with AI. Everyone a Maker.')}
-                </div>
-                <p className="text-[11px] sm:text-[12px] lg:text-[13px] text-[#5a6b85] leading-[1.7]">
-                  {tr('让 AI 从屏幕走进现实，', 'Bringing AI from the screen into reality —')}
-                  <br className="hidden sm:inline" />
-                  {tr('可逛、可玩、可学、可赛、可合作。', 'explore, play, learn, compete and collaborate.')}
-                </p>
-              </div>
-
-              <div className="doa-rise doa-rise-4 flex flex-wrap items-center gap-2.5 lg:gap-3 pt-1">
-                <button
-                  type="button"
-                  onClick={() => setActiveRoute('maker/tracks')}
-                  className="group px-6 py-2.5 lg:px-7 lg:py-3 text-[12px] lg:text-sm font-semibold text-white bg-[#165DFF] hover:bg-[#1453E6] rounded-full shadow-[0_8px_20px_rgba(22,93,255,0.28)] hover:shadow-[0_12px_28px_rgba(22,93,255,0.34)] transition-all flex items-center gap-1.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#165DFF] focus-visible:ring-offset-2 active:scale-[0.97]"
-                >
-                  <span>{tr('报名参赛', 'Enter the Contest')}</span>
-                  <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setActiveRoute('forum')}
-                  className="px-5 py-2.5 lg:px-6 lg:py-3 text-[12px] lg:text-sm font-semibold text-[#165DFF] bg-white/85 hover:bg-white border border-[#165DFF] rounded-full backdrop-blur-sm transition-all flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#165DFF] focus-visible:ring-offset-2 active:scale-[0.97]"
-                >
-                  <Ticket className="w-3.5 h-3.5 text-[#165DFF]" />
-                  <span>{tr('报名参会', 'Get Tickets')}</span>
-                </button>
-              </div>
-
-              {/* ---------- Date / venue ---------- */}
-              <div className="doa-rise doa-rise-5 flex flex-wrap items-center gap-x-3 gap-y-2 pt-2">
-                <span className="text-[11px] font-mono text-[#7d8ba3]">2026</span>
-                <span className="text-lg sm:text-xl font-extrabold font-mono text-[#0B1B3A] tracking-tight">
-                  11.14 <span className="font-light text-[#b6c2d4]">——</span> 11.15
-                </span>
-                <span className="h-4 w-px bg-[#111111]/15" aria-hidden="true" />
-                <span>
-                  <span className="block text-[13px] font-semibold text-[#1a2b4d] leading-tight">
-                    {tr('上海 · 长宁', 'Shanghai · Changning')}
-                  </span>
-                  <span className="block text-[11px] text-[#7d8ba3]">
-                    {tr('德必大虹桥园区 × 乐动虹桥', 'Dobe Park × LeDoong Hongqiao')}
-                  </span>
-                </span>
-              </div>
+        <div className="relative z-10 max-w-[1200px] mx-auto px-6 md:px-10 pt-28 sm:pt-32 lg:pt-36 pb-20 sm:pb-28 lg:pb-36">
+          <div className="max-w-[620px] space-y-4 lg:space-y-5">
+            <div className="doa-rise doa-rise-1 flex items-center gap-2">
+              <span className="h-px w-7 bg-[#165DFF]/70" aria-hidden="true" />
+              <span className="text-[11px] lg:text-xs font-semibold text-[#165DFF] tracking-[0.28em]">
+                {tr('智 汇 长 宁 · 创 享 全 球', 'CHANGNING · AI FOR EVERY MAKER')}
+              </span>
             </div>
 
-            {/* ---------- Real-time ASCII earth, sitting right on the paper ---------- */}
-            <div className="relative">
-              {/* Soft brand halo that seats the globe on the light background */}
-              <div
-                aria-hidden="true"
-                className="doa-globe-halo absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 aspect-square w-[88%] rounded-full pointer-events-none"
-              />
+            <h1 className="doa-rise doa-rise-2 leading-[0.98]">
+              <span className="block text-[#141B45]">
+                <DoAiLogo className="h-[62px] sm:h-[76px] lg:h-[92px]" />
+              </span>
+              <span className="block text-[17px] sm:text-[22px] lg:text-[28px] font-black text-[#0B1B3A] tracking-[-0.01em] uppercase leading-[1.2] mt-3">
+                Global AI Makers
+              </span>
+              <span className="block text-[17px] sm:text-[22px] lg:text-[28px] font-black text-[#0B1B3A] tracking-[-0.01em] uppercase leading-[1.2]">
+                Conference
+              </span>
+              <span className="block text-[22px] sm:text-[30px] lg:text-[38px] font-bold text-[#1a2b4d] tracking-[-0.02em] leading-[1.15] mt-1.5">
+                {tr('Dobe全球 AI 创客大会', 'DOBE Global AI Makers Conference')}
+              </span>
+            </h1>
 
-              {/* The globe itself — no window, no chrome */}
-              <div className="doa-rise doa-rise-3 relative h-[340px] sm:h-[420px] lg:h-[460px] xl:h-[500px]">
-                <AsciiGlobe rpm={1.4} />
+            <div className="doa-rise doa-rise-3 space-y-1">
+              <div className="text-[15px] sm:text-[17px] lg:text-[19px] font-bold text-[#0B1B3A]">
+                {tr('AI 造物，人人创客', 'Build with AI. Everyone a Maker.')}
               </div>
+              <p className="text-[11px] sm:text-[12px] lg:text-[13px] text-[#5a6b85] leading-[1.7]">
+                {tr('让 AI 从屏幕走进现实，', 'Bringing AI from the screen into reality —')}
+                <br className="hidden sm:inline" />
+                {tr('可逛、可玩、可学、可赛、可合作。', 'explore, play, learn, compete and collaborate.')}
+              </p>
+            </div>
 
-              {/* One-line live caption */}
-              <div className="relative mt-1 flex items-center justify-center gap-2 font-mono text-[10px] sm:text-[11px] text-[#8CA3C8]">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#00C48C] animate-pulse" aria-hidden="true" />
-                <span>{tr('实时 ASCII 地球 · 拖拽旋转 · 惯性自转', 'Live ASCII globe · drag to spin · inertial rotation')}</span>
-              </div>
+            <div className="doa-rise doa-rise-4 flex flex-wrap items-center gap-2.5 lg:gap-3 pt-1">
+              <button
+                type="button"
+                onClick={() => setActiveRoute('maker/tracks')}
+                className="group px-6 py-2.5 lg:px-7 lg:py-3 text-[12px] lg:text-sm font-semibold text-white bg-[#165DFF] hover:bg-[#1453E6] rounded-full shadow-[0_8px_20px_rgba(22,93,255,0.28)] hover:shadow-[0_12px_28px_rgba(22,93,255,0.34)] transition-all flex items-center gap-1.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#165DFF] focus-visible:ring-offset-2 active:scale-[0.97]"
+              >
+                <span>{tr('报名参赛', 'Enter the Contest')}</span>
+                <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveRoute('forum')}
+                className="px-5 py-2.5 lg:px-6 lg:py-3 text-[12px] lg:text-sm font-semibold text-[#165DFF] bg-white/85 hover:bg-white border border-[#165DFF] rounded-full backdrop-blur-sm transition-all flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#165DFF] focus-visible:ring-offset-2 active:scale-[0.97]"
+              >
+                <Ticket className="w-3.5 h-3.5 text-[#165DFF]" />
+                <span>{tr('报名参会', 'Get Tickets')}</span>
+              </button>
+            </div>
 
-              {/* ---------- City cards orbiting the globe (xl+) ---------- */}
-              {[
-                { name: 'Shanghai', img: cityShanghai, style: { left: '-7%', top: '10%' }, float: 'doa-card-float-1' },
-                { name: 'Silicon Valley', img: citySingapore, style: { right: '-5%', top: '16%' }, float: 'doa-card-float-2' },
-                { name: 'Florence', img: cityFlorence, style: { left: '-6%', bottom: '16%' }, float: 'doa-card-float-3' },
-                { name: 'Hong Kong', img: cityHongkong, style: { right: '-5%', bottom: '13%' }, float: 'doa-card-float-4' },
-              ].map(card => (
-                <div
-                  key={card.name}
-                  className={`absolute hidden xl:block w-28 ${card.float} cursor-default`}
-                  style={card.style}
-                >
-                  <div className="doa-city-card rounded-xl overflow-hidden bg-white/85 backdrop-blur-[2px] border border-white/80 shadow-[0_10px_28px_rgba(22,93,255,0.16)]">
-                    <img
-                      src={card.img}
-                      alt={card.name}
-                      className="w-full aspect-[4/3] object-cover"
-                      draggable={false}
-                    />
-                    <div className="px-2 py-1.5 flex items-center justify-between gap-1">
-                      <span className="text-[10px] font-semibold text-[#1b2a4a] truncate">
-                        {card.name}
-                      </span>
-                      <MapPin className="w-2.5 h-2.5 text-[#165DFF] shrink-0" />
-                    </div>
-                  </div>
-                </div>
-              ))}
+            {/* ---------- Date / venue ---------- */}
+            <div className="doa-rise doa-rise-5 flex flex-wrap items-center gap-x-3 gap-y-2 pt-2">
+              <span className="text-[11px] font-mono text-[#55627a]">2026</span>
+              <span className="text-lg sm:text-xl font-extrabold font-mono text-[#0B1B3A] tracking-tight">
+                11.14 <span className="font-light text-[#b6c2d4]">——</span> 11.15
+              </span>
+              <span className="h-4 w-px bg-[#111111]/15" aria-hidden="true" />
+              <span>
+                <span className="block text-[13px] font-semibold text-[#1a2b4d] leading-tight">
+                  {tr('上海 · 长宁', 'Shanghai · Changning')}
+                </span>
+                <span className="block text-[11px] text-[#55627a]">
+                  {tr('德必大虹桥园区 × 乐动虹桥', 'Dobe Park × LeDoong Hongqiao')}
+                </span>
+              </span>
             </div>
           </div>
         </div>
