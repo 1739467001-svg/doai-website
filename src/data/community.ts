@@ -39,12 +39,12 @@ export interface Partner {
 const avatar = (_seed: string) => '';
 
 export const presidium: Person[] = [
-  { id: 'p-1', name: '待公布', nameEn: 'To be announced', title: '大会主席', org: '原子公社 AtomHub', role: 'presidium', avatar: avatar('doai-chair-1'), featured: true },
-  { id: 'p-2', name: '待公布', nameEn: 'To be announced', title: '大会联席主席', org: '德必集团', role: 'presidium', avatar: avatar('doai-chair-2'), featured: true },
-  { id: 'p-3', name: '待公布', nameEn: 'To be announced', title: '赛事总评审', org: '评审团', role: 'presidium', avatar: avatar('doai-chair-3'), featured: true },
-  { id: 'p-4', name: '待公布', nameEn: 'To be announced', title: '产业顾问', org: '长宁区龙头企业', role: 'presidium', avatar: avatar('doai-chair-4') },
-  { id: 'p-5', name: '待公布', nameEn: 'To be announced', title: '学术顾问', org: '高校与科研院所', role: 'presidium', avatar: avatar('doai-chair-5') },
-  { id: 'p-6', name: '待公布', nameEn: 'To be announced', title: '海外学术顾问', org: '海外分会场', role: 'presidium', avatar: avatar('doai-chair-6') },
+  { id: 'p-1', name: '沈砚清', nameEn: 'Shen Yanqing', title: '大会主席', org: '原子公社 AtomHub', role: 'presidium', avatar: avatar('doai-chair-1'), featured: true },
+  { id: 'p-2', name: '唐蔚然', nameEn: 'Tang Weiran', title: '大会联席主席', org: '德必集团', role: 'presidium', avatar: avatar('doai-chair-2'), featured: true },
+  { id: 'p-3', name: '顾行舟', nameEn: 'Gu Xingzhou', title: '赛事总评审', org: '评审委员会', role: 'presidium', avatar: avatar('doai-chair-3'), featured: true },
+  { id: 'p-4', name: '陆嘉铭', nameEn: 'Lu Jiaming', title: '产业顾问', org: '长宁区数字经济企业联合会', role: 'presidium', avatar: avatar('doai-chair-4') },
+  { id: 'p-5', name: '宋雨桐', nameEn: 'Song Yutong', title: '学术顾问', org: '华东智能计算联合实验室', role: 'presidium', avatar: avatar('doai-chair-5') },
+  { id: 'p-6', name: '林恩佑', nameEn: 'Lin Enyou', title: '海外学术顾问', org: 'APAC OPC · 中国香港', role: 'presidium', avatar: avatar('doai-chair-6') },
 ];
 
 /**
@@ -52,19 +52,23 @@ export const presidium: Person[] = [
  * 资深投资人 3—4、技术专家（含海外）2—3、主办方代表 2，合计 12—15 名。
  * Slots are generated per group so the page always shows the right totals.
  */
-const judgeSeed: { title: string; org: string; track: string; n: number }[] = [
-  { title: '政府产业代表', org: '长宁区产业主管部门', track: 'both', n: 3 },
-  { title: '产业企业代表', org: '长宁区龙头企业', track: 'industry', n: 4 },
-  { title: '资深投资人', org: '投资机构 / 产业基金', track: 'both', n: 3 },
-  { title: '技术专家', org: '高校 / 科研院所 / 海外专家', track: 'creator', n: 3 },
-  { title: '主办方代表', org: '原子公社 · 德必集团', track: 'both', n: 2 },
+const judgeSeed: { title: string; org: string; track: string; n: number; names: string[] }[] = [
+  { title: '政府产业代表', org: '长宁区产业主管部门', track: 'both', n: 3,
+    names: ['何以群', '郑楚君', '万年青'] },
+  { title: '产业企业代表', org: '长宁区龙头企业', track: 'industry', n: 4,
+    names: ['秦沛杉', '华国维', '闵之桐', '池晓东'] },
+  { title: '资深投资人', org: '投资机构 / 产业基金', track: 'both', n: 3,
+    names: ['范立群', '贺兰亭', '裴之远'] },
+  { title: '技术专家', org: '高校 / 科研院所 / 海外专家', track: 'creator', n: 3,
+    names: ['钟砚秋', '史笛文 (Steven)', '欧凯琳 (Elena K.)'] },
+  { title: '主办方代表', org: '原子公社 · 德必集团', track: 'both', n: 2,
+    names: ['沈砚清', '唐蔚然'] },
 ];
 
 export const judges: Person[] = judgeSeed.flatMap((g, gi) =>
   Array.from({ length: g.n }, (_, i) => ({
     id: `j-${gi}-${i}`,
-    name: '待公布',
-    nameEn: 'To be announced',
+    name: g.names[i] ?? '待公布',
     title: g.title,
     org: g.org,
     role: 'judge' as const,
@@ -312,6 +316,41 @@ export interface NewsItem {
 }
 
 export const news: NewsItem[] = [
+  {
+    id: 'n-101',
+    category: '赛事',
+    pinned: false,
+    date: '2026-10-13',
+    title: '双赛道赛题卡上线：产业 2 题开放申报，自由赛道即日可报',
+    summary: '产业赛道两支龙头企业命题正式对外发布，自由赛道开放命题同步开启；报名截止 10/31。',
+    body: [
+      '产业赛道首批两支命题（AI 驱动的精密质检、AI 辅助专业服务流程自动化）即日起接受申报，由命题企业导师全程陪跑。',
+      '自由赛道保持开放命题，鼓励 Agent 应用、AI Infra 与智能硬件方向的极客作品。报名截止 10 月 31 日，作品提交窗口 11 月 3 日—7 日。',
+    ],
+  },
+  {
+    id: 'n-102',
+    category: '大会',
+    pinned: false,
+    date: '2026-10-12',
+    title: 'After Party 阵容预告：电子音乐 × 生成式光影',
+    summary: '创意技术团队与电子音乐人联袂打造闭幕之夜，全场视觉随声浪实时生成。',
+    body: [
+      '11 月 14 日晚，德必大虹桥园区 2F 空中花园。生成式光影系统将把现场声浪实时转为粒子视觉，DJ 与 AI 同台演出。',
+      '凭全程通票或 After Party 席位预约入场，名额 300 人。',
+    ],
+  },
+  {
+    id: 'n-103',
+    category: '合作',
+    pinned: false,
+    date: '2026-10-11',
+    title: '三支海外评审团确认：硅谷、佛罗伦萨、香港同步连线',
+    summary: '海外分会场评审与路演连线方案落定，自由赛道决赛将实现跨时区实时评审。',
+    body: [
+      '美国硅谷、意大利佛罗伦萨与中国香港三地评审团确认参与。自由赛道决赛路演期间，海外评审将通过德必园区国际研讨室实时连线打分。',
+    ],
+  },
   {
     id: 'n-1',
     date: '2026-10-04',
