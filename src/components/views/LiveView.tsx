@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import heroHorizon from '../../assets/images/hero_ai_horizon_1790923964186.jpg';
 import { useApp } from '../../context/AppContext';
 import {
   Radio,
@@ -200,7 +201,7 @@ export const LiveView: React.FC = () => {
                   <div className="relative w-full h-full flex items-center justify-center">
                     {/* Simulated Stage Visual Background */}
                     <img
-                      src="/src/assets/images/hero_ai_horizon_1790923964186.jpg"
+                      src={heroHorizon}
                       alt="Live Stage Stream"
                       referrerPolicy="no-referrer"
                       className="w-full h-full object-cover opacity-80"

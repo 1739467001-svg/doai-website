@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { apiUrl } from '../../lib/api';
 import { useApp } from '../../context/AppContext';
 import {
   Users,
@@ -50,8 +51,8 @@ const CardWall: React.FC = () => {
     if (!currentUser) return;
     try {
       const [u, f] = await Promise.all([
-        fetch('/api/users').then(r => r.json()),
-        fetch(`/api/follows?userId=${currentUser.id}`).then(r => r.json()),
+        fetch(apiUrl('/api/users')).then(r => r.json()),
+        fetch(apiUrl(`/api/follows?userId=${currentUser.id}`)).then(r => r.json()),
       ]);
       if (u.ok) setUsers(u.users.filter((x: WallUser) => x.id !== currentUser.id));
       if (f.ok) {
@@ -73,7 +74,7 @@ const CardWall: React.FC = () => {
     const isFollowing = following.includes(user.id);
     setBusyId(user.id);
     try {
-      const res = await fetch('/api/follows', {
+      const res = await fetch(apiUrl('/api/follows'), {
         method: isFollowing ? 'DELETE' : 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ from: currentUser.id, to: user.id }),

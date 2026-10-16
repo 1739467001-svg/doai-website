@@ -5,6 +5,7 @@
  *    （数据来自简单后端 /api/wx/articles，封面走 /api/wx/cover 代理防盗链）
  */
 import React, { useEffect, useState } from 'react';
+import { apiUrl } from '../../lib/api';
 import { useApp } from '../../context/AppContext';
 import { DetailShell } from '../detail/DetailShell';
 import { news, newsCategories, NewsItem } from '../../data/community';
@@ -143,7 +144,7 @@ export const NewsView: React.FC = () => {
 
   useEffect(() => {
     let alive = true;
-    fetch('/api/wx/articles')
+    fetch(apiUrl('/api/wx/articles'))
       .then(r => r.json())
       .then(d => {
         if (alive && d?.ok) setWxArticles(d.articles);

@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
+import { apiUrl } from '../../lib/api';
 import { useApp } from '../../context/AppContext';
 import { QRCodeSVG } from 'qrcode.react';
 import { TeamPanel } from './TeamPanel';
@@ -50,7 +51,7 @@ const ProfileEditor: React.FC = () => {
   const syncAtomClub = async () => {
     setSyncing(true);
     try {
-      const res = await fetch(`/api/atomclub/avatar?userId=${me.id}`);
+      const res = await fetch(apiUrl(`/api/atomclub/avatar?userId=${me.id}`));
       const d = await res.json();
       if (res.ok && d.ok) {
         setAvatarUrl(d.avatar);
@@ -342,7 +343,7 @@ export const DashboardView: React.FC = () => {
     const ticket = tickets.find(t => t.id === ticketId);
     if (!ticket) return;
     try {
-      const res = await fetch('/api/admin/checkin', {
+      const res = await fetch(apiUrl('/api/admin/checkin'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ code: ticket.qrCode, gate: '主入口', holder: ticket.holderName }),

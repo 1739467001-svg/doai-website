@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import confAuditorium from '../../assets/images/conference_auditorium_1790923976092.jpg';
+import makersCollab from '../../assets/images/makers_collaborating_1790923986603.jpg';
+import forumPanel from '../../assets/images/forum_panel_1790923996404.jpg';
 import { useApp } from '../../context/AppContext';
 import {
   Calendar,
@@ -149,7 +152,7 @@ export const ConferenceView: React.FC = () => {
       <section id="conf-venue" className="max-w-[1200px] mx-auto px-6 sm:px-8 scroll-mt-24 py-6">
         <div className="relative rounded-3xl overflow-hidden border border-[#E8EAED] aspect-[16/9] sm:aspect-[21/9] shadow-floating">
           <img
-            src="/src/assets/images/conference_auditorium_1790923976092.jpg"
+            src={confAuditorium}
             alt="DOAI 2026 Auditorium"
             referrerPolicy="no-referrer"
             className="w-full h-full object-cover"
@@ -243,7 +246,7 @@ export const ConferenceView: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="rounded-3xl overflow-hidden border border-[#E8EAED] relative group aspect-[4/3]">
             <img
-              src="/src/assets/images/makers_collaborating_1790923986603.jpg"
+              src={makersCollab}
               alt="Makers Collaborating"
               referrerPolicy="no-referrer"
               className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-500"
@@ -258,7 +261,7 @@ export const ConferenceView: React.FC = () => {
 
           <div className="rounded-3xl overflow-hidden border border-[#E8EAED] relative group aspect-[4/3]">
             <img
-              src="/src/assets/images/forum_panel_1790923996404.jpg"
+              src={forumPanel}
               alt="Forum Panel"
               referrerPolicy="no-referrer"
               className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-500"

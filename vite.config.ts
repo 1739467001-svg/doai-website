@@ -5,6 +5,8 @@ import {defineConfig} from 'vite';
 
 export default defineConfig(() => {
   return {
+    // 部署到子路径时设置 BASE=/doai/（本地开发默认根路径）
+    base: process.env.BASE || '/',
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { apiUrl } from '../../lib/api';
 import { useApp } from '../../context/AppContext';
 import {
   Layers,
@@ -42,7 +43,7 @@ const CheckinPanel: React.FC = () => {
   const [records, setRecords] = useState<CheckinRecord[]>([]);
 
   const loadRecords = () => {
-    fetch('/api/admin/checkins')
+    fetch(apiUrl('/api/admin/checkins'))
       .then(r => r.json())
       .then(d => {
         if (d?.ok) setRecords(d.checkins);
@@ -58,7 +59,7 @@ const CheckinPanel: React.FC = () => {
     setSubmitting(true);
     setFeedback(null);
     try {
-      const res = await fetch('/api/admin/checkin', {
+      const res = await fetch(apiUrl('/api/admin/checkin'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ code: code.trim(), gate }),
@@ -188,7 +189,7 @@ export const AdminView: React.FC = () => {
   const { registrations: localRegistrations } = useApp();
   const [backendRegistrations, setBackendRegistrations] = useState<Registration[] | null>(null);
   useEffect(() => {
-    fetch('/api/registrations')
+    fetch(apiUrl('/api/registrations'))
       .then(r => r.json())
       .then(d => {
         if (d?.ok && Array.isArray(d.registrations)) setBackendRegistrations(d.registrations);

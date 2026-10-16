@@ -1,4 +1,8 @@
 import React, { useState } from 'react';
+import confAuditorium from '../../assets/images/conference_auditorium_1790923976092.jpg';
+import venueBazaar from '../../assets/images/venue_maker_bazaar_1790924729315.jpg';
+import forumPanel from '../../assets/images/forum_panel_1790923996404.jpg';
+import eveningParty from '../../assets/images/evening_after_party_1790924737645.jpg';
 import { useApp } from '../../context/AppContext';
 import { PeopleSection } from '../sections/PeopleSection';
 import { AsciiGlobe } from '../common/AsciiGlobe';
@@ -100,28 +104,28 @@ export const HomeView: React.FC = () => {
       id: 'opening',
       title: '开幕式 & 社交', titleEn: 'Opening & Social',
       dateVenue: '11/14 德必大虹桥园区', dateVenueEn: '11/14 Dobe Park',
-      img: '/src/assets/images/conference_auditorium_1790923976092.jpg',
+      img: confAuditorium,
       desc: '全球 AI 思想领袖与学术院士主旨演讲，开幕发布仪式，并举行首日创客交流酒会。',
     },
     {
       id: 'finals',
       title: '决赛路演 & 游园市集', titleEn: 'Finals & Maker Fair',
       dateVenue: '11/15 乐动虹桥', dateVenueEn: '11/15 LeDoong',
-      img: '/src/assets/images/venue_maker_bazaar_1790924729315.jpg',
+      img: venueBazaar,
       desc: '双赛道 30+ 决赛入围团队现场 Demo 路演与专家答辩；全天候沉浸式智能硬件市集与互动游园展区。',
     },
     {
       id: 'forums',
       title: '18个分会场', titleEn: '18 Forums',
       dateVenue: '全球AI创想，思想碰撞', dateVenueEn: 'Global AI ideas, live',
-      img: '/src/assets/images/forum_panel_1790923996404.jpg',
+      img: forumPanel,
       desc: '覆盖 Agent 框架、具身智能、微机电、消费级创客硬件、商业出海等 18 个细分前沿议题。',
     },
     {
       id: 'party',
       title: 'After Party', titleEn: 'After Party',
       dateVenue: '与全球创客一起狂欢', dateVenueEn: 'Party with global makers',
-      img: '/src/assets/images/evening_after_party_1790924737645.jpg',
+      img: eveningParty,
       desc: '闭幕狂欢社交夜，电子音乐与生成式光影互动，全场创客举杯畅聊，交换数字名片与未来合作机会。',
     },
   ];

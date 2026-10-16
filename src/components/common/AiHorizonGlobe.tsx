@@ -1,4 +1,8 @@
 import React, { useEffect, useRef } from 'react';
+import cityShanghai from '../../assets/images/city_shanghai_1790924759447.jpg';
+import cityFlorence from '../../assets/images/city_florence_1790924778811.jpg';
+import citySingapore from '../../assets/images/city_singapore_1790924769287.jpg';
+import cityHongkong from '../../assets/images/city_hongkong_1790924787371.jpg';
 
 interface FloatingCard {
   id: string;
@@ -16,7 +20,7 @@ export const AiHorizonGlobe: React.FC = () => {
     {
       id: 'shanghai',
       name: 'Shanghai',
-      img: '/src/assets/images/city_shanghai_1790924759447.jpg',
+      img: cityShanghai,
       xPct: 18,
       yPct: 14,
       rotation: -3,
@@ -24,7 +28,7 @@ export const AiHorizonGlobe: React.FC = () => {
     {
       id: 'florence',
       name: 'Florence',
-      img: '/src/assets/images/city_florence_1790924778811.jpg',
+      img: cityFlorence,
       xPct: 22,
       yPct: 62,
       rotation: 2,
@@ -32,7 +36,7 @@ export const AiHorizonGlobe: React.FC = () => {
     {
       id: 'singapore',
       name: 'Singapore',
-      img: '/src/assets/images/city_singapore_1790924769287.jpg',
+      img: citySingapore,
       xPct: 80,
       yPct: 18,
       rotation: 4,
@@ -40,7 +44,7 @@ export const AiHorizonGlobe: React.FC = () => {
     {
       id: 'hongkong',
       name: 'Hong Kong',
-      img: '/src/assets/images/city_hongkong_1790924787371.jpg',
+      img: cityHongkong,
       xPct: 86,
       yPct: 68,
       rotation: -2,

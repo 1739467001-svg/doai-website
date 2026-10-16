@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { apiUrl } from '../lib/api';
 import {
   Language,
   User,
@@ -482,7 +483,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // 加载后端保存的自定义资料覆盖（改名/换头像持久化）
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    fetch(`/api/profile?userId=${initialUser.id}`)
+    fetch(apiUrl(`/api/profile?userId=${initialUser.id}`))
       .then(r => r.json())
       .then(d => {
         if (d?.ok && d.profile && (d.profile.name || d.profile.avatar)) {
@@ -496,13 +497,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, []);
 
   // ---- URL 路由同步：/admin、/forum 等直链可直接打开对应页面 ----
+  // 部署在子路径（如 /doai/）时，前端路由需要带上该前缀
+  const BASE_PATH = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
   const KNOWN_ROUTE_BASES = [
     'home', 'conference', 'maker', 'register', 'square', 'forum', 'live',
     'dashboard', 'admin', 'rules', 'news', 'attend', 'track', 'module', 'detail',
   ];
   const routeFromLocation = (): string => {
     if (typeof window === 'undefined') return 'home';
-    const p = window.location.pathname.replace(/\/+$/, '') || '/';
+    let p = window.location.pathname.replace(/\/+$/, '') || '/';
+    if (BASE_PATH !== '/' && p.startsWith(BASE_PATH)) p = p.slice(BASE_PATH.length) || '/';
     if (p === '/') return 'home';
     const base = p.slice(1).split('/')[0];
     return KNOWN_ROUTE_BASES.includes(base) ? p.slice(1) : 'home';
@@ -511,9 +515,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const setActiveRoute = (route: string) => {
     setActiveRouteState(route);
     if (typeof window === 'undefined') return;
-    const path = route === 'home' ? '/' : `/${route}`;
-    if (window.location.pathname !== path) {
-      window.history.pushState({}, '', path);
+    const path = (route === 'home' ? '' : `/${route}`) || '';
+    const full = (BASE_PATH === '/' ? '' : BASE_PATH) + (route === 'home' ? '/' : path);
+    if (window.location.pathname !== full) {
+      window.history.pushState({}, '', full);
     }
   };
   useEffect(() => {
@@ -529,9 +534,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
 
   // ---- 后端同步（server.js :3001）：best-effort，失败不阻塞前端 ----
+  // 子路径部署时 API 也带前缀（Nginx 把 /doai/api/ 转发到后端）
+  const apiBase = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
   const apiPost = (url: string, body: unknown) => {
     if (typeof window === 'undefined') return;
-    fetch(url, {
+    fetch(apiBase + url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
@@ -543,13 +550,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // 首次挂载：把演示数据同步到后端，管理后台可直接读到同一份报名/凭证
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    fetch('/api/registrations')
+    fetch(apiUrl('/api/registrations'))
       .then(r => r.json())
       .then(d => {
         if (d?.ok && Array.isArray(d.registrations) && d.registrations.length === 0) {
           apiPost('/api/registrations/sync', { registrations: initialRegistrations });
         }
-        fetch('/api/tickets')
+        fetch(apiUrl('/api/tickets'))
           .then(r => r.json())
           .then(dt => {
             if (dt?.ok && Array.isArray(dt.tickets) && dt.tickets.length === 0) {
