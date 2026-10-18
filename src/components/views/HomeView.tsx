@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import confAuditorium from '../../assets/images/conference_auditorium_1790923976092.jpg';
 import venueBazaar from '../../assets/images/venue_maker_bazaar_1790924729315.jpg';
 import forumPanel from '../../assets/images/forum_panel_1790923996404.jpg';
@@ -6,8 +6,7 @@ import eveningParty from '../../assets/images/evening_after_party_1790924737645.
 import { useApp } from '../../context/AppContext';
 import { PeopleSection } from '../sections/PeopleSection';
 import { DoAiLogo } from '../common/DoAiLogo';
-import heroGlobeVideo from '../../assets/video/hero-globe.mp4';
-import heroGlobePoster from '../../assets/video/hero-globe-poster.jpg';
+import { HeroGlobeStage } from '../sections/HeroGlobeStage';
 import {
   ArrowRight,
   Play,
@@ -30,6 +29,8 @@ import {
 
 export const HomeView: React.FC = () => {
   const { setActiveRoute, setLoginModalOpen, currentUser, tr } = useApp();
+  const heroCopyRef = useRef<HTMLDivElement | null>(null);
+  const heroSpacerRef = useRef<HTMLDivElement | null>(null);
 
   const [detailModalItem, setDetailModalItem] = useState<{
     title: string;
@@ -129,36 +130,14 @@ export const HomeView: React.FC = () => {
   return (
     <div className="pt-[72px] bg-white text-[#0B1B3A] overflow-hidden">
       {/* =========================================================================
-          1. HERO SECTION — full-bleed looping globe film as the backdrop.
-          Copy sits over the pale sky on the left; the film's own globe and
-          city skyline carry the right side. Poster covers the first paint.
+          1. HERO SECTION — copy on the left, the Glass Globe on its pedestal
+          to the right (below the copy on mobile). The stage scales the
+          rooftop plate so the pedestal always lands under the globe; see
+          docs/DESIGN_SYSTEM.md → Hero.
          ========================================================================= */}
-      <section className="relative overflow-hidden bg-white text-[#0B1B3A]">
-        {/* Background: looping globe film — muted, autoplay, seamless loop.
-            Poster (a 2s frame) covers the first paint so there is no flash. */}
-        <video
-          className="absolute inset-0 w-full h-full object-cover"
-          src={heroGlobeVideo}
-          poster={heroGlobePoster}
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="auto"
-          aria-hidden="true"
-        />
-        {/* 白色提亮渐变：左侧文字区对比度更高，右侧保留影片原貌 */}
-        <div
-          aria-hidden="true"
-          className="absolute inset-0"
-          style={{
-            background:
-              'linear-gradient(100deg, rgba(255,255,255,0.72) 0%, rgba(255,255,255,0.42) 38%, rgba(255,255,255,0.10) 68%)',
-          }}
-        />
-
-        <div className="relative z-10 max-w-[1200px] mx-auto px-6 md:px-10 pt-28 sm:pt-32 lg:pt-36 pb-20 sm:pb-28 lg:pb-36">
-          <div className="max-w-[620px] space-y-4 lg:space-y-5">
+      <section className="doa-hero relative overflow-hidden text-[#0B1B3A]">
+        <div className="pointer-events-none relative z-10 max-w-[1200px] mx-auto px-6 md:px-10 pt-28 sm:pt-32 lg:pt-36 pb-20 sm:pb-28 lg:pb-36">
+          <div ref={heroCopyRef} className="pointer-events-auto max-w-[620px] space-y-4 lg:space-y-5">
             <div className="doa-rise doa-rise-1 flex items-center gap-2">
               <span className="h-px w-7 bg-[#165DFF]/70" aria-hidden="true" />
               <span className="text-[11px] lg:text-xs font-semibold text-[#165DFF] tracking-[0.28em]">
@@ -229,7 +208,17 @@ export const HomeView: React.FC = () => {
               </span>
             </div>
           </div>
+          {/* Mobile / tablet: room for the globe below the copy. */}
+          <div ref={heroSpacerRef} aria-hidden="true" className="doa-hero-globe-spacer lg:hidden" />
         </div>
+
+        {/* Backdrop + globe. Rendered after the copy so the refs it measures
+            are attached; stacking keeps it underneath (copy is z-10). */}
+        <HeroGlobeStage
+          copyRef={heroCopyRef}
+          spacerRef={heroSpacerRef}
+          hostLabel={tr('上海 · 外滩', 'Shanghai · The Bund')}
+        />
 
         {/* Bottom fade into the next white section */}
         <div

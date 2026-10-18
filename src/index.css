@@ -344,6 +344,116 @@
 .doa-card-float-3 { animation-delay: -3s; }
 .doa-card-float-4 { animation-delay: -4.5s; }
 
+/* --------------------------------------------------------------------------
+   Hero stage — rooftop plate + Glass Globe (HeroGlobeStage.tsx)
+   -------------------------------------------------------------------------- */
+
+/* Sky behind the plate, sampled from the plate's own edges, so wherever the
+   scaled plate stops short the page keeps the same air. */
+.doa-hero {
+  background: linear-gradient(180deg, #CDE4FB 0%, #E3EEFC 30%, #F5F9FD 55%, #F2F7FD 78%, #FFFFFF 100%);
+}
+
+/* Feather the plate's edges into that sky. */
+.doa-hero-plate {
+  -webkit-mask-image:
+    linear-gradient(90deg, transparent 0%, #000 16%, #000 86%, transparent 100%),
+    linear-gradient(180deg, transparent 0%, #000 18%, #000 82%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(90deg, transparent 0%, #000 16%, #000 86%, transparent 100%),
+    linear-gradient(180deg, transparent 0%, #000 18%, #000 82%, transparent 100%);
+  mask-composite: intersect;
+}
+
+/* Contrast veil for the copy: top-down on mobile (globe sits below the copy),
+   left-to-right on desktop (globe sits to the right). */
+.doa-hero-veil {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.78) 0%, rgba(255, 255, 255, 0.6) 40%, rgba(255, 255, 255, 0) 62%);
+}
+
+@media (min-width: 1024px) {
+  .doa-hero-veil {
+    background: linear-gradient(100deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.55) 34%, rgba(255, 255, 255, 0) 56%);
+  }
+}
+
+/* Room for the globe under the copy on small screens: 3 sphere radii.
+   HeroGlobeStage reads the radius back from this height. */
+.doa-hero-globe-spacer {
+  height: calc(clamp(118px, 30vw, 180px) * 3);
+}
+
+/* The globe hovers a few pixels above its pedestal… */
+@keyframes doai-globe-float {
+  0%, 100% { transform: translate3d(0, -4px, 0); }
+  50%      { transform: translate3d(0, 4px, 0); }
+}
+
+.doa-globe-float {
+  animation: doai-globe-float 7s ease-in-out infinite;
+}
+
+/* …and the light it throws on the pedestal brightens as it sinks closer. */
+@keyframes doai-globe-caustic {
+  0%, 100% { opacity: 0.62; transform: scale(0.94); }
+  50%      { opacity: 1; transform: scale(1); }
+}
+
+@keyframes doai-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.doa-globe-caustic-in {
+  animation: doai-fade-in 1.2s var(--ease-standard) 0.45s both;
+}
+
+.doa-globe-caustic {
+  background: radial-gradient(closest-side, rgba(22, 93, 255, 0.34) 0%, rgba(46, 123, 246, 0.16) 52%, rgba(46, 123, 246, 0) 100%);
+  filter: blur(2px);
+  animation: doai-globe-caustic 7s ease-in-out infinite;
+}
+
+/* Caption that rides along with the host city on the globe. The outer box is
+   moved by the engine; the pill sits up-right of the city, with a hairline. */
+.doa-globe-label {
+  transition: opacity 200ms linear;
+  will-change: transform, opacity;
+}
+
+.doa-globe-label-inner {
+  position: absolute;
+  left: 14px;
+  bottom: 10px;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--color-ink-900);
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 0 4px 14px rgba(11, 27, 58, 0.14);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.doa-globe-label-inner::before {
+  content: '';
+  position: absolute;
+  left: -10px;
+  bottom: -8px;
+  width: 12px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.9);
+  transform: rotate(-38deg);
+  transform-origin: left center;
+}
+
 /* Scroll-in reveal for the hero copy. */
 @keyframes doai-rise {
   from { opacity: 0; transform: translate3d(0, 22px, 0); }
@@ -365,7 +475,10 @@
    in JS and renders a single static frame instead of animating. */
 @media (prefers-reduced-motion: reduce) {
   .doa-card-float,
-  .doa-rise {
+  .doa-rise,
+  .doa-globe-float,
+  .doa-globe-caustic,
+  .doa-globe-caustic-in {
     animation: none !important;
   }
   .doa-city-card {
