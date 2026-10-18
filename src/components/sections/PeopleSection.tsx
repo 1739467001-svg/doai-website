@@ -10,7 +10,7 @@ import {
   presidium, judges, judgeGroups, partners, partnerCategories, Person,
 } from '../../data/community';
 import { useApp } from '../../context/AppContext';
-import { ChevronDown, Users, Handshake, Sparkles, BadgeCheck } from 'lucide-react';
+import { ChevronDown, Users, Handshake, Sparkles, BadgeCheck, ShieldCheck } from 'lucide-react';
 
 const PersonCard: React.FC<{ p: Person; size?: 'lg' | 'sm' }> = ({ p, size = 'sm' }) => (
   <div className="doa-card doa-card-hover p-5 text-center flex flex-col items-center">
@@ -34,40 +34,11 @@ const PersonCard: React.FC<{ p: Person; size?: 'lg' | 'sm' }> = ({ p, size = 'sm
 );
 
 export const PeopleSection: React.FC = () => {
-  const { setActiveRoute, tr } = useApp();
+  const { setActiveRoute, tr, lang } = useApp();
   const [openGroup, setOpenGroup] = useState<string | null>(null);
 
   return (
     <section className="py-20 lg:py-24 max-w-[1200px] mx-auto px-6 md:px-10">
-      {/* ---------------- 主席团 ---------------- */}
-      <div className="mb-16">
-        <div className="flex items-end justify-between gap-6 mb-8">
-          <div>
-            <div className="doa-eyebrow mb-3">PRESIDIUMS</div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0B1B3A] tracking-tight">
-              {tr('大赛主席团', 'Presidium')}
-            </h2>
-            <p className="text-[13px] text-[#6B7C9B] mt-2 max-w-xl leading-relaxed">
-              {tr('主席团由主办方、产业方与学术代表组成，负责赛事方向与赛制制定。', 'Organizers, industry and academia shaping the contest direction and rules.')}
-              <span className="text-[#98A6BE]">{tr('（嘉宾名单依姓氏笔画排序，排名不分主次）', '(listed alphabetically, no ranking)')}</span>
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={() => setActiveRoute('conference')}
-            className="shrink-0 text-[13px] font-semibold text-[#165DFF] hover:underline"
-          >
-            {tr('了解更多 →', 'Learn more →')}
-          </button>
-        </div>
-
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          {presidium.map(p => (
-            <PersonCard key={p.id} p={p} size="lg" />
-          ))}
-        </div>
-      </div>
-
       {/* ---------------- 专家评委 ---------------- */}
       <div className="mb-16">
         <div className="flex items-end justify-between gap-6 mb-8">
@@ -89,7 +60,7 @@ export const PeopleSection: React.FC = () => {
               <div className="text-[11px] uppercase tracking-wider text-[#98A6BE] font-semibold mb-1">
                 {g.title}
               </div>
-              <div className="text-xl font-extrabold text-[#0B1B3A] tabular-nums">{g.count}</div>
+              <div className="text-xl font-extrabold text-[#0B1B3A] tabular-nums">{g.label}</div>
               <div className="text-[11px] text-[#6B7C9B] mt-0.5">{g.org}</div>
             </div>
           ))}
@@ -127,7 +98,7 @@ export const PeopleSection: React.FC = () => {
                       {String(gi + 1).padStart(2, '0')}
                     </span>
                     <span className="text-[13px] font-bold text-[#1A2B4D]">{g.title}</span>
-                    <span className="text-[11px] text-[#98A6BE]">{g.count} 名</span>
+                    <span className="text-[11px] text-[#98A6BE]">{g.label}</span>
                   </span>
                   <ChevronDown
                     className={`w-4 h-4 text-[#98A6BE] transition-transform ${isOpen ? 'rotate-180 text-[#165DFF]' : ''}`}
@@ -167,10 +138,10 @@ export const PeopleSection: React.FC = () => {
           <div>
             <div className="doa-eyebrow mb-3">PARTNERS</div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0B1B3A] tracking-tight">
-              {tr('生态伙伴', 'Ecosystem Partners')}
+              {tr('组织架构', 'Organizers')}
             </h2>
             <p className="text-[13px] text-[#6B7C9B] mt-2 max-w-xl leading-relaxed">
-              {tr('主办、联合主办、支持单位、场地与内容合作方，以及 3 个海外分会场。', 'Hosts, co-hosts, supporters, venue and content partners, plus 3 overseas venues.')}
+              {tr('指导单位、主办方、联合主办、战略合作方与内容平台，以飞书《赛事方案》为准。', 'Per the official plan: guiding unit, hosts, co-organizer, strategic partners and content platform.')}
             </p>
           </div>
         </div>
@@ -182,9 +153,11 @@ export const PeopleSection: React.FC = () => {
             return (
               <div key={cat}>
                 <div className="flex items-center gap-2 mb-3">
-                  {cat === '主办' ? (
+                  {cat === '指导单位' ? (
+                    <ShieldCheck className="w-3.5 h-3.5 text-[#165DFF]" />
+                  ) : cat === '主办方' ? (
                     <Sparkles className="w-3.5 h-3.5 text-[#165DFF]" />
-                  ) : cat === '海外分会场' ? (
+                  ) : cat === '内容平台' ? (
                     <Users className="w-3.5 h-3.5 text-[#165DFF]" />
                   ) : (
                     <Handshake className="w-3.5 h-3.5 text-[#165DFF]" />
@@ -210,6 +183,47 @@ export const PeopleSection: React.FC = () => {
               </div>
             );
           })}
+        </div>
+      </div>
+
+      {/* ---------------- 合作媒体 ---------------- */}
+      <div className="mt-16">
+        <div className="doa-eyebrow mb-3">MEDIA PARTNERS</div>
+        <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0B1B3A] tracking-tight">
+          {tr('合作媒体', 'Media Partners')}
+        </h2>
+        <div className="flex flex-wrap gap-2.5 mt-6">
+          {[
+            ['这很容易', 'This Is Easy'], ['赛博禅心', 'Cyber Zen'], ['特工宇宙', 'Agent Universe'],
+            ['观猹', 'GuanCha'], ['硅星人', 'Silicon Star'], ['手工川', 'HandCraft'], ['椒盐玉兔', 'Salt Bunny'],
+          ].map(([zh, en], i) => (
+            <span key={i} className="doa-card px-5 py-3 text-sm font-bold text-[#1A2B4D]">
+              {lang === 'en' ? en : zh}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* ---------------- 合作社区 ---------------- */}
+      <div className="mt-16">
+        <div className="doa-eyebrow mb-3">COMMUNITY PARTNERS</div>
+        <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0B1B3A] tracking-tight">
+          {tr('合作社区', 'Community Partners')}
+        </h2>
+        <p className="text-[13px] text-[#6B7C9B] mt-2">
+          {tr('25 家 AI 与创客社区联合推广，覆盖全国开发者与高校社群。', '25 AI & maker communities co-promoting nationwide.')}
+        </p>
+        <div className="flex flex-wrap gap-2.5 mt-6">
+          {[
+            'Datawhale', '去探索', '杭州AI工坊', '出海去', '周周黑客松', '云谷中心', 'Y/our Space',
+            'SeeAI', 'WaytoAGI', '十堰黑客松', '清华创协', '北京理工大学创业协会', '北理工灵动工厂',
+            'vibefriends', 'AGI Bar知识蒸馏', 'EPIC', 'BoHack', '一支烟花', '超越之路', 'AtomGit',
+            '多多群岛', 'she Nicest', 'Rebuild-Z', '塞托邦', '徽客松',
+          ].map((name, i) => (
+            <span key={i} className="px-4 py-2 rounded-full text-[13px] font-semibold text-[#48597A] bg-white border border-[#E3ECFA]">
+              {name}
+            </span>
+          ))}
         </div>
       </div>
     </section>

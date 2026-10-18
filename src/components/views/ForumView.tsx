@@ -66,7 +66,7 @@ export const ForumView: React.FC = () => {
           {[
             { label: '分会场', labelEn: 'Venues', value: '18 个', valueEn: '18', note: '统一 DOAI 命名体系', noteEn: 'Unified naming' },
             { label: '场次总量', labelEn: 'Sessions', value: '30—40 场', valueEn: '30–40', note: '两天合计', noteEn: 'Across both days' },
-            { label: '举办时间', labelEn: 'When', value: '11/15', valueEn: '11/15', note: '乐动虹桥 1F—3F 与德必园区', noteEn: 'LeDoong 1F–3F & Dobe Park' },
+            { label: '举办时间', labelEn: 'When', value: '11/15', valueEn: '11/15', note: '外滩德必园区 1F—3F 与德必园区', noteEn: 'LeDoong 1F–3F & Dobe Park' },
             { label: '预约方式', labelEn: 'Booking', value: '免费选座', valueEn: 'Free seats', note: '开场前 48 小时可取消', noteEn: 'Free cancellation up to 48h before' },
           ].map((st, i) => (
             <div key={i} className="doa-card p-5">

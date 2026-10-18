@@ -105,8 +105,8 @@ const CheckinPanel: React.FC = () => {
             className="px-4 py-3 bg-[#F7F8FA] border border-[#E8EAED] rounded-xl text-sm"
           >
             <option value="主入口">主入口闸机</option>
-            <option value="乐动虹桥">乐动虹桥分会场</option>
-            <option value="德必大虹桥">德必大虹桥分会场</option>
+            <option value="外滩德必园区">外滩德必园区分会场</option>
+            <option value="外滩德必园区">外滩德必园区分会场</option>
           </select>
           <button
             type="submit"

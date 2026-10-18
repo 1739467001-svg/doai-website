@@ -442,7 +442,7 @@ export const RegisterView: React.FC = () => {
                         : 'bg-[#00C48C]/10 text-[#00A57A]'
                     }`}
                   >
-                    {track === 'industry' ? tr('产业赛道 · AI + Industry', 'Industry Track · AI + Industry') : tr('自由赛道 · AI Creator', 'Creator Track · AI Creator')}
+                    {track === 'industry' ? tr('产业命题赛道', 'Industry Brief Track') : tr('自由创意赛道', 'Free Creation Track')}
                   </span>
                 </div>
                 <button
@@ -538,7 +538,7 @@ export const RegisterView: React.FC = () => {
                 </div>
                 <div className="text-xs text-[#666666] space-y-1 pt-2 border-t border-[#E8EAED]">
                   <div>项目名称：{projectName}</div>
-                  <div>申报赛道：{track === 'industry' ? '产业赛道' : '自由赛道'}</div>
+                  <div>申报赛道：{track === 'industry' ? '产业命题赛道' : '自由创意赛道'}</div>
                   <div>电子票券：已自动存入 DOAI Passport 数字身份卡</div>
                 </div>
 

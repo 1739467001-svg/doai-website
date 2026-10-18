@@ -16,34 +16,37 @@ import {
 
 export const ConferenceView: React.FC = () => {
   const { lang, setActiveRoute, tr } = useApp();
-  const [activeDay, setActiveDay] = useState<'day1' | 'day2'>('day1');
+  const [activeDay, setActiveDay] = useState<'day1' | 'day2' | 'day3'>('day1');
+
 
 
   const scheduleData = {
     day1: [
-      { time: '09:00 - 12:30', title: '报到签到与物料领取', speaker: '参赛团队 · 媒体 · 嘉宾', venue: '德必园区 · 签到区' },
-      { time: '13:30 - 14:00', title: '开场：领导致辞', speaker: '政府领导 · 主办方', venue: '德必园区 · 主会场' },
-      { time: '14:00 - 14:40', title: '主办方分享：战略发布与大会愿景', speaker: '原子公社 · 德必集团', venue: '德必园区 · 主会场' },
-      { time: '14:40 - 15:40', title: '圆桌论坛：全球 AI 创客生态', speaker: '海外专家连线 · 投资人 · 创客代表', venue: '德必园区 · 主会场' },
-      { time: '16:00 - 16:40', title: '赛制发布与高校签约', speaker: '组委会 · 高校代表', venue: '德必园区 · 主会场' },
-      { time: '18:30 - 21:30', title: 'After Party 创客社交之夜', speaker: '全体参会创客', venue: '德必大虹桥园区' },
+      { time: '14:00 - 16:00', title: '签到入场', speaker: '参赛团队签到、领取赛事物料包，自由参观展区', venue: '外滩德必园区 · 签到区' },
+      { time: '16:00 - 18:00', title: '开幕盛典暨战略发布会', speaker: '黄浦区领导致辞 · 德必 OPC 战略发布 · 战略合作签约 · 评审团公布', venue: '外滩德必园区 · 主会场' },
+      { time: '18:00 - 19:30', title: '欢迎晚宴', speaker: '政府嘉宾 · 企业代表 · 投资人 · 参赛团队', venue: '外滩德必园区' },
+      { time: '19:30 - 21:30', title: '破冰组队夜', speaker: '电梯演讲 · 命题企业代表现场解读 · 自由组队 · 公布次日任务', venue: '外滩德必园区' },
     ],
     day2: [
-      { time: '09:30 起', title: '展区开市：市集 · 互动 · 求职 · 展商', speaker: '长宁味道市集 · AI 互动区', venue: '乐动虹桥 1F' },
-      { time: '09:30 - 12:00', title: '决赛路演第一场：产业赛道（8+5 分钟制）', speaker: '入围产业赛道项目', venue: '乐动虹桥 1F 路演厅' },
-      { time: '09:30 - 12:00', title: '自由赛道分会场路演 · 海外线上评审', speaker: '入围自由赛道项目 · 海外专家', venue: '德必园区' },
-      { time: '09:30 - 12:00', title: '「逐梦星河」商业航天论坛（上午场）', speaker: '航天机构 · 科研院所', venue: '乐动虹桥 2F 航天馆' },
-      { time: '13:30 - 16:00', title: '决赛路演第二场：自由赛道（8+5 分钟制）', speaker: '入围自由赛道项目', venue: '乐动虹桥 1F 路演厅' },
-      { time: '13:30 - 17:00', title: '分论坛（7—8 场并行）', speaker: '各分会场承办方', venue: '乐动虹桥 3F' },
-      { time: '16:30 - 17:30', title: '闭幕式：颁奖与项目落地签约', speaker: '组委会 · 企业代表', venue: '乐动虹桥 · 主会场' },
+      { time: '09:00 - 09:30', title: '开发启动会', speaker: '明确当日产出要求：Demo · 海报 · 宣传视频 · 路演 PPT', venue: '外滩德必园区' },
+      { time: '09:30 - 12:00', title: '集中开发 & 导师巡场', speaker: '技术导师 · 产业导师分赛道一对一答疑', venue: '外滩德必园区' },
+      { time: '13:30 - 17:30', title: '物料制作 & 专项辅导', speaker: '路演表达工作坊 · 海报设计指导站 · 命题企业二次驻场', venue: '外滩德必园区' },
+      { time: '18:30 - 22:00', title: '深夜打磨 & 宵夜补给（22:00 作品提交截止）', speaker: '团队自主优化作品 · 导师按需在线答疑', venue: '外滩德必园区' },
+    ],
+    day3: [
+      { time: '09:00 - 12:00', title: 'AI 创客游园会', speaker: '项目快闪区 · 产业对接市集 · 政策咨询窗口', venue: '外滩德必园区' },
+      { time: '13:30 - 17:00', title: '决赛路演暨颁奖典礼（8 分钟展示 + 5 分钟问答）', speaker: '政府代表 · 产业专家 · 投资人 · 技术专家', venue: '外滩德必园区 · 主会场' },
+      { time: '17:00 - 18:00', title: '媒体专访 & 自由交流', speaker: '获奖团队 · 嘉宾', venue: '外滩德必园区' },
+      { time: '18:30 - 21:30', title: '外滩 After Party', speaker: '外滩露台轻奢酒会 · 自由交流与趣味互动', venue: '外滩' },
     ],
   };
 
   // Maps each inline agenda row below to a full entry in the schedule dataset,
   // in the same order, so "查看详情" lands on the right session.
   const dayScheduleIds: Record<string, string[]> = {
-    day1: ['sch-101', 'sch-103', 'sch-104', 'sch-105', 'sch-106', 'sch-107'],
-    day2: ['sch-201', 'sch-202', 'sch-203', 'sch-204', 'sch-205', 'sch-206', 'sch-207'],
+    day1: [],
+    day2: [],
+    day3: [],
   };
 
   return (
@@ -133,17 +136,35 @@ export const ConferenceView: React.FC = () => {
           ))}
         </div>
 
-        {/* Organisers, per the official plan */}
-        <div className="doa-panel p-6 mt-6 flex flex-wrap items-center gap-x-8 gap-y-3">
-          <div className="text-[11px] uppercase tracking-widest text-[#98A6BE] font-semibold">主办单位</div>
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-[13px] text-[#1A2B4D] font-semibold">
-            <span>原子公社 AtomHub</span>
+        {/* Organisers, per the official plan (飞书 2026-10) */}
+        <div className="doa-panel p-6 mt-6 space-y-3">
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-[13px] text-[#1A2B4D]">
+            <div className="text-[11px] uppercase tracking-widest text-[#98A6BE] font-semibold w-24 shrink-0">指导单位</div>
+            <span className="font-semibold">黄浦区政府相关单位</span>
+          </div>
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-[13px] text-[#1A2B4D]">
+            <div className="text-[11px] uppercase tracking-widest text-[#98A6BE] font-semibold w-24 shrink-0">主办方</div>
+            <span className="font-semibold">德必集团</span>
             <span className="text-[#C0CBDD]">×</span>
-            <span>德必集团</span>
-            <span className="text-[#C0CBDD]">|</span>
-            <span className="text-[#48597A] font-normal">联合主办：上海市时代青年科创中心</span>
-            <span className="text-[#C0CBDD]">|</span>
-            <span className="text-[#48597A] font-normal">支持：长宁区人民政府</span>
+            <span className="font-semibold">Flowmind</span>
+          </div>
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-[13px] text-[#1A2B4D]">
+            <div className="text-[11px] uppercase tracking-widest text-[#98A6BE] font-semibold w-24 shrink-0">联合主办</div>
+            <span className="font-semibold">原子公社 AtomHub</span>
+          </div>
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-[13px] text-[#1A2B4D]">
+            <div className="text-[11px] uppercase tracking-widest text-[#98A6BE] font-semibold w-24 shrink-0">战略合作方</div>
+            <span>香港高升</span>
+            <span className="text-[#C0CBDD]">·</span>
+            <span>Google Cloud</span>
+            <span className="text-[#C0CBDD]">·</span>
+            <span>涂鸦智能</span>
+            <span className="text-[#C0CBDD]">·</span>
+            <span>拓竹科技</span>
+          </div>
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-[13px] text-[#1A2B4D]">
+            <div className="text-[11px] uppercase tracking-widest text-[#98A6BE] font-semibold w-24 shrink-0">内容平台</div>
+            <span>小红书科技</span>
           </div>
         </div>
       </section>
@@ -166,7 +187,7 @@ export const ConferenceView: React.FC = () => {
                 {lang === 'zh' ? '汇聚全球 700+ 顶尖创客与智库先锋' : 'Gathering 700+ Global Creators & Researchers'}
               </h3>
               <p className="text-xs sm:text-sm text-neutral-300">
-                2026.11.14 – 11.15 · 德必大虹桥园区 × 乐动虹桥 · 全球线上同步
+                2026.11.13 – 11.15 · 外滩德必园区 · 全球线上同步
               </p>
             </div>
           </div>
@@ -284,15 +305,16 @@ export const ConferenceView: React.FC = () => {
               {lang === 'zh' ? '大会日程总览' : 'Full 3-Day Agenda'}
             </h2>
             <p className="text-xs text-[#666666] mt-1">
-              2026.11.15 – 11.17 · 每日精彩日程与会场指引
+              2026.11.13 – 11.15 · 共 3 天 · 每日日程与会场指引
             </p>
           </div>
 
           {/* Day Selector Segmented Control */}
           <div className="flex items-center p-1 bg-white border border-[#E8EAED] rounded-xl self-start">
             {[
-              { id: 'day1', label: 'Day 1 · 11/14 开幕与社交' },
-              { id: 'day2', label: 'Day 2 · 11/15 赛果绽放' },
+              { id: 'day1', label: 'Day 1 · 11/13 签到集结' },
+              { id: 'day2', label: 'Day 2 · 11/14 创客攻坚' },
+              { id: 'day3', label: 'Day 3 · 11/15 决赛路演' },
             ].map(day => (
               <button
                 key={day.id}

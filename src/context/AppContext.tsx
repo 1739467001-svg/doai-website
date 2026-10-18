@@ -73,7 +73,7 @@ const initialCMS: CMSData = {
     prizePoolEn: '¥200,000',
     judges: 15,
   },
-  announcement: 'Dobe AI 创客大会（DOAI）报名 9/28 开启，10/31 截止；11/15 乐动虹桥决赛路演。',
+  announcement: 'Dobe AI 创客大会（DOAI）报名 9/28 开启，10/31 截止；11/15 外滩德必园区决赛路演。',
   announcementEn: 'DOAI registration opens 9/28 and closes 10/31; finals on 11/15 at Ledong Hongqiao.',
   streamUrl: 'https://live.doai2026.org/main',
 };
@@ -288,7 +288,7 @@ const initialRecruitments: RecruitmentPost[] = [
   {
     id: 'rec-6',
     track: 'industry',
-    title: '长宁智慧园区数字孪生导览',
+    title: '黄浦智慧园区数字孪生导览',
     summary: '为德必园区做一版实时数字孪生导览：人流热力、车位与能耗可视化，拿下园区落地试点。',
     neededRoles: ['三维可视化 (Three.js)', 'GIS 工程师', '数据分析师'],
     skills: ['Three.js', 'Cesium', 'Node.js', 'PostgreSQL'],
@@ -429,7 +429,7 @@ const initialTalents: TalentProfile[] = [
     city: '海外 Remote (EU)',
     availableTime: '30 小时/周',
     roleIntent: '具身智能工程师',
-    bio: '常驻米兰的机器人工程师，参加过 3 届 Maker Faire，想通过佛罗伦萨分会场加入一支中国队伍。',
+    bio: '常驻米兰的机器人工程师，参加过 3 届 Maker Faire，希望通过海外分会场加入一支中国队伍。',
     likes: 41,
     hasLiked: false,
     atomclubVerified: true,

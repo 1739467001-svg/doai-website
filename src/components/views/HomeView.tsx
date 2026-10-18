@@ -31,7 +31,6 @@ import {
 export const HomeView: React.FC = () => {
   const { setActiveRoute, setLoginModalOpen, currentUser, tr } = useApp();
 
-  const [mapModalOpen, setMapModalOpen] = useState(false);
   const [detailModalItem, setDetailModalItem] = useState<{
     title: string;
     dateVenue: string;
@@ -61,7 +60,7 @@ export const HomeView: React.FC = () => {
     {
       id: 'forum',
       title: '论坛预约', titleEn: 'Forums',
-      subtitle: '18 个分会场 · 30—40 场', subtitleEn: '18 venues · 30–40 sessions',
+      subtitle: '分论坛数量待定', subtitleEn: 'Coming soon',
       icon: Calendar,
       iconColor: 'text-[#FF4D4F]',
       iconBg: 'bg-[#FF4D4F]/10',
@@ -98,32 +97,32 @@ export const HomeView: React.FC = () => {
 
   const highlightCards = [
     {
-      id: 'opening',
-      title: '开幕式 & 社交', titleEn: 'Opening & Social',
-      dateVenue: '11/14 德必大虹桥园区', dateVenueEn: '11/14 Dobe Park',
+      id: 'day1',
+      title: 'Day 1 · 签到集结 & 开幕盛典', titleEn: 'Day 1 · Opening',
+      dateVenue: '11/13 外滩德必园区', dateVenueEn: '11/13 Bund Dobe Park',
       img: confAuditorium,
-      desc: '全球 AI 思想领袖与学术院士主旨演讲，开幕发布仪式，并举行首日创客交流酒会。',
+      desc: '签到领物料；黄浦区领导致辞发布 AI 产业扶持政策，德必 OPC 战略发布与战略合作签约；晚上破冰组队夜。',
     },
     {
-      id: 'finals',
-      title: '决赛路演 & 游园市集', titleEn: 'Finals & Maker Fair',
-      dateVenue: '11/15 乐动虹桥', dateVenueEn: '11/15 LeDoong',
+      id: 'day2',
+      title: 'Day 2 · 创客攻坚', titleEn: 'Day 2 · Build Sprint',
+      dateVenue: '11/14 外滩德必园区', dateVenueEn: '11/14 Bund Dobe Park',
       img: venueBazaar,
-      desc: '双赛道 30+ 决赛入围团队现场 Demo 路演与专家答辩；全天候沉浸式智能硬件市集与互动游园展区。',
+      desc: '封闭开发日：集中开发 & 导师巡场、路演工作坊与海报指导站，22:00 作品提交截止。',
     },
     {
-      id: 'forums',
-      title: '18个分会场', titleEn: '18 Forums',
-      dateVenue: '全球AI创想，思想碰撞', dateVenueEn: 'Global AI ideas, live',
+      id: 'day3',
+      title: 'Day 3 · 游园展示 & 决赛路演', titleEn: 'Day 3 · Demo & Finals',
+      dateVenue: '11/15 外滩德必园区', dateVenueEn: '11/15 Bund Dobe Park',
       img: forumPanel,
-      desc: '覆盖 Agent 框架、具身智能、微机电、消费级创客硬件、商业出海等 18 个细分前沿议题。',
+      desc: 'AI 创客游园会 + 产业对接市集；决赛路演暨颁奖典礼（8 分钟展示 + 5 分钟问答）。',
     },
     {
       id: 'party',
-      title: 'After Party', titleEn: 'After Party',
+      title: '外滩 After Party', titleEn: 'Bund After Party',
       dateVenue: '与全球创客一起狂欢', dateVenueEn: 'Party with global makers',
       img: eveningParty,
-      desc: '闭幕狂欢社交夜，电子音乐与生成式光影互动，全场创客举杯畅聊，交换数字名片与未来合作机会。',
+      desc: '外滩露台轻奢酒会收官派对，电子音乐与生成式光影互动，全场创客举杯畅聊、交换数字名片。',
     },
   ];
 
@@ -163,7 +162,7 @@ export const HomeView: React.FC = () => {
             <div className="doa-rise doa-rise-1 flex items-center gap-2">
               <span className="h-px w-7 bg-[#165DFF]/70" aria-hidden="true" />
               <span className="text-[11px] lg:text-xs font-semibold text-[#165DFF] tracking-[0.28em]">
-                {tr('智 汇 长 宁 · 创 享 全 球', 'CHANGNING · AI FOR EVERY MAKER')}
+                {tr('智 汇 外 滩 · 创 享 黄 浦', 'BUND · AI FOR EVERY MAKER')}
               </span>
             </div>
 
@@ -178,7 +177,7 @@ export const HomeView: React.FC = () => {
                 Conference
               </span>
               <span className="block text-[22px] sm:text-[30px] lg:text-[38px] font-bold text-[#1a2b4d] tracking-[-0.02em] leading-[1.15] mt-1.5">
-                {tr('Dobe全球 AI 创客大会', 'DOBE Global AI Makers Conference')}
+                {tr('2026 Dobe 外滩 AI 创客大会', 'DOBE Bund AI Makers Conference 2026')}
               </span>
             </h1>
 
@@ -216,15 +215,16 @@ export const HomeView: React.FC = () => {
             <div className="doa-rise doa-rise-5 flex flex-wrap items-center gap-x-3 gap-y-2 pt-2">
               <span className="text-[11px] font-mono text-[#55627a]">2026</span>
               <span className="text-lg sm:text-xl font-extrabold font-mono text-[#0B1B3A] tracking-tight">
-                11.14 <span className="font-light text-[#b6c2d4]">——</span> 11.15
+                {/* TODO: 具体日期待团队确认（飞书仅写周五—周日共 3 天；另一口径为 11.27—11.29） */}
+                11.13（周五） <span className="font-light text-[#b6c2d4]">——</span> 11.15（周日） · 共 3 天
               </span>
               <span className="h-4 w-px bg-[#111111]/15" aria-hidden="true" />
               <span>
                 <span className="block text-[13px] font-semibold text-[#1a2b4d] leading-tight">
-                  {tr('上海 · 长宁', 'Shanghai · Changning')}
+                  {tr('上海 · 黄浦', 'Shanghai · Huangpu')}
                 </span>
                 <span className="block text-[11px] text-[#55627a]">
-                  {tr('德必大虹桥园区 × 乐动虹桥', 'Dobe Park × LeDoong Hongqiao')}
+                  {tr('外滩德必园区', 'Bund Dobe Park')}
                 </span>
               </span>
             </div>
@@ -339,120 +339,6 @@ export const HomeView: React.FC = () => {
         </div>
       </section>
 
-      {/* =========================================================================
-          4. DUAL VENUE LAYOUT ("双会场布局" - Exact Diagram with walking path)
-         ========================================================================= */}
-      <section className="relative py-20 lg:py-24 bg-gradient-to-b from-[#EBF3FF]/60 via-[#F4F8FF]/40 to-white border-y border-[#EAEFF8] overflow-hidden">
-        <div className="max-w-[1200px] mx-auto px-6 md:px-10 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            {/* Left Narrative */}
-            <div className="lg:col-span-4 space-y-4">
-              <div className="text-xs font-bold text-[#888888] tracking-widest uppercase">
-                {tr('DUAL VENUE', 'DUAL VENUE')}
-              </div>
-              <h2 className="text-3xl font-extrabold text-[#0B1B3A] tracking-tight">
-                {tr('双会场布局', 'Two Venues')}
-              </h2>
-              <p className="text-xs sm:text-[13px] text-[#666666] leading-relaxed">
-                {tr('德必大虹桥园区与乐动虹桥两大主会场，', 'Two main venues — Dobe Grand Hongqiao Park and LeDoong —')}
-                <br />
-                {tr('相距约500米，步行8–10分钟可达。', 'about 500m apart, an 8–10 minute walk.')}
-              </p>
-              <div className="pt-2">
-                <button
-                  onClick={() => setMapModalOpen(true)}
-                  className="px-6 py-2.5 text-xs font-semibold text-[#165DFF] hover:text-[#1453E6] bg-white hover:bg-[#F5F8FF] border border-[#165DFF] rounded-full transition-all inline-flex items-center gap-1.5 shadow-xs"
-                >
-                  <span>{tr('查看会场地图', 'Venue Map')}</span>
-                  <span>→</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Right: The Two Venue Cards with Connecting Walking Path (Exact Layout) */}
-            <div className="lg:col-span-8 relative">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16 items-center relative">
-                {/* Connecting Curved Dotted Walking Path (Positioned between cards) */}
-                <div className="hidden md:flex flex-col items-center justify-center absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-none">
-                  <div className="w-8 h-8 rounded-full bg-[#165DFF] text-white flex items-center justify-center shadow-md animate-bounce">
-                    <Footprints className="w-4 h-4" />
-                  </div>
-                  <div className="mt-2 px-3 py-1 bg-white/95 backdrop-blur-md border border-[#165DFF]/30 rounded-full shadow-sm text-center">
-                    <div className="text-xs font-bold text-[#165DFF]">{tr('约500m', '≈500m')}</div>
-                    <div className="text-[10px] text-[#666666] whitespace-nowrap">{tr('步行8-10分钟', '8–10 min walk')}</div>
-                  </div>
-                </div>
-
-                {/* Venue 1: 德必大虹桥园区 */}
-                <div className="relative bg-white/95 backdrop-blur-md rounded-3xl p-6 sm:p-7 border border-[#E2E8F0] shadow-floating hover:shadow-premium transition-all">
-                  <div className="flex items-center justify-between pb-3 border-b border-[#F0F2F5] mb-3">
-                    <h3 className="text-base sm:text-lg font-bold text-[#0B1B3A]">
-                      {tr('德必大虹桥园区', 'Dobe Grand Hongqiao Park')}
-                    </h3>
-                    <button
-                      onClick={() => setMapModalOpen(true)}
-                      className="w-6 h-6 rounded-full bg-[#F7F8FA] hover:bg-[#165DFF] text-[#888888] hover:text-white flex items-center justify-center text-xs transition-colors"
-                    >
-                      ↗
-                    </button>
-                  </div>
-
-                  {/* Badge */}
-                  <div className="mb-3">
-                    <span className="inline-block px-3 py-1 text-xs font-semibold text-white bg-[#165DFF] rounded-lg">
-                      {tr('11.14 下午 — 晚间', '11/14 Afternoon — Night')}
-                    </span>
-                  </div>
-
-                  <div className="space-y-1 text-xs text-[#555555]">
-                    <div className="font-semibold text-[#0B1B3A]">
-                      {tr('开幕式论坛 · 自由社交 · After Party', 'Opening forum · social · after party')}
-                    </div>
-                    <div className="text-[#888888] text-[11px]">
-                      部分赛道路演分会场 · 海外线上评审室
-                    </div>
-                  </div>
-                </div>
-
-                {/* Venue 2: 乐动虹桥 */}
-                <div className="relative bg-white/95 backdrop-blur-md rounded-3xl p-6 sm:p-7 border border-[#E2E8F0] shadow-floating hover:shadow-premium transition-all">
-                  <div className="flex items-center justify-between pb-3 border-b border-[#F0F2F5] mb-3">
-                    <h3 className="text-base sm:text-lg font-bold text-[#0B1B3A]">
-                      {tr('乐动虹桥', 'LeDoong Hongqiao')}
-                    </h3>
-                    <button
-                      onClick={() => setMapModalOpen(true)}
-                      className="w-6 h-6 rounded-full bg-[#F7F8FA] hover:bg-[#165DFF] text-[#888888] hover:text-white flex items-center justify-center text-xs transition-colors"
-                    >
-                      ↗
-                    </button>
-                  </div>
-
-                  {/* Badge */}
-                  <div className="mb-3">
-                    <span className="inline-block px-3 py-1 text-xs font-semibold text-white bg-[#165DFF] rounded-lg">
-                      {tr('11.15 全天', '11/15 All Day')}
-                    </span>
-                  </div>
-
-                  <div className="space-y-1 text-xs text-[#555555]">
-                    <div className="font-semibold text-[#0B1B3A]">
-                      {tr('决赛路演 · 游园会 · 市集 · 分论坛', 'Finals · fair · market · forums')}
-                    </div>
-                    <div className="text-[#888888] text-[11px]">
-                      AI 互动 · 招聘 · 晨商 · 航天体验论坛
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* =========================================================================
-          4.5 PEOPLE — 大赛主席团 · 专家评委团 · 生态伙伴
-         ========================================================================= */}
       <PeopleSection />
 
       {/* =========================================================================
@@ -480,12 +366,19 @@ export const HomeView: React.FC = () => {
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
           {[
-            { mark: '原', markBg: 'bg-neutral-100', markText: 'text-neutral-700', name: '原子公社', en: 'AtomHub', tag: '社区伙伴', tagEn: 'Community' },
-            { mark: 'DB', markBg: 'bg-[#165DFF]', markText: 'text-white', name: '德必集团', en: 'DOBE GROUP', tag: '主办场地', tagEn: 'Venue Host' },
-            { mark: '长', markBg: 'bg-[#F2F7FF]', markText: 'text-[#165DFF]', name: '长宁区人民政府', en: 'Changning Gov.', tag: '指导单位', tagEn: 'Guiding Body' },
-            { mark: 'MS', markBg: 'bg-[#F25022]/10', markText: 'text-[#F25022]', name: 'Microsoft', en: '微软', tag: '技术伙伴', tagEn: 'Technology' },
-            { mark: 'N', markBg: 'bg-[#76B900]/10', markText: 'text-[#76B900]', name: 'NVIDIA', en: '英伟达', tag: '算力伙伴', tagEn: 'Compute' },
-            { mark: 'intel', markBg: 'bg-[#0068B5]/10', markText: 'text-[#0068B5]', name: 'Intel', en: '英特尔', tag: '硬件伙伴', tagEn: 'Hardware' },
+            { mark: '涂', markBg: 'bg-[#165DFF]/10', markText: 'text-[#165DFF]', name: '涂鸦智能', en: 'Tuya Smart', tag: '已签约', tagEn: 'Signed' },
+            { mark: '拓', markBg: 'bg-[#00C48C]/10', markText: 'text-[#00876A]', name: '拓竹科技', en: 'Bambu Lab', tag: '实物赞助', tagEn: 'Hardware Sponsor' },
+            { mark: 'GC', markBg: 'bg-neutral-100', markText: 'text-neutral-700', name: '谷歌云', en: 'Google Cloud', tag: '即将官宣', tagEn: 'Coming soon' },
+            { mark: '谷', markBg: 'bg-neutral-100', markText: 'text-neutral-700', name: '谷歌营销', en: 'Google Marketing', tag: '即将官宣', tagEn: 'Coming soon' },
+            { mark: '浦', markBg: 'bg-[#0068B5]/10', markText: 'text-[#0068B5]', name: '浦发银行', en: 'SPD Bank', tag: '即将官宣', tagEn: 'Coming soon' },
+            { mark: '宇', markBg: 'bg-neutral-100', markText: 'text-neutral-700', name: '宇树科技', en: 'Unitree', tag: '即将官宣', tagEn: 'Coming soon' },
+            { mark: '火', markBg: 'bg-[#FF4D4F]/10', markText: 'text-[#FF4D4F]', name: '火山引擎', en: 'Volcengine', tag: '即将官宣', tagEn: 'Coming soon' },
+            { mark: '百', markBg: 'bg-[#722ED1]/10', markText: 'text-[#722ED1]', name: '阿里百炼', en: 'Alibaba Bailian', tag: '即将官宣', tagEn: 'Coming soon' },
+            { mark: 'wb', markBg: 'bg-neutral-100', markText: 'text-neutral-700', name: 'workbuddy', en: 'workbuddy', tag: '即将官宣', tagEn: 'Coming soon' },
+            { mark: '云', markBg: 'bg-[#FF8A1F]/10', markText: 'text-[#FF8A1F]', name: '阿里云', en: 'Alibaba Cloud', tag: '即将官宣', tagEn: 'Coming soon' },
+            { mark: '阶', markBg: 'bg-[#165DFF]/10', markText: 'text-[#165DFF]', name: '阶跃星辰', en: 'StepFun', tag: '即将官宣', tagEn: 'Coming soon' },
+            { mark: 'MM', markBg: 'bg-neutral-100', markText: 'text-neutral-700', name: 'MiniMax', en: 'MiniMax', tag: '即将官宣', tagEn: 'Coming soon' },
+            { mark: 'Trae', markBg: 'bg-neutral-100', markText: 'text-neutral-700', name: 'Trae', en: 'Trae', tag: '即将官宣', tagEn: 'Coming soon' },
           ].map(p => (
             <div
               key={p.name}
@@ -499,7 +392,13 @@ export const HomeView: React.FC = () => {
               <div className="mt-auto">
                 <div className="text-[13px] font-bold text-[#0B1B3A] leading-tight truncate">{p.name}</div>
                 <div className="text-[10px] text-[#98A6BE] tracking-tight truncate">{p.en}</div>
-                <span className="inline-block mt-1.5 px-1.5 py-0.5 text-[10px] font-medium text-[#48597A] bg-[#F7FAFF] border border-[#E3ECFA] rounded">
+                <span
+                  className={`inline-block mt-1.5 px-1.5 py-0.5 text-[10px] font-medium rounded ${
+                    (p.tag ?? '').includes('官宣')
+                      ? 'text-[#98A6BE] bg-neutral-50 border border-neutral-200'
+                      : 'text-[#48597A] bg-[#F7FAFF] border border-[#E3ECFA]'
+                  }`}
+                >
                   {tr(p.tag, p.tagEn)}
                 </span>
               </div>
@@ -507,70 +406,6 @@ export const HomeView: React.FC = () => {
           ))}
         </div>
       </section>
-
-      {/* =========================================================================
-          MODAL: Venue Map Modal ("查看会场地图")
-         ========================================================================= */}
-      {mapModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-150">
-          <div className="relative w-full max-w-2xl bg-white rounded-3xl p-8 shadow-floating border border-[#E8EAED] max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between pb-4 border-b border-[#E8EAED] mb-6">
-              <div>
-                <h3 className="text-xl font-bold text-[#0B1B3A]">{tr('DOAI 2026 双会场空间与路线导引', 'DOAI 2026 Venues & Walking Guide')}</h3>
-                <p className="text-xs text-[#666666] mt-0.5">{tr('上海 · 长宁 · 德必大虹桥园区 ↔ 乐动虹桥', 'Shanghai · Changning · Dobe Park ↔ LeDoong')}</p>
-              </div>
-              <button
-                onClick={() => setMapModalOpen(false)}
-                className="p-1.5 text-[#888888] hover:text-[#0B1B3A] rounded-full"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <div className="space-y-6 text-xs text-[#555555]">
-              {/* Walking Route Guide */}
-              <div className="p-5 bg-[#F5F8FF] rounded-2xl border border-[#165DFF]/20 space-y-2">
-                <div className="font-bold text-[#165DFF] text-sm flex items-center gap-2">
-                  <Footprints className="w-4 h-4" />
-                  <span>步行接驳指引（约 500 米 · 8-10 分钟）</span>
-                </div>
-                <p className="leading-relaxed">
-                  德必大虹桥园区（天山西路567号）出发，沿临虹路向北步行约 400 米至协和路交口即达乐动虹桥。沿途设有大会志愿者导引台与地面发光路标。
-                </p>
-              </div>
-
-              {/* Venue 1 Breakdown */}
-              <div className="p-4 doa-panel space-y-2">
-                <div className="font-bold text-[#0B1B3A] text-sm">德必大虹桥园区 (11.14 主场)</div>
-                <ul className="list-disc list-inside space-y-1 leading-relaxed text-[#666666]">
-                  <li>德必主会场：开幕式、主办方战略发布、圆桌论坛、赛制发布与高校签约</li>
-                  <li>2F 创客空中花园：自由社交茶歇、After Party 狂欢晚会</li>
-                  <li>3F 国际研讨室：海外线上双向连线评审室与闭门路演分会场</li>
-                </ul>
-              </div>
-
-              {/* Venue 2 Breakdown */}
-              <div className="p-4 doa-panel space-y-2">
-                <div className="font-bold text-[#0B1B3A] text-sm">乐动虹桥 (11.15 主场)</div>
-                <ul className="list-disc list-inside space-y-1 leading-relaxed text-[#666666]">
-                  <li>中庭路演大厅：30+ 决赛团队全天路演与答辩评审</li>
-                  <li>A/B/C/D 分论坛厅：18 个垂直前沿技术与出海商业分论坛</li>
-                  <li>户外创客市集展区：智能硬件、具身机器人、端侧推理装置互动游园</li>
-                </ul>
-              </div>
-            </div>
-
-            <div className="pt-6 mt-6 border-t border-[#E8EAED] flex justify-end">
-              <button
-                onClick={() => setMapModalOpen(false)}
-                className="px-6 py-2.5 text-xs font-semibold text-white bg-[#165DFF] hover:bg-[#1453E6] rounded-full"
-              >
-                {tr('已了解', 'Got it')}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* =========================================================================
           MODAL: Event Highlight Details Modal

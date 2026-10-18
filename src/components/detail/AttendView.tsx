@@ -5,7 +5,7 @@
  *
  * Everything the plan states about attendance is honoured here:
  *   - 参会全程免费，不设任何付费通道（并给出防诈骗提示）
- *   - 双会场：11/14 德必大园区（开幕与社交），11/15 乐动虹桥（路演·游园·市集）
+ *   - 双会场：11/14 德必大园区（开幕与社交），11/15 外滩德必园区（路演·游园·市集）
  *   - 游园 / 市集 / AI 互动区对公众开放
  *   - 需要名额的是开幕主会场、决赛路演厅与 18 个分会场
  */
@@ -46,9 +46,9 @@ const PASS_TYPES: PassType[] = [
     quota: '不限量', quotaEn: 'Unlimited',
     perks: [
       '11/14 德必园区签到与开幕主会场（需选座）',
-      '11/15 乐动虹桥决赛路演厅（需选座）',
+      '11/15 外滩德必园区决赛路演厅（需选座）',
       'AI 创客游园会与 3F 选手作品展',
-      '长宁味道市集与 AI 互动区',
+      '黄浦市集与 AI 互动区',
       '展商展位区与樊登书店求职功能区',
     ],
     needsSeat: true,
@@ -95,7 +95,6 @@ const PASS_TYPES: PassType[] = [
     quota: '审核制', quotaEn: 'By application',
     perks: [
       '开幕主会场与决赛路演厅优先席位',
-      '德必园区海外线上评审室观摩',
       '媒体采访区与产业对接区通行',
       '需提交机构信息，组委会 3 个工作日内审核',
     ],
@@ -120,10 +119,10 @@ export const AttendView: React.FC = () => {
   /* Seat options = the sessions that actually need capacity control. */
   const seatOptions = useMemo(
     () => [
-      { id: 'seat-open', label: '开幕主会场', labelEn: 'Opening Main Hall', when: '11/14 13:00—17:30', place: '德必大虹桥园区', placeEn: 'Dobe Park', cap: 400 },
-      { id: 'seat-roadshow', label: '决赛路演厅', labelEn: 'Finals Hall', when: '11/15 09:30—16:00', place: '乐动虹桥 1F 路演厅', placeEn: 'LeDoong 1F', cap: 320 },
-      { id: 'seat-orbit', label: '逐梦星河 · 商业航天论坛', labelEn: 'Aerospace Forum', when: '11/15', place: '乐动虹桥 2F 航天馆', placeEn: 'LeDoong 2F', cap: 180 },
-      { id: 'seat-afterparty', label: 'After Party 创客社交之夜', labelEn: 'After Party Night', when: '11/14 18:30—21:30', place: '德必大虹桥园区', placeEn: 'Dobe Park', cap: 300 },
+      { id: 'seat-open', label: '开幕主会场', labelEn: 'Opening Main Hall', when: '11/14 13:00—17:30', place: '外滩德必园区', placeEn: 'Dobe Park', cap: 400 },
+      { id: 'seat-roadshow', label: '决赛路演厅', labelEn: 'Finals Hall', when: '11/15 09:30—16:00', place: '外滩德必园区 · 路演厅', placeEn: 'LeDoong 1F', cap: 320 },
+      { id: 'seat-orbit', label: '逐梦星河 · 商业航天论坛', labelEn: 'Aerospace Forum', when: '11/15', place: '外滩德必园区 2F', placeEn: 'LeDoong 2F', cap: 180 },
+      { id: 'seat-afterparty', label: 'After Party 创客社交之夜', labelEn: 'After Party Night', when: '11/14 18:30—21:30', place: '外滩德必园区', placeEn: 'Dobe Park', cap: 300 },
     ],
     []
   );
@@ -184,7 +183,7 @@ export const AttendView: React.FC = () => {
             qrCode: `DOAI-ATTEND-${pass.id.toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`,
             status: 'claimed' as const,
             sessionTime: '2026-11-15 全天',
-            venue: '乐动虹桥 · 公共展区',
+            venue: '外滩德必园区 · 公共展区',
             issuedAt: now,
           },
         ];
@@ -285,7 +284,7 @@ export const AttendView: React.FC = () => {
         )}
       meta={[
         { label: tr('大会日期', 'Dates'), value: event.dateLabel },
-        { label: tr('会场', 'Venues'), value: tr('德必大虹桥园区 × 乐动虹桥', 'Dobe Park × LeDoong') },
+        { label: tr('会场', 'Venues'), value: tr('外滩德必园区', 'Bund Dobe Park') },
         { label: tr('报名费用', 'Fee'), value: tr('免费', 'Free') },
         { label: tr('已持有凭证', 'My Passes'), value: `${myPassTickets.length}` },
       ]}
@@ -322,7 +321,7 @@ export const AttendView: React.FC = () => {
           {[
             { icon: Baby, label: '亲子友好', labelEn: 'Family friendly', desc: '11/15 游园会设亲子体验区', descEn: 'Family zone at the fair on 11/15' },
             { icon: Accessibility, label: '无障碍', labelEn: 'Accessible', desc: '两会场均有无障碍通道与电梯', descEn: 'Accessible routes & lifts at both venues' },
-            { icon: Coffee, label: '餐饮', labelEn: 'Food', desc: '长宁味道市集 8—12 家本地餐饮', descEn: '8–12 local food stalls at the market' },
+            { icon: Coffee, label: '餐饮', labelEn: 'Food', desc: '黄浦市集 8—12 家本地餐饮', descEn: '8–12 local food stalls at the market' },
             { icon: MapPin, label: '接驳', labelEn: 'Shuttle', desc: '两会场步行 8—10 分钟，现场设引导', descEn: 'Venues 8–10 min walk apart, guided' },
           ].map((r, i) => {
             const Icon = r.icon;

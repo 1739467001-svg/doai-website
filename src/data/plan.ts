@@ -10,20 +10,20 @@
 export const event = {
   nameZh: 'Dobe AI 创客大会',
   shortName: 'DOAI',
-  fullNameEn: 'Dobe Open AI Makers Conference',
-  slogan: '智汇长宁 · 创享全球',
+  fullNameEn: 'Dobe Bund AI Makers Conference 2026',
+  slogan: '智汇外滩 · 创享黄浦',
   tagline: 'AI 造物，人人创客',
   taglineDesc: '让 AI 从屏幕走进现实，人人可逛、可玩、可学、可赛、可合作。',
   year: 2026,
   dateLabel: '11.14 — 11.15',
   dateRange: '2026 年 11 月 14 日（周六）—15 日（周日）',
-  city: '上海 · 长宁',
+  city: '上海 · 黄浦',
   nature: '面向全球开发者、创业者、企业、大学生与公众的复合型 AI 创客大会',
   format: '线上官网 + 线下双会场',
   organizers: ['原子公社 AtomHub', '德必集团'],
-  coOrganizers: ['上海市时代青年科创中心'],
-  supporters: ['长宁区人民政府'],
-  hostLine: '原子公社 × 德必 联合主办 · 长宁区人民政府支持',
+  coOrganizers: ['原子公社 AtomHub'],
+  supporters: ['黄浦区人民政府'],
+  hostLine: '原子公社 × 德必 联合主办 · 黄浦区人民政府支持',
 } as const;
 
 /* ---------------------------------------------------------------- 场地 */
@@ -35,23 +35,23 @@ export const venue = {
 export const venues = [
   {
     id: 'debei',
-    name: '德必大虹桥园区',
+    name: '外滩德必园区',
     role: '开幕与社交主场',
     sessions: [
       { when: '11/14 下午—晚间', role: '开幕与社交主场',
         content: '开幕式论坛（领导致辞、主办方分享、圆桌、赛制发布 / 高校签约）、自由社交、After Party' },
       { when: '11/15 白天', role: '路演分会场 + 线上评审',
-        content: '部分赛道决赛路演分会场、海外线上评审室（海外专家远程接入）、分会场直播' },
+        content: '决赛路演、AI 创客游园会与市集、颁奖典礼' },
     ],
   },
   {
     id: 'ledong',
-    name: '乐动虹桥',
+    name: '外滩德必园区（分会场）',
     role: '路演 · 游园 · 市集主场',
-    address: '长宁区娄山关路 445 弄',
+    address: '外滩德必园区（现场设指引）',
     sessions: [
       { when: '11/15 全天', role: '路演 · 游园 · 市集主场',
-        content: '决赛路演主会场、AI 创客游园会、长宁味道市集、AI 互动、求职招聘、展商、分论坛、航天馆论坛' },
+        content: '决赛路演主会场、AI 创客游园会、黄浦市集、AI 互动、求职招聘、展商、分论坛、航天馆论坛' },
     ],
   },
 ] as const;
@@ -62,7 +62,7 @@ export const scale = [
   { label: '参赛规模', value: '700+', unit: '开发者 / 创客池', note: '入围路演 20—30 个项目（双赛道）' },
   { label: '分会场', value: '18', unit: '个', note: '两天合计 30—40 场' },
   { label: '展商 / 展位', value: '31—41', unit: '个', note: '小展位 15—20 免费 · 中展位 12—15 收费 · 大展位 4—6 收费' },
-  { label: '长宁味道餐饮摊位', value: '8—12', unit: '家', note: '本地餐饮联动' },
+  { label: '黄浦味道餐饮摊位', value: '8—12', unit: '家', note: '本地餐饮联动' },
   { label: 'AI 公司招聘展位', value: '8—12', unit: '家', note: '付费广告位 1999 元 / 天' },
   { label: '演讲嘉宾', value: '80—120', unit: '位', note: '含至少 1 位海外专家' },
 ] as const;
@@ -108,12 +108,11 @@ export const contest = {
   ],
   timeline: [
     { date: '9/28 — 10/31', title: '报名', desc: '通过 DOAI 官网提交团队与项目资料，生成报名凭证。' },
-    { date: '10 月中旬', title: '命题发布', desc: '产业赛道联合长宁区龙头企业发布真实业务命题。' },
+    { date: '10 月中旬', title: '命题发布', desc: '产业赛道联合黄浦区龙头产业企业发布真实业务命题。' },
     { date: '10 月中旬 — 11 月上旬', title: '线上组队', desc: '官网在线组队与招募队员，形成战队档案。' },
     { date: '11/3 — 11/7', title: '作品提交', desc: '提交项目说明、Demo 视频与团队信息。' },
-    { date: '11/8 — 11/11', title: '线上初筛', desc: '专家评审团初评，含海外线上评审同步参与。' },
-    { date: '11/12 前', title: '公布入围', desc: '公布 20—30 个入围路演项目。' },
-    { date: '11/15', title: '线下路演', desc: '乐动虹桥主会场 + 德必园区分会场同步进行。' },
+        { date: '11/12 前', title: '公布入围', desc: '公布 20—30 个入围路演项目。' },
+    { date: '11/15', title: '线下路演', desc: '外滩德必园区主会场同步进行。' },
     { date: '11/15 闭幕式', title: '颁奖与落地', desc: '现场颁奖，并推动获奖项目与企业需求现场签约。' },
   ],
 } as const;
@@ -123,9 +122,9 @@ export const tracks = [
     id: 'industry',
     name: '产业赛道',
     nameEn: 'AI + Industry',
-    audience: '面向长宁龙头企业真实命题解题的团队',
+    audience: '面向黄浦区龙头产业企业真实命题解题的团队',
     directions: ['AI + 消费（电商、IP 类情绪消费、新消费）', 'AI + 专业服务（出海、法务、财税）'],
-    rule: '联合长宁区龙头企业发布真实业务命题，定向解题；获奖项目优先对接企业采购订单与落地孵化。',
+    rule: '联合黄浦区龙头产业企业发布真实业务命题，定向解题；获奖项目优先对接企业采购订单与落地孵化。',
   },
   {
     id: 'creator',
@@ -138,11 +137,7 @@ export const tracks = [
 ] as const;
 
 /* ---------------------------------------------------------------- 海外联动 */
-export const overseas = [
-  { city: '中国香港', role: '亚太 OPC 流量入口' },
-  { city: '意大利佛罗伦萨', role: '欧洲设计力量' },
-  { city: '美国硅谷', role: '全球技术高地' },
-] as const;
+export const overseas = [] as const;
 
 /* ---------------------------------------------------------------- 日程 */
 export const agenda = [
@@ -150,7 +145,7 @@ export const agenda = [
     id: 'day1',
     day: 'Day 1',
     date: '11 月 14 日（周六）',
-    venue: '德必大虹桥园区',
+    venue: '外滩德必园区',
     positioning: '开幕与社交',
     summary: '下午开幕式（领导讲话、主办方分享、圆桌、赛制发布与高校签约），晚间 After Party 深度社交。',
     items: [
@@ -167,16 +162,15 @@ export const agenda = [
     id: 'day2',
     day: 'Day 2',
     date: '11 月 15 日（周日）',
-    venue: '乐动虹桥 + 德必园区',
+    venue: '外滩德必园区',
     positioning: '赛果绽放',
-    summary: '乐动虹桥承担决赛路演主会场、游园会、市集、互动、求职、展商与分论坛；德必园区承担部分赛道路演分会场与海外线上评审室。',
+    summary: '外滩德必园区为三天赛事唯一主场：Day 1 开幕盛典与破冰组队，Day 2 封闭开发与作品提交，Day 3 游园会、决赛路演与颁奖典礼。',
     items: [
-      { time: '09:30 起', place: '乐动虹桥 1F', title: '展区开市', desc: '长宁味道市集开市、AI 互动区开放、樊登书店求职区开放、展商开馆、游园护照发放。' },
-      { time: '09:30—12:00', place: '乐动虹桥 1F 路演厅', title: '决赛路演第一场：产业赛道', desc: '8+5 分钟制，直播。' },
-      { time: '09:30—12:00', place: '德必园区', title: '自由赛道分会场路演', desc: '海外线上评审室启用，海外专家远程接入。' },
-      { time: '09:30—12:00', place: '乐动虹桥 2F', title: '「逐梦星河」商业航天论坛（上午场）', desc: '' },
-      { time: '13:30—16:00', place: '乐动虹桥 1F 路演厅', title: '决赛路演第二场：自由赛道', desc: '8+5 分钟制，直播。' },
-      { time: '13:30—17:00', place: '乐动虹桥 3F', title: '分论坛（7—8 场并行）', desc: '详见分会场一览。' },
+      { time: '09:30 起', place: '外滩德必园区 1F', title: '展区开市', desc: '黄浦市集开市、AI 互动区开放、樊登书店求职区开放、展商开馆、游园护照发放。' },
+      { time: '09:30—12:00', place: '外滩德必园区 · 路演厅', title: '决赛路演第一场：产业赛道', desc: '8+5 分钟制，直播。' },
+      { time: '09:30—12:00', place: '外滩德必园区 2F', title: '「逐梦星河」商业航天论坛（上午场）', desc: '' },
+      { time: '13:30—16:00', place: '外滩德必园区 · 路演厅', title: '决赛路演第二场：自由赛道', desc: '8+5 分钟制，直播。' },
+      { time: '13:30—17:00', place: '外滩德必园区 3F', title: '分论坛（7—8 场并行）', desc: '详见分会场一览。' },
       { time: '16:30—17:30', place: '主会场', title: '闭幕式：颁奖与项目落地签约', desc: '公布获奖名单，现场推动项目与企业需求签约。' },
     ],
   },

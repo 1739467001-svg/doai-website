@@ -27,7 +27,7 @@ export interface Person {
 export interface Partner {
   id: string;
   name: string;
-  category: '主办' | '联合主办' | '支持' | '生态伙伴' | '承办方' | '海外分会场';
+  category: '指导单位' | '主办方' | '联合主办' | '战略合作方' | '内容平台' | '支持' | '生态伙伴' | '承办方' | '海外分会场';
   desc: string;
 }
 
@@ -39,12 +39,12 @@ export interface Partner {
 const avatar = (_seed: string) => '';
 
 export const presidium: Person[] = [
-  { id: 'p-1', name: '沈砚清', nameEn: 'Shen Yanqing', title: '大会主席', org: '原子公社 AtomHub', role: 'presidium', avatar: avatar('doai-chair-1'), featured: true },
-  { id: 'p-2', name: '唐蔚然', nameEn: 'Tang Weiran', title: '大会联席主席', org: '德必集团', role: 'presidium', avatar: avatar('doai-chair-2'), featured: true },
-  { id: 'p-3', name: '顾行舟', nameEn: 'Gu Xingzhou', title: '赛事总评审', org: '评审委员会', role: 'presidium', avatar: avatar('doai-chair-3'), featured: true },
-  { id: 'p-4', name: '陆嘉铭', nameEn: 'Lu Jiaming', title: '产业顾问', org: '长宁区数字经济企业联合会', role: 'presidium', avatar: avatar('doai-chair-4') },
-  { id: 'p-5', name: '宋雨桐', nameEn: 'Song Yutong', title: '学术顾问', org: '华东智能计算联合实验室', role: 'presidium', avatar: avatar('doai-chair-5') },
-  { id: 'p-6', name: '林恩佑', nameEn: 'Lin Enyou', title: '海外学术顾问', org: 'APAC OPC · 中国香港', role: 'presidium', avatar: avatar('doai-chair-6') },
+  { id: 'p-1', name: '待公布', nameEn: 'To be announced', title: '大会主席', org: '原子公社 AtomHub', role: 'presidium', avatar: avatar('doai-chair-1'), featured: true },
+  { id: 'p-2', name: '待公布', nameEn: 'To be announced', title: '大会联席主席', org: '德必集团', role: 'presidium', avatar: avatar('doai-chair-2'), featured: true },
+  { id: 'p-3', name: '待公布', nameEn: 'To be announced', title: '赛事总评审', org: '评审委员会', role: 'presidium', avatar: avatar('doai-chair-3'), featured: true },
+  { id: 'p-4', name: '待公布', nameEn: 'To be announced', title: '产业顾问', org: '黄浦区数字经济企业联合会', role: 'presidium', avatar: avatar('doai-chair-4') },
+  { id: 'p-5', name: '待公布', nameEn: 'To be announced', title: '学术顾问', org: '华东智能计算联合实验室', role: 'presidium', avatar: avatar('doai-chair-5') },
+  { id: 'p-6', name: '待公布', nameEn: 'To be announced', title: '海外学术顾问', org: '海外学术机构', role: 'presidium', avatar: avatar('doai-chair-6') },
 ];
 
 /**
@@ -52,23 +52,18 @@ export const presidium: Person[] = [
  * 资深投资人 3—4、技术专家（含海外）2—3、主办方代表 2，合计 12—15 名。
  * Slots are generated per group so the page always shows the right totals.
  */
-const judgeSeed: { title: string; org: string; track: string; n: number; names: string[] }[] = [
-  { title: '政府产业代表', org: '长宁区产业主管部门', track: 'both', n: 3,
-    names: ['何以群', '郑楚君', '万年青'] },
-  { title: '产业企业代表', org: '长宁区龙头企业', track: 'industry', n: 4,
-    names: ['秦沛杉', '华国维', '闵之桐', '池晓东'] },
-  { title: '资深投资人', org: '投资机构 / 产业基金', track: 'both', n: 3,
-    names: ['范立群', '贺兰亭', '裴之远'] },
-  { title: '技术专家', org: '高校 / 科研院所 / 海外专家', track: 'creator', n: 3,
-    names: ['钟砚秋', '史笛文 (Steven)', '欧凯琳 (Elena K.)'] },
-  { title: '主办方代表', org: '原子公社 · 德必集团', track: 'both', n: 2,
-    names: ['沈砚清', '唐蔚然'] },
+const judgeSeed: { title: string; org: string; track: string; n: number; label: string }[] = [
+  { title: '政府产业代表', org: '黄浦区产业主管部门', track: 'both', n: 2, label: '2—3 名' },
+  { title: '产业企业代表', org: '黄浦区龙头企业', track: 'industry', n: 4, label: '4 名' },
+  { title: '资深投资人', org: '投资机构 / 产业基金', track: 'both', n: 3, label: '3—4 名' },
+  { title: '技术专家', org: '高校 / 科研院所 / 海外专家', track: 'creator', n: 2, label: '2—3 名' },
+  { title: '主办方代表', org: '德必集团 · Flowmind', track: 'both', n: 2, label: '2 名' },
 ];
 
 export const judges: Person[] = judgeSeed.flatMap((g, gi) =>
   Array.from({ length: g.n }, (_, i) => ({
     id: `j-${gi}-${i}`,
-    name: g.names[i] ?? '待公布',
+    name: '待公布',
     title: g.title,
     org: g.org,
     role: 'judge' as const,
@@ -77,25 +72,23 @@ export const judges: Person[] = judgeSeed.flatMap((g, gi) =>
   }))
 );
 
-export const judgeGroups = judgeSeed.map((g) => ({ title: g.title, org: g.org, count: g.n }));
+export const judgeGroups = judgeSeed.map((g) => ({ title: g.title, org: g.org, count: g.n, label: g.label }));
 
 /* ------------------------------------------------------------------ 伙伴 */
 
 export const partners: Partner[] = [
-  { id: 'pt-1', name: '原子公社 AtomHub', category: '主办', desc: '创客社区与赛事发起方，组队广场与数字名片模块提供方。' },
-  { id: 'pt-2', name: '德必集团', category: '主办', desc: '德必大虹桥园区运营方，提供开幕与社交主场。' },
-  { id: 'pt-3', name: '上海市时代青年科创中心', category: '联合主办', desc: '青年科创力量联合发起。' },
-  { id: 'pt-4', name: '长宁区人民政府', category: '支持', desc: '政策支持与区域产业资源协同。' },
-  { id: 'pt-5', name: '乐动虹桥', category: '生态伙伴', desc: '路演、游园与市集主场运营方。' },
-  { id: 'pt-6', name: '樊登书店', category: '生态伙伴', desc: '1F 人才引力场与求职功能区合作方。' },
-  { id: 'pt-7', name: '原子之心', category: '生态伙伴', desc: '线上社区与内容运营。' },
-  { id: 'pt-8', name: '商业航天馆', category: '生态伙伴', desc: '2F「逐梦星河」商业航天论坛场地。' },
-  { id: 'pt-9', name: '中国香港 · APAC OPC', category: '海外分会场', desc: '亚太 OPC 流量入口。' },
-  { id: 'pt-10', name: '意大利佛罗伦萨', category: '海外分会场', desc: '欧洲设计力量联动。' },
-  { id: 'pt-11', name: '美国硅谷', category: '海外分会场', desc: '全球技术高地联动。' },
+  { id: 'pt-gov', name: '黄浦区政府相关单位', category: '指导单位', desc: 'AI 产业专项扶持政策发布与区域产业资源协同。' },
+  { id: 'pt-2', name: '德必集团', category: '主办方', desc: '外滩德必园区运营方，OPC 创新服务体系与 AI 产业加速计划发起方。' },
+  { id: 'pt-fm', name: 'Flowmind', category: '主办方', desc: 'AI 产业大会联合发起方。' },
+  { id: 'pt-1', name: '原子公社 AtomHub', category: '联合主办', desc: '创客社区与赛事发起方，组队广场与数字名片模块提供方。' },
+  { id: 'pt-st', name: '香港高升', category: '战略合作方', desc: '战略合作签约伙伴。' },
+  { id: 'pt-gc', name: 'Google Cloud', category: '战略合作方', desc: '云服务与算力战略合作伙伴。' },
+  { id: 'pt-ty', name: '涂鸦智能', category: '战略合作方', desc: 'AI+IoT 战略合作伙伴。' },
+  { id: 'pt-bb', name: '拓竹科技', category: '战略合作方', desc: '桌面 3D 打印与具身硬件战略合作伙伴。' },
+  { id: 'pt-xhs', name: '小红书科技', category: '内容平台', desc: '社交平台话题运营与内容传播合作方。' },
 ];
 
-export const partnerCategories = ['主办', '联合主办', '支持', '生态伙伴', '海外分会场'] as const;
+export const partnerCategories = ['指导单位', '主办方', '联合主办', '战略合作方', '内容平台'] as const;
 
 /* ------------------------------------------------------- 赛题与赛制 */
 
@@ -117,123 +110,80 @@ export interface ContestBrief {
 }
 
 export const contestBriefs: ContestBrief[] = [
-  /* ------------------------- 产业赛道（示例命题） ------------------------- */
   {
-    id: 'b-ind-1',
-    code: 'IND-CONSUMER-01',
+    id: 'b-prop-1',
+    code: 'IND-PROP-01',
     track: 'industry',
-    title: 'AI 驱动的情绪消费与 IP 运营',
-    sponsor: '长宁区龙头企业（拟）',
+    title: '金融科技命题',
+    sponsor: '命题企业待官宣',
     status: 'upcoming',
-    publishDate: '2026-10-15',
-    summary: '面向新消费与 IP 情绪价值场景，用 AI 打通内容生产、用户洞察与转化链路。',
-    background:
-      '新消费品牌在 IP 运营中普遍面临内容生产成本高、用户洞察滞后、转化链路割裂三个问题。本赛题希望团队用可运行的 Demo 证明：同样的内容投入下，AI 能把「洞察—生成—分发—转化」串成闭环，并给出可衡量的指标提升。',
-    deliverables: [
-      '可运行 Demo 或线上访问地址',
-      '3 分钟 Demo 视频（公开直链）',
-      '项目说明文档（含架构与数据来源）',
-      '指标提升的测算方式与基线数据',
-    ],
-    criteria: [
-      { name: '真实场景价值', weight: '35%', desc: '是否解决命题方真实业务痛点，指标是否可验证。' },
-      { name: '技术创新性', weight: '25%', desc: '技术选型是否合理，有无自研成分。' },
-      { name: '工程完成度', weight: '25%', desc: '系统稳定性、边界情况处理、上线准备度。' },
-      { name: '团队与落地力', weight: '15%', desc: '分工合理性与落地路径清晰度。' },
-    ],
-    resources: ['命题方业务数据与场景说明', '一对一产业导师辅导', '落地试点机会对接'],
-    deadline: '2026-11-07',
+    publishDate: '2026-11-13',
+    deadline: '2026-11-14',
+    summary: '面向金融科技真实业务场景的定向命题，获奖团队优先获得企业 POC 合作与采购订单。',
+    background: '联合黄浦区金融产业企业发布真实业务需求，参赛团队定向解题。命题详情与企业信息将于开幕盛典公布。',
+    deliverables: ['可运行 Demo 或线上访问地址', '3 分钟 Demo 视频（公开直链）', '项目说明文档（含架构与数据来源）'],
+    criteria: [{ name: '需求匹配度', weight: '待公布', desc: '与命题需求的匹配程度综合评定' }],
+    resources: ['企业导师驻场辅导', '命题数据与接口支持（以企业公布为准）'],
   },
   {
-    id: 'b-ind-2',
-    code: 'IND-PROF-01',
+    id: 'b-prop-2',
+    code: 'IND-PROP-02',
     track: 'industry',
-    title: 'AI 辅助的专业服务流程自动化',
-    sponsor: '长宁区专业服务机构（拟）',
+    title: '商贸零售命题',
+    sponsor: '命题企业待官宣',
     status: 'upcoming',
-    publishDate: '2026-10-15',
-    summary: '围绕出海、法务、财税等高频文档与审核流程，用 Agent 降低重复人工成本。',
-    background:
-      '专业服务的核心人力大量消耗在资料检索、初步审核与多语言转写上。本赛题考察团队能否用 Agent 构建可靠的专业服务流水线，并在真实样本上验证准确率与人力节省幅度。',
-    deliverables: [
-      '可运行 Demo',
-      '真实或脱敏样本上的准确率评估',
-      '与现有流程的人力对比测算',
-      '合规与数据安全说明',
-    ],
-    criteria: [
-      { name: '真实场景价值', weight: '35%', desc: '是否显著降低真实专业服务的重复劳动。' },
-      { name: '技术创新性', weight: '25%', desc: 'Agent 编排与可靠性设计。' },
-      { name: '工程完成度', weight: '25%', desc: '容错、审计与回滚能力。' },
-      { name: '团队与落地力', weight: '15%', desc: '对专业服务场景的理解深度。' },
-    ],
-    resources: ['脱敏行业样本', '律所 / 财税顾问评审', '合规专家答疑'],
-    deadline: '2026-11-07',
-  },
-
-  /* ------------------------- 自由赛道（命题方向） ------------------------- */
-  {
-    id: 'b-cre-1',
-    code: 'CRE-AGENT-01',
-    track: 'creator',
-    title: '多智能体协作与垂直 Agent 应用',
-    sponsor: '原子公社 · 开放命题',
-    status: 'open',
-    publishDate: '2026-09-28',
-    summary: '不限产业方向，用多智能体协作解决一个真实工作流问题。',
-    background:
-      '单 Agent 在复杂任务中容易失控。本赛题考察团队在多智能体分工、上下文共享与失败恢复上的工程能力，要求给出可运行系统而非概念演示。',
-    deliverables: ['可运行 Demo', '系统架构图', '任务完成率与失败率评估', '3 分钟演示视频'],
-    criteria: [
-      { name: '技术创新性', weight: '35%', desc: '是否有未定义的探索或方法创新。' },
-      { name: '工程完成度', weight: '30%', desc: 'Demo 是否真的能稳定跑通。' },
-      { name: '真实场景价值', weight: '20%', desc: '即便面向未来，方案需自洽。' },
-      { name: '团队与表达', weight: '15%', desc: '8 分钟内讲清最打动人的一点。' },
-    ],
-    resources: ['Token / 算力资源补助', '开源社区导师', '投资机构对接'],
-    deadline: '2026-11-07',
+    publishDate: '2026-11-13',
+    deadline: '2026-11-14',
+    summary: '面向商贸零售场景的 AI 命题，深度贴合黄浦商贸产业基础。',
+    background: '命题详情与企业信息将于开幕盛典公布。',
+    deliverables: ['可运行 Demo 或线上访问地址', '3 分钟 Demo 视频（公开直链）', '项目说明文档'],
+    criteria: [{ name: '需求匹配度', weight: '待公布', desc: '与命题需求的匹配程度综合评定' }],
+    resources: ['企业导师驻场辅导', '命题数据与接口支持（以企业公布为准）'],
   },
   {
-    id: 'b-cre-2',
-    code: 'CRE-INFRA-01',
-    track: 'creator',
-    title: '模型训练、推理部署与算力调度',
-    sponsor: '原子公社 · 开放命题',
-    status: 'open',
-    publishDate: '2026-09-28',
-    summary: '在成本、吞吐与延迟之间取得更好平衡的底层工程方案。',
-    background:
-      '模型落地的瓶颈往往不在效果而在成本。本赛题考察团队在推理优化、量化、批处理与调度上的真实工程能力。',
-    deliverables: ['可运行代码或服务', '性能与成本基准测试报告', '复现说明', '3 分钟演示视频'],
-    criteria: [
-      { name: '技术创新性', weight: '35%', desc: '底层方法或工程取舍是否有新意。' },
-      { name: '工程完成度', weight: '30%', desc: '基准测试是否完整可复现。' },
-      { name: '真实场景价值', weight: '20%', desc: '对真实部署场景的参考价值。' },
-      { name: '团队与表达', weight: '15%', desc: '技术表达清晰度。' },
-    ],
-    resources: ['算力资源支持', '技术专家评审', '落地场景推荐'],
-    deadline: '2026-11-07',
+    id: 'b-prop-3',
+    code: 'IND-PROP-03',
+    track: 'industry',
+    title: '文旅服务命题',
+    sponsor: '命题企业待官宣',
+    status: 'upcoming',
+    publishDate: '2026-11-13',
+    deadline: '2026-11-14',
+    summary: '适配外滩商圈与文旅景区真实落地场景的 AI 命题。',
+    background: '命题详情与企业信息将于开幕盛典公布。',
+    deliverables: ['可运行 Demo 或线上访问地址', '3 分钟 Demo 视频（公开直链）', '项目说明文档'],
+    criteria: [{ name: '需求匹配度', weight: '待公布', desc: '与命题需求的匹配程度综合评定' }],
+    resources: ['企业导师驻场辅导', '命题数据与接口支持（以企业公布为准）'],
   },
   {
-    id: 'b-cre-3',
-    code: 'CRE-HW-01',
+    id: 'b-prop-4',
+    code: 'IND-PROP-04',
+    track: 'industry',
+    title: 'AIGC 宣传视频命题',
+    sponsor: '命题企业待官宣',
+    status: 'upcoming',
+    publishDate: '2026-11-13',
+    deadline: '2026-11-14',
+    summary: '基于企业场景和素材定制 AIGC 宣传视频。',
+    background: '命题详情与企业信息将于开幕盛典公布。',
+    deliverables: ['AIGC 宣传视频成片', '制作说明文档（工作流与工具链）'],
+    criteria: [{ name: '创意呈现', weight: '待公布', desc: '视频创意与技术实现综合评定' }],
+    resources: ['企业素材与场景支持（以企业公布为准）'],
+  },
+  {
+    id: 'b-cre-open',
+    code: 'CRE-OPEN-01',
     track: 'creator',
-    title: '具身智能、可穿戴与边缘设备',
-    sponsor: '原子公社 · 开放命题',
+    title: '自由创意赛道 · 开放命题',
+    sponsor: '不设命题方（开放申报）',
     status: 'open',
     publishDate: '2026-09-28',
-    summary: '把 AI 放进物理世界：能跑起来、能摸得着的硬件作品。',
-    background:
-      '硬件赛道的门槛在于「真的能跑」。本赛题要求实物原型或可交互仿真，重点考察端侧推理、功耗与结构可靠性。',
-    deliverables: ['实物原型或可交互仿真', '硬件规格说明', '端侧推理性能数据', '演示视频'],
-    criteria: [
-      { name: '技术创新性', weight: '35%', desc: '软硬件结合是否有新意。' },
-      { name: '工程完成度', weight: '30%', desc: '原型可靠性与完成度。' },
-      { name: '真实场景价值', weight: '20%', desc: '是否解决了具体的使用问题。' },
-      { name: '团队与表达', weight: '15%', desc: '现场演示效果。' },
-    ],
-    resources: ['3F 造物车间工位', '硬件厂商器件支持', '创客空间导师'],
-    deadline: '2026-11-07',
+    deadline: '2026-11-14',
+    summary: '不限业务场景，鼓励底层技术突破与商业模式创新；AI+软件与 AI+硬件两大子赛道独立评奖。',
+    background: 'AI+软件赛道：行业大模型解决方案、AI SaaS 工具、智能决策系统、AIGC 内容生产工具、AI 企业服务、金融科技算法、智慧城市软件平台等方向。AI+硬件赛道：AI 智能终端、嵌入式 AI 设备、服务机器人、可穿戴 AI 设备、AIoT 感知设备、商业场景智能硬件、文旅数字硬件等方向。',
+    deliverables: ['可运行 Demo 或线上访问地址', '3 分钟 Demo 视频（公开直链）', '项目说明文档（含架构与数据来源）'],
+    criteria: [{ name: '技术创新性', weight: '待公布', desc: '底层技术突破与商业模式创新' }],
+    resources: ['德必园区落地权益 · 算力与工具支持（以组委会公布为准）'],
   },
 ];
 
@@ -285,7 +235,7 @@ export const contestRules: ContestRule[] = [
     summary: '线下决赛怎么比。',
     items: [
       { q: '路演赛制是什么？', a: '每个团队 8 分钟路演 + 5 分钟答辩，全程直播。' },
-      { q: '在哪里路演？', a: '产业赛道在乐动虹桥 1F 路演厅主会场；自由赛道在德必园区分会场。' },
+      { q: '在哪里路演？', a: '产业赛道在外滩德必园区 · 主会场。' },
       { q: '入围多少个团队？', a: '20—30 个项目（双赛道合计）。' },
       { q: '现场需要准备什么？', a: '可运行的 Demo 演示环境、8 分钟讲解稿，以及产品文档与团队介绍材料。' },
     ],
@@ -336,7 +286,7 @@ export const news: NewsItem[] = [
     title: 'After Party 阵容预告：电子音乐 × 生成式光影',
     summary: '创意技术团队与电子音乐人联袂打造闭幕之夜，全场视觉随声浪实时生成。',
     body: [
-      '11 月 14 日晚，德必大虹桥园区 2F 空中花园。生成式光影系统将把现场声浪实时转为粒子视觉，DJ 与 AI 同台演出。',
+      '11 月 14 日晚，外滩德必园区 2F 空中花园。生成式光影系统将把现场声浪实时转为粒子视觉，DJ 与 AI 同台演出。',
       '凭全程通票或 After Party 席位预约入场，名额 300 人。',
     ],
   },
@@ -345,10 +295,10 @@ export const news: NewsItem[] = [
     category: '合作',
     pinned: false,
     date: '2026-10-11',
-    title: '三支海外评审团确认：硅谷、佛罗伦萨、香港同步连线',
+    title: '战略合作方确认：香港高升、Google Cloud、涂鸦智能、拓竹科技',
     summary: '海外分会场评审与路演连线方案落定，自由赛道决赛将实现跨时区实时评审。',
     body: [
-      '美国硅谷、意大利佛罗伦萨与中国香港三地评审团确认参与。自由赛道决赛路演期间，海外评审将通过德必园区国际研讨室实时连线打分。',
+      '香港高升、Google Cloud、涂鸦智能、拓竹科技四家战略合作方确认参与；赛事评审团构成（12—15 名，五类代表）将于开幕盛典正式公布。',
     ],
   },
   {
@@ -372,7 +322,7 @@ export const news: NewsItem[] = [
     summary: '双赛道同步开放，产业赛道将于 10 月中旬发布龙头企业真实命题。',
     body: [
       'Dobe AI 创客大赛报名通道现已开启，报名截止时间为 10 月 31 日 24:00。',
-      '本届赛事设置产业赛道与自由赛道。产业赛道联合长宁区龙头企业发布真实业务命题，面向解题团队定向开放；自由赛道不限产业方向，鼓励底层算法突破与商业模式创新。',
+      '本届赛事设置产业赛道与自由赛道。产业赛道联合黄浦区龙头产业企业发布真实业务命题，面向解题团队定向开放；自由赛道不限产业方向，鼓励底层算法突破与商业模式创新。',
       '完成线上组队后，战队档案将同步沉淀至原子公社名片模块，便于后续对接产业导师。',
     ],
     pinned: true,
@@ -381,11 +331,11 @@ export const news: NewsItem[] = [
     id: 'n-3',
     date: '2026-09-28',
     category: '大会',
-    title: '双会场确定：德必大虹桥园区 × 乐动虹桥',
+    title: '双会场确定：外滩德必园区',
     summary: '11/14 开幕与社交在德必，11/15 路演游园市集在乐动，两场地步行 8—10 分钟。',
     body: [
       '经组委会确认，本届大会采用双会场布局。',
-      '11 月 14 日下午至晚间，德必大虹桥园区作为开幕与社交主场，承载开幕式论坛与 After Party；11 月 15 日，乐动虹桥作为路演、游园与市集主场，承载决赛路演主会场、AI 创客游园会、长宁味道市集、AI 互动、求职招聘、展商与分论坛。',
+      '11 月 14 日下午至晚间，外滩德必园区作为三天赛事唯一主场：开幕盛典与 After Party（Day 1）、封闭开发与作品提交（Day 2）、决赛路演、AI 创客游园会与市集（Day 3）。',
       '两场地相距约 500 米，步行 8—10 分钟可达，现场安排接驳与引导。',
     ],
   },
@@ -405,12 +355,12 @@ export const news: NewsItem[] = [
     id: 'n-5',
     date: '2026-09-24',
     category: '合作',
-    title: '3 个海外线上分会场确定：中国香港、佛罗伦萨、硅谷',
+    title: '战略合作方确认：香港高升、Google Cloud、涂鸦智能、拓竹科技',
     summary: '海外分会场承担报名招募、初筛联动与路演连线观摩。',
     body: [
-      '为呼应「智汇长宁 · 创享全球」的定位，本届大会设立 3 个海外线上分会场。',
-      '中国香港作为亚太 OPC 流量入口，意大利佛罗伦萨代表欧洲设计力量，美国硅谷定位全球技术高地。',
-      '海外分会场与长宁主会场同频，承担报名招募、线上初筛联动、路演连线观摩与传播扩散。',
+      '为呼应「智汇外滩 · 创享黄浦」的定位，本届大会设立 3 个海外线上分会场。',
+      '四家战略合作方确认参与：香港高升、Google Cloud、涂鸦智能、拓竹科技；战略合作签约仪式将于 Day 1 开幕盛典举行。',
+      '海外分会场与黄浦主会场同频，承担报名招募、线上初筛联动、路演连线观摩与传播扩散。',
     ],
   },
   {

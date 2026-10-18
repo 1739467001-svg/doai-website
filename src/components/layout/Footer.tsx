@@ -18,8 +18,8 @@ export const Footer: React.FC = () => {
             </div>
             <p className="text-xs leading-relaxed text-[#666666] max-w-sm">
               {lang === 'zh'
-                ? 'DOAI 2026 全球 AI 时代创造者大会官方数字基础设施。连接全球智能创造者，构筑下一代开放式协作网络。'
-                : 'DOAI 2026 Official Digital Infrastructure for Global AI Creators. Connecting decentralized intelligence into an open creative network.'}
+                ? '2026 Dobe 外滩 AI 创客大会官方数字基础设施。连接全球智能创造者，构筑下一代开放式协作网络。'
+                : '2026 DOBE Bund AI Makers Conference — Official Digital Infrastructure. Connecting decentralized intelligence into an open creative network.'}
             </p>
             <div className="flex items-center gap-3 pt-2 text-xs text-[#888888]">
               <span className="flex items-center gap-1">

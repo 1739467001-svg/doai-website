@@ -44,7 +44,7 @@ export const DoAiLogo: React.FC<DoAiLogoProps> = ({ className = '' }) => {
     <svg
       viewBox="0 0 520 132"
       role="img"
-      aria-label="DOAi — Dobe Open AI Makers Conference"
+      aria-label="DOAi — Dobe Bund AI Makers Conference 2026"
       className={`block w-auto ${className}`}
     >
       {/* Wordmark: DOA in ink, i with its blue square dot detached on top */}
@@ -63,7 +63,7 @@ export const DoAiLogo: React.FC<DoAiLogoProps> = ({ className = '' }) => {
         fontSize={25}
       >
         <text x="366" y="45" textLength="150" lengthAdjust="spacingAndGlyphs">
-          Dobe Open AI
+          Dobe Bund AI
         </text>
         <text x="366" y="82" textLength="75" lengthAdjust="spacingAndGlyphs">
           Makers

@@ -649,7 +649,7 @@ export const DashboardView: React.FC = () => {
                   desc: '30+ 名单公示',
                   done: myRegistration.status === 'shortlisted',
                 },
-                { title: '4. 现场路演', desc: '乐动虹桥 1F 路演厅现场答辩', done: false },
+                { title: '4. 现场路演', desc: '外滩德必园区 · 路演厅现场答辩', done: false },
               ].map((step, idx) => (
                 <div
                   key={idx}

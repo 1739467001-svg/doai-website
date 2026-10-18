@@ -16,32 +16,31 @@ import makersImg from '../assets/images/makers_collaborating_1790923986603.jpg';
  * `speakers` is intentionally omitted — the plan lists 出席领导名单 as 待确认.
  */
 export const schedule: ScheduleItem[] = [
-  // ---------------- Day 1 · 11/14 · 德必大虹桥园区 · 开幕与社交 ----------------
+  // ---------------- Day 1 · 11/14 · 外滩德必园区 · 开幕与社交 ----------------
   { id: 'sch-101', day: 'day1', startTime: '09:00', endTime: '12:30', title: '报到签到', venue: '德必园区 · 签到区', type: 'social', track: 'general', description: '报到签到、领取物料包与嘉宾证；参赛团队报到、媒体采访、自由交流。' },
   { id: 'sch-102', day: 'day1', startTime: '13:00', endTime: '13:30', title: '入场就座、暖场视频', venue: '德必园区 · 主会场', type: 'social', track: 'general', description: '' },
   { id: 'sch-103', day: 'day1', startTime: '13:30', endTime: '14:00', title: '开场：领导致辞', venue: '德必园区 · 主会场', type: 'keynote', track: 'general', description: '政府领导、主办方致辞。' },
   { id: 'sch-104', day: 'day1', startTime: '14:00', endTime: '14:40', title: '主办方分享：战略发布与大会愿景', venue: '德必园区 · 主会场', type: 'keynote', track: 'general', description: '原子公社、德必集团战略发布与大会愿景（直播）。' },
   { id: 'sch-105', day: 'day1', startTime: '14:40', endTime: '15:40', title: '圆桌论坛：全球 AI 创客生态', venue: '德必园区 · 主会场', type: 'symposium', track: 'general', description: '海外专家连线 + 投资人 + 创客代表。' },
   { id: 'sch-106', day: 'day1', startTime: '16:00', endTime: '16:40', title: '赛制发布与高校签约', venue: '德必园区 · 主会场', type: 'keynote', track: 'general', description: '双赛道赛制正式发布，现场签署高校合作协议。' },
-  { id: 'sch-107', day: 'day1', startTime: '18:30', endTime: '21:30', title: 'After Party 创客社交之夜', venue: '德必大虹桥园区', type: 'social', track: 'general', description: '创客社交之夜，自由交流与合作对接。' },
+  { id: 'sch-107', day: 'day1', startTime: '18:30', endTime: '21:30', title: 'After Party 创客社交之夜', venue: '外滩德必园区', type: 'social', track: 'general', description: '创客社交之夜，自由交流与合作对接。' },
 
-  // ---------------- Day 2 · 11/15 · 乐动虹桥 + 德必园区 · 赛果绽放 ----------------
-  { id: 'sch-201', day: 'day2', startTime: '09:30', endTime: '12:00', title: '展区开市', venue: '乐动虹桥 1F', type: 'workshop', track: 'general', description: '长宁味道市集开市、AI 互动区开放、樊登书店求职区开放、展商开馆、游园护照发放。' },
-  { id: 'sch-202', day: 'day2', startTime: '09:30', endTime: '12:00', title: '决赛路演第一场：产业赛道', venue: '乐动虹桥 1F 路演厅', type: 'roadshow', track: 'industry', capacity: 320, description: '8 分钟路演 + 5 分钟答辩，全程直播。' },
-  { id: 'sch-203', day: 'day2', startTime: '09:30', endTime: '12:00', title: '自由赛道分会场路演', venue: '德必园区', type: 'roadshow', track: 'creator', description: '海外线上评审室启用，海外专家远程接入评审。' },
-  { id: 'sch-204', day: 'day2', startTime: '09:30', endTime: '12:00', title: '「逐梦星河」商业航天论坛（上午场）', venue: '乐动虹桥 2F 航天馆', type: 'symposium', track: 'general', description: '' },
-  { id: 'sch-205', day: 'day2', startTime: '13:30', endTime: '16:00', title: '决赛路演第二场：自由赛道', venue: '乐动虹桥 1F 路演厅', type: 'roadshow', track: 'creator', capacity: 320, description: '8 分钟路演 + 5 分钟答辩，全程直播。' },
-  { id: 'sch-206', day: 'day2', startTime: '13:30', endTime: '17:00', title: '分论坛（7—8 场并行）', venue: '乐动虹桥 3F', type: 'symposium', track: 'general', description: '18 个分会场中当日排期场次依次进行。' },
-  { id: 'sch-207', day: 'day2', startTime: '16:30', endTime: '17:30', title: '闭幕式：颁奖与项目落地签约', venue: '乐动虹桥 · 主会场', type: 'keynote', track: 'general', description: '公布获奖名单，现场推动项目与企业需求签约。' },
+  // ---------------- Day 2 · 11/15 · 外滩德必园区 · 赛果绽放 ----------------
+  { id: 'sch-201', day: 'day2', startTime: '09:30', endTime: '12:00', title: '展区开市', venue: '外滩德必园区 1F', type: 'workshop', track: 'general', description: '黄浦市集开市、AI 互动区开放、樊登书店求职区开放、展商开馆、游园护照发放。' },
+  { id: 'sch-202', day: 'day2', startTime: '09:30', endTime: '12:00', title: '决赛路演第一场：产业赛道', venue: '外滩德必园区 · 路演厅', type: 'roadshow', track: 'industry', capacity: 320, description: '8 分钟路演 + 5 分钟答辩，全程直播。' },
+  { id: 'sch-204', day: 'day2', startTime: '09:30', endTime: '12:00', title: '「逐梦星河」商业航天论坛（上午场）', venue: '外滩德必园区 2F', type: 'symposium', track: 'general', description: '' },
+  { id: 'sch-205', day: 'day2', startTime: '13:30', endTime: '16:00', title: '决赛路演第二场：自由赛道', venue: '外滩德必园区 · 路演厅', type: 'roadshow', track: 'creator', capacity: 320, description: '8 分钟路演 + 5 分钟答辩，全程直播。' },
+  { id: 'sch-206', day: 'day2', startTime: '13:30', endTime: '17:00', title: '分论坛（7—8 场并行）', venue: '外滩德必园区 3F', type: 'symposium', track: 'general', description: '18 个分会场中当日排期场次依次进行。' },
+  { id: 'sch-207', day: 'day2', startTime: '16:30', endTime: '17:30', title: '闭幕式：颁奖与项目落地签约', venue: '外滩德必园区 · 主会场', type: 'keynote', track: 'general', description: '公布获奖名单，现场推动项目与企业需求签约。' },
 ];
 
 export const venues: Venue[] = [
   {
     id: 'venue-debei',
-    name: '德必大虹桥园区',
+    name: '外滩德必园区',
     nameEn: 'Debei Hongqiao Park',
-    address: '上海市长宁区金钟路 968 号',
-    district: '长宁 · 虹桥商务区',
+    address: '上海市黄浦区外滩（园区入口详见现场指引）',
+    district: '黄浦 · 外滩',
     capacity: 1200,
     image: hallImg,
     tags: ['主会场', '开幕式', '分论坛'],
@@ -52,10 +51,10 @@ export const venues: Venue[] = [
   },
   {
     id: 'venue-ledong',
-    name: '乐动虹桥',
+    name: '外滩德必园区',
     nameEn: 'Ledong Hongqiao',
-    address: '上海市长宁区福泉北路 518 号',
-    district: '长宁 · 虹桥商务区',
+    address: '上海市黄浦区外滩（园区入口详见现场指引）',
+    district: '黄浦 · 外滩',
     capacity: 2000,
     image: bazaarImg,
     tags: ['决赛', '市集', 'After Party'],
@@ -94,10 +93,10 @@ export const programBlocks: ProgramBlock[] = [
     title: '双会场空间与路线导引',
     titleEn: 'Two Venues & Wayfinding',
     summary:
-      '德必大虹桥园区承载思想与荣誉，乐动虹桥承载创造与狂欢。两会场相距 1.8 公里，大会全程提供接驳车。',
+      '外滩德必园区承载思想与荣誉，外滩德必园区承载创造与狂欢。两会场相距 1.8 公里，大会全程提供接驳车。',
     bullets: [
-      { title: '德必大虹桥园区', desc: '开幕式 · 主旨演讲 · 颁奖典礼', icon: 'globe' },
-      { title: '乐动虹桥', desc: '双赛道决赛 · 硬件市集 · After Party', icon: 'bolt' },
+      { title: '外滩德必园区', desc: '开幕式 · 主旨演讲 · 颁奖典礼', icon: 'globe' },
+      { title: '外滩德必园区', desc: '双赛道决赛 · 硬件市集 · After Party', icon: 'bolt' },
       { title: '接驳车', desc: '两会场之间每 20 分钟一班，全程免费。', icon: 'people' },
       { title: '参会指引', desc: '凭 DOAI Passport 扫码即可上车与入场。', icon: 'shield' },
     ],
@@ -180,7 +179,7 @@ export const modulePages: ModulePage[] = [
     eyebrow: 'MISSION & VISION',
     title: '大会愿景与使命',
     subtitle:
-      'Dobe AI 创客大会（DOAI）由原子公社与德必集团联合主办、长宁区人民政府支持，定位为「全球 AI 创客的线下连接器 + 线上平台」——把「大会两天」沉淀为「长宁 = 全球 AI 创客目的地」的长期 IP。',
+      '2026 Dobe 外滩 AI 创客大会（DOAI）由德必集团与 Flowmind 主办、原子公社联合主办，黄浦区政府相关单位指导，定位为「全球 AI 创客的线下连接器 + 线上平台」——把「三天赛程」沉淀为「黄浦 = 全球 AI 创客目的地」的长期 IP。',
     heroImage: heroImg,
     stats: [
       { label: '线下人流', value: '2000—4000' },
@@ -193,9 +192,9 @@ export const modulePages: ModulePage[] = [
         heading: '大会定位',
         body: '以赛事为核心引擎，以官网为线上入口：一端连接全球 AI 公司与开发者（赛事、论坛、招聘、展示），一端连接公众与消费者（体验、市集、游园）。',
         items: [
-          { title: '线下连接器', desc: '德必园区与乐动虹桥双会场，步行 8—10 分钟可达。' },
+          { title: '线下连接器', desc: '德必园区与外滩德必园区双会场，步行 8—10 分钟可达。' },
           { title: '线上平台', desc: '报名、组队、初筛、论坛发起全部在官网完成。' },
-          { title: '产业落地', desc: '长宁龙头企业真实命题 + 获奖项目现场签约。' },
+          { title: '产业落地', desc: '命题企业真实业务需求 + 获奖项目现场签约。' },
           { title: '公众体验', desc: '市集、游园、AI 互动让普通人也能逛、能玩、能学。' },
         ],
       },
@@ -208,8 +207,8 @@ export const modulePages: ModulePage[] = [
         body: '大会由产业园区与创客社区共同发起，通过政府与产业资源形成合力。',
         items: [
           { title: '主办单位', desc: '原子公社 AtomHub、德必集团。' },
-          { title: '联合主办', desc: '上海市时代青年科创中心。' },
-          { title: '支持单位', desc: '长宁区人民政府。' },
+          { title: '联合主办', desc: '原子公社 AtomHub。' },
+          { title: '支持单位', desc: '黄浦区人民政府。' },
         ],
       },
     ],
@@ -223,28 +222,28 @@ export const modulePages: ModulePage[] = [
     eyebrow: 'TWO VENUES',
     title: '双会场空间规划',
     subtitle:
-      '德必大虹桥园区承担开幕与社交，乐动虹桥承担路演、游园与市集。两场地相距约 500m，步行 8—10 分钟可达，11/14—11/15 连续两天。',
+      '外滩德必园区承担开幕与社交，外滩德必园区承担路演、游园与市集。两场地相距约 500m，步行 8—10 分钟可达，11/14—11/15 连续两天。',
     heroImage: bazaarImg,
     stats: [
-      { label: '德必大虹桥', value: '开幕 · 社交' },
-      { label: '乐动虹桥', value: '路演 · 游园' },
+      { label: '外滩德必园区', value: '开幕 · 社交' },
+      { label: '外滩德必园区', value: '路演 · 游园' },
       { label: '场地间距', value: '约 500m' },
       { label: '步行时间', value: '8—10 分钟' },
     ],
     sections: [
       {
-        heading: '德必大虹桥园区 · 开幕与社交主场',
-        body: '第一天在这里开幕，第二天作为路演分会场与海外线上评审室继续使用。',
+        heading: '外滩德必园区 · 开幕与社交主场',
+        body: '三天赛程均在外滩德必园区进行：Day 1 开幕与破冰，Day 2 封闭开发，Day 3 游园会与决赛路演。',
         items: [
           { title: '11/14 下午—晚间', desc: '开幕式论坛（领导致辞、主办方分享、圆桌、赛制发布 / 高校签约）、自由社交、After Party。' },
-          { title: '11/15 白天', desc: '部分赛道决赛路演分会场、海外线上评审室（海外专家远程接入）、分会场直播。' },
+          { title: '11/15 白天', desc: 'AI 创客游园会、决赛路演与颁奖典礼、现场直播。' },
         ],
       },
       {
-        heading: '乐动虹桥 · 路演 · 游园 · 市集主场',
-        body: '地址位于长宁区娄山关路 445 弄，是第二天人流最密集的场地。',
+        heading: '外滩德必园区 · 路演 · 游园 · 市集主场',
+        body: '地址位于外滩德必园区（现场设指引），是第二天人流最密集的场地。',
         items: [
-          { title: '1F 迎宾与市集', desc: '长宁味道市集、AI 互动大厅、樊登书店求职区、大中小展商展位。' },
+          { title: '1F 迎宾与市集', desc: '黄浦市集、AI 互动大厅、樊登书店求职区、大中小展商展位。' },
           { title: '1F 路演厅', desc: '决赛路演主会场，8+5 分钟制，全程直播。' },
           { title: '2F 航天馆', desc: '「逐梦星河」商业航天论坛全天进行。' },
           { title: '3F 游园会与分论坛', desc: '选手作品布展，同层并行 7—8 场分论坛。' },
@@ -264,18 +263,18 @@ export const modulePages: ModulePage[] = [
     eyebrow: 'TRACK · AI + INDUSTRY',
     title: '产业赛道',
     subtitle:
-      '面向长宁龙头企业真实命题解题的团队。联合长宁区龙头企业发布真实业务命题，定向解题；获奖项目优先对接企业采购订单与落地孵化。',
+      '面向黄浦区龙头产业企业真实命题解题的团队。联合黄浦区龙头产业企业发布真实业务命题，定向解题；获奖项目优先对接企业采购订单与落地孵化。',
     heroImage: hallImg,
     stats: [
       { label: '面向对象', value: '龙头企业解题团队' },
       { label: '路演赛制', value: '8+5 分钟' },
-      { label: '路演地点', value: '乐动虹桥 1F' },
+      { label: '路演地点', value: '外滩德必园区 1F' },
       { label: '落地对接', value: '采购订单优先' },
     ],
     sections: [
       {
         heading: '命题方向',
-        body: '产业赛道不设泛命题，而是围绕长宁本地龙头企业的真实业务需求定向解题。',
+        body: '产业赛道不设泛命题，而是围绕黄浦区本地龙头企业的真实业务需求定向解题。',
         items: [
           { title: 'AI + 消费', desc: '电商、IP 类情绪消费、新消费。' },
           { title: 'AI + 专业服务', desc: '出海、法务、财税。' },
@@ -287,7 +286,7 @@ export const modulePages: ModulePage[] = [
         items: [
           { title: '10 月中旬', desc: '命题发布，官网同步上线命题专区。' },
           { title: '定向解题', desc: '按企业真实需求设计 Demo 与落地方案。' },
-          { title: '11/15 现场', desc: '乐动虹桥 1F 路演厅，8 分钟路演 + 5 分钟答辩。' },
+          { title: '11/15 现场', desc: '外滩德必园区 · 路演厅，8 分钟路演 + 5 分钟答辩。' },
         ],
       },
       {

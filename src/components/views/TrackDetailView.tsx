@@ -32,25 +32,28 @@ const TRACK_META: Record<
     tagline: string;
     taglineEn?: string;
     positioning: string;
-    directions: { title: string; desc: string }[];
+    directions: { titleZh: string; titleEn: string; descZh: string; descEn: string }[];
     reviewFocus: string;
+    reviewFocusEn?: string;
     requirements: string[];
   }
-> = {
-  industry: {
-    name: '产业赛道', nameEn: 'Industry Track',
+> = {  industry: {
+    name: '产业命题赛道', nameEn: 'Industry Brief Track',
     en: 'AI + Industry',
     color: '#165DFF',
     icon: Cpu,
     tagline: '命题制解题 · 企业真实场景 · 优先落地孵化',
     taglineEn: 'Real business briefs · priority incubation',
     positioning:
-      '联合长宁区龙头企业发布真实业务命题，参赛团队定向解题。重点考察 AI 技术在真实产业场景中的落地能力与商业闭环，获奖项目优先对接企业采购订单与德必园区落地孵化资源。',
+      '联合黄浦区龙头产业企业发布真实业务需求，参赛团队定向解题。重点考察 AI 技术在真实产业场景中的落地能力与商业闭环，获奖项目优先对接企业采购订单与外滩德必园区落地孵化资源。',
     directions: [
-      { title: 'AI + 消费', desc: '电商、IP 类情绪消费、新消费场景中的 AI 原生应用与智能硬件。' },
-      { title: 'AI + 专业服务', desc: '出海、法务、财税等专业服务业的智能体与工作流自动化。' },
+      { titleZh: '金融科技命题', titleEn: 'FinTech Brief', descZh: '合作方待官宣', descEn: 'Partner TBA' },
+      { titleZh: '商贸零售命题', titleEn: 'Retail Brief', descZh: '合作方待官宣', descEn: 'Partner TBA' },
+      { titleZh: '文旅服务命题', titleEn: 'Culture & Tourism Brief', descZh: '合作方待官宣', descEn: 'Partner TBA' },
+      { titleZh: 'AIGC 宣传视频命题', titleEn: 'AIGC Video Brief', descZh: '合作方待官宣', descEn: 'Partner TBA' },
     ],
-    reviewFocus: '商业可行性与商业落地闭环',
+    reviewFocus: '与黄浦主导产业真实业务需求的匹配度',
+    reviewFocusEn: 'Fit with real industry needs',
     requirements: [
       '参赛团队 2—5 人（含队长），或个人独立参赛',
       '报名及评审全程免费，知识产权 100% 归团队所有',
@@ -59,7 +62,7 @@ const TRACK_META: Record<
     ],
   },
   creator: {
-    name: '自由赛道', nameEn: 'Creator Track',
+    name: '自由创意赛道', nameEn: 'Free Creation Track',
     en: 'AI Creator',
     color: '#00C48C',
     icon: Layers,
@@ -68,9 +71,8 @@ const TRACK_META: Record<
     positioning:
       '不限产业方向，鼓励底层算法突破、原生 Agent 应用与商业模式创新。路演 + 评选 + 投资对接一站式完成，为最具极客精神的创造者提供直达资本与社区的通道。',
     directions: [
-      { title: 'Agent 应用', desc: '多智能体协作、对话式应用、垂直领域 Agent。' },
-      { title: 'AI Infra', desc: '模型训练、推理部署、算力调度等基础设施创新。' },
-      { title: '智能硬件', desc: '具身智能、可穿戴设备、边缘侧 AI 装置。' },
+      { titleZh: 'AI+软件赛道', titleEn: 'AI+Software', descZh: '行业大模型解决方案、AI SaaS 工具、智能决策系统、AIGC 内容生产工具、AI 企业服务、金融科技算法、智慧城市软件平台', descEn: 'Industry LLM solutions, AI SaaS tools, decision systems, AIGC content tools, enterprise AI, fintech algorithms, smart city platforms' },
+      { titleZh: 'AI+硬件赛道', titleEn: 'AI+Hardware', descZh: 'AI 智能终端、嵌入式 AI 设备、服务机器人、可穿戴 AI 设备、AIoT 感知设备、商业场景智能硬件、文旅数字硬件', descEn: 'AI smart devices, embedded AI, service robots, wearables, AIoT sensing, commercial smart hardware, cultural-tourism digital hardware' },
     ],
     reviewFocus: '突破性技术创新与极客精神',
     requirements: [
@@ -83,7 +85,7 @@ const TRACK_META: Record<
 };
 
 export const TrackDetailView: React.FC<{ track?: string }> = ({ track }) => {
-  const { setActiveRoute, tr } = useApp();
+  const { setActiveRoute, tr, lang } = useApp();
   const trackId: TrackType = track === 'industry' ? 'industry' : 'creator';
   const meta = TRACK_META[trackId];
   const Icon = meta.icon;
@@ -152,9 +154,9 @@ export const TrackDetailView: React.FC<{ track?: string }> = ({ track }) => {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {meta.directions.map(d => (
-              <div key={d.title} className="doa-card p-6">
-                <h3 className="text-base font-bold text-[#0B1B3A] mb-2">{d.title}</h3>
-                <p className="text-[13px] text-[#6B7C9B] leading-relaxed">{d.desc}</p>
+              <div key={d.titleZh} className="doa-card p-6">
+                <h3 className="text-base font-bold text-[#0B1B3A] mb-2">{lang === 'en' ? d.titleEn : d.titleZh}</h3>
+                <p className="text-[13px] text-[#6B7C9B] leading-relaxed">{lang === 'en' ? d.descEn : d.descZh}</p>
               </div>
             ))}
           </div>
@@ -168,7 +170,7 @@ export const TrackDetailView: React.FC<{ track?: string }> = ({ track }) => {
               <h2 className="text-lg font-bold text-[#0B1B3A]">{tr('评审侧重', 'Judging Focus')}</h2>
             </div>
             <p className="text-sm text-[#48597A] leading-relaxed mb-4">
-              本赛道重点考量：<strong style={{ color: meta.color }}>{meta.reviewFocus}</strong>
+              {tr('本赛道重点考量：', 'Focus:')} <strong style={{ color: meta.color }}>{lang === 'en' ? (meta.reviewFocusEn ?? meta.reviewFocus) : meta.reviewFocus}</strong>
             </p>
             <div className="space-y-2">
               {[
@@ -211,7 +213,7 @@ export const TrackDetailView: React.FC<{ track?: string }> = ({ track }) => {
           <div className="space-y-4">
             {briefs.length === 0 ? (
               <div className="doa-panel p-8 text-center text-sm text-[#6B7C9B]">
-                本赛道命题即将发布，敬请期待（产业赛道命题 10 月中旬由长宁区龙头企业正式发布）
+                命题企业及具体命题方向将于开幕盛典公布，敬请期待
               </div>
             ) : (
               briefs.map(b => (

@@ -134,7 +134,7 @@ export const Navbar: React.FC = () => {
                   header and the first screen share one identity. */}
               <img
                 src={doaiLogo}
-                alt="DOAi — Dobe Open AI Makers Conference"
+                alt="DOAi — Dobe Bund AI Makers Conference 2026"
                 className="h-[24px] lg:h-[30px] w-auto object-contain transition-opacity group-hover:opacity-70"
                 draggable={false}
               />
@@ -395,7 +395,7 @@ export const Navbar: React.FC = () => {
             <div className="mt-4 space-y-2">
               <div className="text-[11px] font-semibold text-[#888888]">{lang === 'en' ? 'Trending:' : '热搜推荐：'}</div>
               <div className="flex flex-wrap gap-2 text-xs">
-                {['产业赛道', '自由赛道', '18个分会场', 'After Party', '长宁味道市集', '创投引力场'].map(tag => (
+                {['产业命题赛道', '自由创意赛道', 'After Party', '外滩市集', '创投引力场'].map(tag => (
                   <button
                     key={tag}
                     onClick={() => {

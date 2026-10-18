@@ -25,36 +25,39 @@ export const MakerView: React.FC<{ scrollTo?: string | null }> = ({ scrollTo }) 
   const { lang, setActiveRoute, openPolicy, tr } = useApp();
 
 
-  // The plan's 赛事流程, with each phase's status derived from today's date so
-  // the site never claims a stage is still open once it has closed.
-  const PHASES = [
-    { key: '报名', keyEn: 'Sign-up', start: '2026-09-28', end: '2026-10-31', desc: '通过 DOAI 官网提交团队与项目资料，生成报名凭证。', descEn: 'Submit team & project info on the official site.' },
-    { key: '命题发布', keyEn: 'Briefs', start: '2026-10-15', end: '2026-10-20', desc: '产业赛道联合长宁区龙头企业发布真实业务命题。', descEn: 'Industry briefs published with local enterprises.' },
-    { key: '线上组队', keyEn: 'Teaming', start: '2026-10-15', end: '2026-11-05', desc: '官网在线组队与招募队员，形成战队档案。', descEn: 'Form teams and recruit members online.' },
-    { key: '作品提交', keyEn: 'Submit', start: '2026-11-03', end: '2026-11-07', desc: '提交项目说明、Demo 视频与团队信息。', descEn: 'Submit project docs, demo video & team info.' },
-    { key: '线上初筛', keyEn: 'Screening', start: '2026-11-08', end: '2026-11-11', desc: '专家评审团初评，含海外线上评审同步参与。', descEn: 'Expert panel first-round review, incl. overseas judges.' },
-    { key: '公布入围', keyEn: 'Finalists', start: '2026-11-12', end: '2026-11-12', desc: '公布 20—30 个入围路演项目。', descEn: '20–30 finalist projects announced.' },
-    { key: '线下路演', keyEn: 'Live Demos', start: '2026-11-15', end: '2026-11-15', desc: '乐动虹桥主会场 + 德必园区分会场同步进行。', descEn: 'On-stage demos at LeDoong + Dobe Park.' },
-    { key: '颁奖与落地', keyEn: 'Awards', start: '2026-11-15', end: '2026-11-15', desc: '现场颁奖，并推动获奖项目与企业需求签约。', descEn: 'Awards ceremony & enterprise deal-making.' },
-  ] as const;
-
-  const TODAY = new Date('2026-10-04T00:00:00');
-  const phaseState = (start: string, end: string) => {
-    const s = new Date(start + 'T00:00:00');
-    const e = new Date(end + 'T23:59:59');
-    if (TODAY < s) return 'upcoming';
-    if (TODAY > e) return 'done';
-    return 'active';
-  };
-
-  const timelineSteps = PHASES.map((p, i) => ({
-    step: String(i + 1).padStart(2, '0'),
-    title: tr(p.key, p.keyEn),
-    date: p.start === p.end ? p.start.slice(5).replace('-', '/') : `${p.start.slice(5).replace('-', '/')} — ${p.end.slice(5).replace('-', '/')}`,
-    desc: tr(p.desc, p.descEn),
-    active: phaseState(p.start, p.end) === 'active',
-    done: phaseState(p.start, p.end) === 'done',
-  }));
+  // 3 天线下黑客松赛程（飞书《赛事方案》四、三天详细赛程安排）
+  const DAYS = [
+    {
+      day: 'Day 1（周五）',
+      theme: tr('签到集结 · 重磅发布 · 破冰组队', 'Check-in · Launch · Team-up Night'),
+      items: [
+        { time: '14:00—16:00', name: tr('签到入场', 'Check-in'), desc: tr('领取赛事物料包（胸牌、赛程手册、周边礼品），自由参观展区', 'Collect your kit and explore the expo') },
+        { time: '16:00—18:00', name: tr('开幕盛典暨战略发布会', 'Opening Ceremony'), desc: tr('黄浦区领导致辞发布 AI 产业扶持政策；德必 OPC 战略发布；战略合作签约；评审团公布', 'Policy release, OPC strategy, partnership signing, jury announcement') },
+        { time: '18:00—19:30', name: tr('欢迎晚宴', 'Welcome Dinner'), desc: tr('政府嘉宾、企业代表、投资人、参赛团队共进晚餐', 'Dinner with officials, enterprises, investors and teams') },
+        { time: '19:30—21:30', name: tr('破冰组队夜', 'Team-up Night'), desc: tr('电梯演讲 · 命题企业现场解读 · 自由组队 · 公布次日任务', 'Pitches, brief walk-throughs, team formation, next-day briefing') },
+      ],
+    },
+    {
+      day: 'Day 2（周六）',
+      theme: tr('创客攻坚 · 产品打磨 · 物料制作', 'Build Sprint'),
+      items: [
+        { time: '09:00—09:30', name: tr('开发启动会', 'Kick-off'), desc: tr('明确当日产出：Demo、海报、1 分钟宣传视频、路演 PPT 初稿', 'Deliverables: demo, poster, video, deck draft') },
+        { time: '09:30—12:00', name: tr('集中开发 & 导师巡场', 'Hacking & Mentors'), desc: tr('技术导师、产业导师分赛道巡场，一对一答疑', 'Tech & industry mentors on the floor') },
+        { time: '13:30—17:30', name: tr('物料制作 & 专项辅导', 'Assets & Coaching'), desc: tr('路演表达工作坊 · 海报设计指导站 · 命题企业二次驻场', 'Pitch workshop, poster clinic, enterprise office hours') },
+        { time: '18:30—22:00', name: tr('深夜打磨 & 宵夜补给', 'Late-night Polish'), desc: tr('22:00 作品提交截止（产品原型 · 海报 · 宣传视频 · 路演 PPT）', 'Submission deadline at 22:00') },
+      ],
+    },
+    {
+      day: 'Day 3（周日）',
+      theme: tr('游园展示 · 决赛路演 · 收官派对', 'Expo · Finals · Party'),
+      items: [
+        { time: '09:00—12:00', name: tr('AI 创客游园会', 'Maker Expo'), desc: tr('项目快闪区 + 产业对接市集，观众自由参观互动', 'Team booths + industry matchmaking market') },
+        { time: '13:30—17:00', name: tr('决赛路演暨颁奖典礼', 'Finals & Awards'), desc: tr('每队 8 分钟展示 + 5 分钟评委问答，现场统分并颁奖', '8-min pitch + 5-min Q&A, live scoring and awards') },
+        { time: '17:00—18:00', name: tr('媒体专访 & 自由交流', 'Media & Mixer'), desc: tr('获奖团队与嘉宾接受媒体采访，参会各方自由对接', 'Media interviews and open networking') },
+        { time: '18:30—21:30', name: tr('外滩 After Party', 'Bund After Party'), desc: tr('外滩露台轻奢酒会，促进创业者、投资人、产业方深度社交', 'Rooftop social overlooking the Bund') },
+      ],
+    },
+  ];
 
   return (
     <div className="pt-24 pb-24">
@@ -71,8 +74,8 @@ export const MakerView: React.FC<{ scrollTo?: string | null }> = ({ scrollTo }) 
           </h1>
           <p className="text-base text-[#666666] leading-relaxed">
             {lang === 'zh'
-              ? '面向全球极客与商业探索者的全开放式 AI 赛事。设置「产业赛道」与「自由赛道」，20 万元总奖金池，全链路免费参赛。以真实代码与产品说话，让最顶尖的创造力破土而出。'
-              : 'An open global AI maker competition featuring dual tracks and a ¥200,000 cash pool. 100% free participation with independent peer reviews.'}
+              ? '面向全球极客与商业探索者的全开放式 AI 赛事。设置「产业命题赛道」与「自由创意赛道」，20 万元总奖金池，3 天线下黑客松，全链路免费参赛。以真实代码与产品说话，让最顶尖的创造力破土而出。'
+              : 'A 3-day on-site hackathon with two tracks — Free Creation and Industry Brief — and a ¥200,000 prize pool. Free to enter.'}
           </p>
 
           <div className="pt-4 flex items-center gap-4">
@@ -110,17 +113,19 @@ export const MakerView: React.FC<{ scrollTo?: string | null }> = ({ scrollTo }) 
                 <Cpu className="w-6 h-6" />
               </div>
               <h3 className="text-2xl font-bold text-[#0B1B3A]">
-                {tr('产业赛道 · AI + Industry', 'Industry Track · AI + Industry')}
+                {tr('产业命题赛道', 'Industry Brief Track')}
               </h3>
               <p className="text-xs text-[#666666] leading-relaxed">
-                联合长宁区龙头企业发布真实业务命题，定向解题；获奖项目优先对接企业采购订单与落地孵化。
+                联合黄浦区/德必园区龙头产业企业发布真实业务需求，参赛团队定向解题，获奖项目优先获得企业采购订单与深度合作机会。
               </p>
 
               <div className="pt-2 space-y-2">
                 <div className="text-xs font-semibold text-[#0B1B3A]">{tr('命题方向：', 'Directions:')}</div>
                 <ul className="text-xs text-[#555555] space-y-1.5 list-disc list-inside">
-                  <li>{tr('AI + 消费：电商、IP 类情绪消费、新消费', 'AI + Consumer: e-commerce, IP-driven & new retail')}</li>
-                  <li>{tr('AI + 专业服务：出海、法务、财税', 'AI + Pro Services: go-global, legal, finance')}</li>
+                  <li>{tr('金融科技命题（合作方待官宣）', 'FinTech brief (TBA)')}</li>
+                  <li>{tr('商贸零售命题（合作方待官宣）', 'Retail brief (TBA)')}</li>
+                  <li>{tr('文旅服务命题（合作方待官宣）', 'Cultural tourism brief (TBA)')}</li>
+                  <li>{tr('AIGC 宣传视频命题（合作方待官宣）', 'AIGC video brief (TBA)')}</li>
                 </ul>
               </div>
             </div>
@@ -143,18 +148,17 @@ export const MakerView: React.FC<{ scrollTo?: string | null }> = ({ scrollTo }) 
                 <Layers className="w-6 h-6" />
               </div>
               <h3 className="text-2xl font-bold text-[#0B1B3A]">
-                {tr('自由赛道 · AI Creator', 'Creator Track · AI Creator')}
+                {tr('自由创意赛道', 'Free Creation Track')}
               </h3>
               <p className="text-xs text-[#666666] leading-relaxed">
-                不限产业方向，鼓励底层算法突破与商业模式创新；路演 + 评选 + 投资对接一站式完成。
+                面向全球 AI 创业者、开发者、硬件工程师与设计师开放，下设两大平行子赛道，独立评审、独立颁奖。
               </p>
 
               <div className="pt-2 space-y-2">
                 <div className="text-xs font-semibold text-[#0B1B3A]">{tr('命题方向：', 'Directions:')}</div>
                 <ul className="text-xs text-[#555555] space-y-1.5 list-disc list-inside">
-                  <li>{tr('Agent 应用：多智能体协作、对话式应用、垂直 Agent', 'Agent apps: multi-agent, conversational, vertical agents')}</li>
-                  <li>{tr('AI Infra：模型训练、推理部署、算力调度', 'AI Infra: training, inference, compute scheduling')}</li>
-                  <li>{tr('智能硬件：具身智能、可穿戴、边缘设备', 'Hardware: embodied AI, wearables, edge devices')}</li>
+                  <li>{tr('AI+软件赛道：行业大模型、AI SaaS、智能决策、AIGC 工具、AI 企业服务、金融科技算法、智慧城市', 'AI+Software: industry LLMs, AI SaaS, decision systems, AIGC tools, fintech algorithms, smart city')}</li>
+                  <li>{tr('AI+硬件赛道：AI 智能终端、嵌入式 AI、服务机器人、可穿戴、AIoT、商业智能硬件、文旅数字硬件', 'AI+Hardware: smart devices, embedded AI, service robots, wearables, AIoT, cultural-tourism hardware')}</li>
                 </ul>
               </div>
             </div>
@@ -177,33 +181,33 @@ export const MakerView: React.FC<{ scrollTo?: string | null }> = ({ scrollTo }) 
         <div className="mb-10">
           <h2 className="text-2xl font-bold text-[#0B1B3A]">{tr('赛事流程与关键节点', 'Contest Timeline')}</h2>
           <p className="text-xs text-[#666666] mt-1">
-            {tr('从线上报名到线下颁奖共 8 个节点，当前阶段自动高亮', '8 milestones from sign-up to awards; current stage highlighted.')}
+            {tr('线下黑客松三天全流程 · 场地：外滩德必园区', 'Three days on-site at Bund Dobe Park')}
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {timelineSteps.map((step, idx) => (
-            <div
-              key={step.step}
-              className={`p-6 rounded-2xl border transition-all ${
-                step.done
-                  ? 'bg-white border-[#165DFF]/40 shadow-xs'
-                  : step.active
-                  ? 'bg-[#165DFF]/5 border-[#165DFF] shadow-sm'
-                  : 'bg-[#F7F8FA] border-[#E8EAED] opacity-80'
-              }`}
-            >
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-xs font-mono font-bold text-[#165DFF]">{step.step}</span>
-                {step.done ? (
-                  <CheckCircle2 className="w-4 h-4 text-[#00C48C]" />
-                ) : (
-                  <Clock className="w-4 h-4 text-[#888888]" />
-                )}
+        <div className="space-y-10">
+          {DAYS.map(day => (
+            <div key={day.day}>
+              <div className="flex items-baseline gap-3 mb-5">
+                <span className="text-lg font-extrabold font-mono text-[#165DFF]">{day.day}</span>
+                <span className="text-base font-bold text-[#0B1B3A]">{day.theme}</span>
               </div>
-              <h4 className="text-sm font-bold text-[#0B1B3A] mb-1">{step.title}</h4>
-              <div className="text-[11px] font-semibold text-[#165DFF] mb-2">{step.date}</div>
-              <p className="text-[11px] text-[#666666] leading-relaxed">{step.desc}</p>
+              <div className="space-y-3">
+                {day.items.map((item, i) => (
+                  <div
+                    key={i}
+                    className="doa-card p-5 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6"
+                  >
+                    <span className="text-xs font-mono font-bold text-[#165DFF] w-32 shrink-0">
+                      {item.time}
+                    </span>
+                    <div className="min-w-0">
+                      <h4 className="text-sm font-bold text-[#0B1B3A]">{item.name}</h4>
+                      <p className="text-xs text-[#666666] leading-relaxed mt-0.5">{item.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           ))}
         </div>
@@ -212,43 +216,24 @@ export const MakerView: React.FC<{ scrollTo?: string | null }> = ({ scrollTo }) 
       {/* 4. Scoring Criteria (4 Dimensions) */}
       <section id="maker-scoring" className="scroll-mt-24 max-w-[1200px] mx-auto px-6 sm:px-8 py-12">
         <div className="mb-8">
-          <h2 className="text-2xl font-bold text-[#0B1B3A]">{tr('评审维度与权重', 'Judging Criteria')}</h2>
+          <h2 className="text-2xl font-bold text-[#0B1B3A]">{tr('评审维度', 'Judging Criteria')}</h2>
           <p className="text-xs text-[#666666] mt-1">
-            {tr('严格执行评审规范，综合衡量代码工程度与真实落地成效', 'Rigorous review balancing engineering depth and real-world impact.')}
+            {tr('五大评审维度，权重分配待评审委员会公布', 'Five dimensions; weights to be announced by the jury committee.')}
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="bg-[#F7F8FA] p-6 rounded-2xl border border-[#E8EAED]">
-            <div className="text-2xl font-bold font-mono text-[#165DFF] mb-2">30%</div>
-            <h4 className="text-sm font-bold text-[#0B1B3A] mb-1">{tr('创新能力', 'Innovation')}</h4>
-            <p className="text-xs text-[#666666] leading-relaxed">
-              方案的新颖性、独创性，是否突破传统范式或带来全新交互范式。
-            </p>
-          </div>
-
-          <div className="bg-[#F7F8FA] p-6 rounded-2xl border border-[#E8EAED]">
-            <div className="text-2xl font-bold font-mono text-[#00C48C] mb-2">30%</div>
-            <h4 className="text-sm font-bold text-[#0B1B3A] mb-1">{tr('技术能力', 'Engineering')}</h4>
-            <p className="text-xs text-[#666666] leading-relaxed">
-              系统工程架构成熟度、推理效率、端侧优化以及抗异常鲁棒性。
-            </p>
-          </div>
-
-          <div className="bg-[#F7F8FA] p-6 rounded-2xl border border-[#E8EAED]">
-            <div className="text-2xl font-bold font-mono text-[#FF7D00] mb-2">20%</div>
-            <h4 className="text-sm font-bold text-[#0B1B3A] mb-1">{tr('商业价值', 'Business Value')}</h4>
-            <p className="text-xs text-[#666666] leading-relaxed">
-              市场空间真实性、商业模式逻辑闭环、可量化的投入产出回报比。
-            </p>
-          </div>
-
-          <div className="bg-[#F7F8FA] p-6 rounded-2xl border border-[#E8EAED]">
-            <div className="text-2xl font-bold font-mono text-purple-600 mb-2">20%</div>
-            <h4 className="text-sm font-bold text-[#0B1B3A] mb-1">{tr('现场表现', 'Live Presentation')}</h4>
-            <p className="text-xs text-[#666666] leading-relaxed">
-              现场真实产品 Demo 运行稳定性、团队答辩与技术深度问答表现。
-            </p>
+        <div className="doa-card p-7">
+          <p className="text-sm text-[#48597A] leading-relaxed mb-5">
+            {tr('综合衡量技术、商业与落地表现，权重分配待评审委员会公布。', 'Five dimensions; weights to be announced by the jury committee.')}
+          </p>
+          <div className="flex flex-wrap gap-2.5">
+            {[
+              [tr('技术创新性', ''), tr('商业可行性', ''), tr('产业适配度', ''), tr('团队与落地力', ''), tr('需求匹配度', '')],
+            ].flat().map((d, i) => (
+              <span key={i} className="px-4 py-2 rounded-full text-[13px] font-semibold text-[#165DFF] bg-[#165DFF]/5 border border-[#165DFF]/25">
+                {d}
+              </span>
+            ))}
           </div>
         </div>
       </section>
@@ -262,55 +247,78 @@ export const MakerView: React.FC<{ scrollTo?: string | null }> = ({ scrollTo }) 
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {[
-            {
-              name: '赛道等级奖', nameEn: 'Track Awards',
-              amount: '¥120,000',
-              tag: '20 支优胜团队', tagEn: '20 winning teams',
-              desc: '覆盖 20 支优胜团队，按各赛道决赛排名阶梯式发放，重点表彰技术落地、产品创新与商业变现能力。', descEn: 'Tiered prizes for 20 winning teams, recognizing shipping, product innovation and monetization.',
-              icon: Trophy,
-              color: '#165DFF',
-            },
-            {
-              name: '专项荣誉奖', nameEn: 'Special Honors',
-              amount: '¥50,000',
-              tag: '跨赛道独立评选', tagEn: 'Cross-track jury',
-              desc: '跨赛道独立评选，聚焦创新点、社会价值与未来商业潜力，可与等级奖兼得。', descEn: 'Independently judged across tracks for novelty, social value and potential; stackable.',
-              icon: Award,
-              color: '#FF7D00',
-            },
-            {
-              name: '普惠激励奖', nameEn: 'Participation Grants',
-              amount: '¥30,000',
-              tag: '全体答辩团队', tagEn: 'All finalists',
-              desc: '面向所有完成答辩的团队发放，致敬坚持与付出。', descEn: 'For every team that completes the final pitch.',
-              icon: ShieldCheck,
-              color: '#00C48C',
-            },
-          ].map((a, i) => {
-            const Icon = a.icon;
-            return (
-              <div
-                key={i}
-                className="doa-card p-7 flex flex-col"
-                style={{ borderTop: `3px solid ${a.color}` }}
-              >
-                <div
-                  className="w-11 h-11 rounded-2xl flex items-center justify-center mb-4"
-                  style={{ background: `${a.color}14`, color: a.color }}
-                >
-                  <Icon className="w-5 h-5" />
-                </div>
-                <h3 className="text-lg font-bold text-[#0B1B3A]">{tr(a.name, a.nameEn)}</h3>
-                <div className="text-3xl font-extrabold font-mono mt-2" style={{ color: a.color }}>
-                  {a.amount}
-                </div>
-                <span className="doa-chip mt-3 self-start">{tr(a.tag, a.tagEn)}</span>
-                <p className="text-[13px] text-[#48597A] leading-relaxed mt-4">{tr(a.desc, a.descEn)}</p>
+        <div className="space-y-6">
+          {/* 等级奖 */}
+          <div className="doa-card p-7" style={{ borderTop: '3px solid #165DFF' }}>
+            <div className="flex items-center justify-between flex-wrap gap-2 mb-4">
+              <h3 className="text-lg font-bold text-[#0B1B3A]">{tr('赛道等级奖', 'Track Awards')}</h3>
+              <span className="text-2xl font-extrabold font-mono text-[#165DFF]">¥120,000</span>
+            </div>
+            <p className="text-xs text-[#666666] mb-5">{tr('覆盖 20 支团队', '20 winning teams')}</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div className="p-5 rounded-2xl bg-[#F7F8FA] border border-[#E8EAED]">
+                <div className="text-sm font-bold text-[#0B1B3A] mb-1">{tr('自由创意赛道', 'Free Creation Track')}</div>
+                <div className="text-xs text-[#888888] mb-3">{tr('两大子赛道独立评奖 · 合计 8 万元', 'Two sub-tracks judged independently · ¥80,000')}</div>
+                <ul className="text-xs text-[#48597A] space-y-1.5">
+                  <li>{tr('AI+软件赛道（4 万）', 'AI+Software (¥40,000)')}：{tr('金奖 1 名 ¥15,000 / 银奖 2 名 各 ¥8,000 / 铜奖 3 名 各 ¥3,000', 'Gold ×1 ¥15,000 · Silver ×2 ¥8,000 · Bronze ×3 ¥3,000')}</li>
+                  <li>{tr('AI+硬件赛道（4 万）', 'AI+Hardware (¥40,000)')}：{tr('金奖 1 名 ¥15,000 / 银奖 2 名 各 ¥8,000 / 铜奖 3 名 各 ¥3,000', 'Gold ×1 ¥15,000 · Silver ×2 ¥8,000 · Bronze ×3 ¥3,000')}</li>
+                </ul>
               </div>
-            );
-          })}
+              <div className="p-5 rounded-2xl bg-[#F7F8FA] border border-[#E8EAED]">
+                <div className="text-sm font-bold text-[#0B1B3A] mb-1">{tr('产业命题赛道', 'Industry Brief Track')}</div>
+                <div className="text-xs text-[#888888] mb-3">{tr('4 大命题独立评奖 · 合计 4 万元', 'Four briefs judged independently · ¥40,000')}</div>
+                <ul className="text-xs text-[#48597A] space-y-1.5">
+                  <li>{tr('单个命题 金奖 1 名：¥8,000 + 企业 POC 合作绿色通道', 'Gold ×1 per brief: ¥8,000 + enterprise POC fast track')}</li>
+                  <li>{tr('单个命题 优秀奖 1 名：¥2,000 + 企业供应商体系入库资格', 'Honorable mention ×1 per brief: ¥2,000 + vendor onboarding')}</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          {/* 专项荣誉奖 */}
+          <div className="doa-card p-7" style={{ borderTop: '3px solid #FF7D00' }}>
+            <div className="flex items-center justify-between flex-wrap gap-2 mb-4">
+              <h3 className="text-lg font-bold text-[#0B1B3A]">{tr('专项荣誉奖', 'Special Honors')}</h3>
+              <span className="text-2xl font-extrabold font-mono text-[#FF7D00]">¥50,000</span>
+            </div>
+            <p className="text-xs text-[#666666] mb-4">{tr('跨赛道评选，可与等级奖兼得', 'Cross-track, stackable with track awards')}</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
+              {[
+                [tr('最佳技术创新奖', ''), '¥12,000', tr('技术壁垒最高、AI 应用最前沿', 'Deepest technical moat')],
+                [tr('最具商业价值奖', ''), '¥12,000', tr('商业模式清晰、盈利空间明确', 'Clear monetization path')],
+                [tr('最佳人气奖', ''), '¥10,000', tr('游园会观众投票 + 线上传播数据综合选出', 'Audience vote + online reach')],
+                [tr('最佳落地潜力奖', ''), '¥6,000', tr('高度适配黄浦产业生态', 'Best fit with Huangpu ecosystem')],
+                [tr('最佳创意设计奖', ''), '¥5,000', tr('产品设计 · 海报 · 宣传视频创意呈现', 'Product, poster & video creativity')],
+                [tr('最佳黑马团队奖', ''), '¥3,000', tr('成立不满 1 年的学生团队 / 现场组队', 'Student or on-site teams under 1 year')],
+                [tr('最佳产业适配奖', ''), '¥2,000', tr('最贴合企业真实业务需求', 'Closest to real business needs')],
+              ].map((row, i) => (
+                <div key={i} className="flex items-center justify-between gap-3 p-3 rounded-xl bg-[#F7F8FA] border border-[#E8EAED]">
+                  <span className="font-semibold text-[#0B1B3A]">{row[0]}</span>
+                  <span className="flex items-center gap-3">
+                    <span className="text-[11px] text-[#888888] hidden sm:inline">{row[2]}</span>
+                    <span className="font-mono font-bold text-[#FF7D00]">{row[1]}</span>
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* 普惠激励奖 */}
+          <div className="doa-card p-7" style={{ borderTop: '3px solid #00C48C' }}>
+            <div className="flex items-center justify-between flex-wrap gap-2 mb-4">
+              <h3 className="text-lg font-bold text-[#0B1B3A]">{tr('普惠激励奖', 'Participation Grants')}</h3>
+              <span className="text-2xl font-extrabold font-mono text-[#00C48C]">¥30,000</span>
+            </div>
+            <p className="text-xs text-[#666666] mb-4">{tr('覆盖所有完赛团队：预计 30 支', 'All teams completing the hackathon: ~30 teams')}</p>
+            <ul className="text-xs text-[#48597A] space-y-2">
+              <li>{tr('完赛现金补贴：每支完赛团队 ¥1,000', 'Cash grant: ¥1,000 per completing team')}</li>
+              <li>{tr('完赛纪念权益包', 'Commemorative package')}：</li>
+              <li className="pl-4 text-[#888888]">· {tr('赛事定制周边礼盒', 'Custom merch box')}</li>
+              <li className="pl-4 text-[#888888]">· {tr('德必园区 1 个月免费开放工位体验', '1-month free desk at Dobe Park')}</li>
+              <li className="pl-4 text-[#888888]">· 100 元 {tr('AI 算力资源补贴券', 'AI compute voucher')}</li>
+              <li className="pl-4 text-[#888888]">· {tr('黄浦区创业政策申报专属辅导服务', 'Huangpu startup policy application coaching')}</li>
+            </ul>
+          </div>
         </div>
 
         <div className="doa-panel p-7 mt-6">
@@ -345,10 +353,30 @@ export const MakerView: React.FC<{ scrollTo?: string | null }> = ({ scrollTo }) 
                 ))}
               </div>
               <p className="text-[12px] text-[#6B7C9B] leading-relaxed mt-4">
-                海外专家经德必园区线上评审室远程参与评审，自由赛道在德必园区分会场路演时同步连线。
+                决赛评审团由政府代表、产业专家、投资人、技术专家组成，现场统分并公布获奖名单。
               </p>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* 5.5 投资机构（飞书《赛事方案》：30+ 创投机构到场） */}
+      <section className="scroll-mt-24 max-w-[1200px] mx-auto px-6 sm:px-8 py-16">
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold text-[#0B1B3A]">资本对接 · 投资机构</h2>
+          <p className="text-xs text-[#666666] mt-1">
+            30+ 创投机构到场，组建专属投资评审团；获奖项目进入投资尽调绿色通道
+          </p>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3">
+          {[
+            'Monolith', '真格基金', '红杉资本', '风物资本', '光合创投', '上海未来基金', '大观资本',
+          ].map((name, i) => (
+            <div key={i} className="doa-card p-4 text-center">
+              <div className="text-sm font-bold text-[#0B1B3A]">{name}</div>
+              <div className="text-[10px] text-[#98A6BE] mt-0.5">投资机构</div>
+            </div>
+          ))}
         </div>
       </section>
 

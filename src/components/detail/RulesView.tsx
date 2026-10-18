@@ -116,7 +116,7 @@ const BriefCard: React.FC<{ b: ContestBrief }> = ({ b }) => {
 
           <section>
             <h4 className="flex items-center gap-2 text-[13px] font-bold text-[#1A2B4D] mb-3">
-              <Scale className="w-4 h-4 text-[#165DFF]" /> 评审维度与权重
+              <Scale className="w-4 h-4 text-[#165DFF]" /> {tr('评审维度', 'Judging Dimensions')}
             </h4>
             <div className="space-y-2.5">
               {b.criteria.map((c, i) => (
@@ -204,7 +204,7 @@ export const RulesView: React.FC = () => {
             <div className="doa-eyebrow mb-2.5">CONTEST BRIEFS</div>
             <h2 className="text-2xl font-extrabold text-[#0B1B3A] tracking-tight">赛题</h2>
             <p className="text-[13px] text-[#6B7C9B] mt-1.5 max-w-2xl leading-relaxed">
-              产业赛道命题将于 10 月中旬由长宁区龙头企业正式发布；自由赛道为开放命题，报名即起可申报。
+              产业命题赛道命题企业将于开幕盛典公布；自由创意赛道为开放命题，报名即起可申报。
             </p>
           </div>
           <div className="flex items-center p-1 bg-white border border-[#E3ECFA] rounded-xl self-start">
