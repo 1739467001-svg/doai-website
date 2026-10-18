@@ -1,6 +1,6 @@
 import React from 'react';
 import { useApp } from '../../context/AppContext';
-import { ShieldCheck, HeartHandshake, Lock, FileText } from 'lucide-react';
+import { ShieldCheck, Lock } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   const { lang, setActiveRoute, openPolicy } = useApp();
@@ -8,7 +8,7 @@ export const Footer: React.FC = () => {
   return (
     <footer className="bg-white border-t border-[#E8EAED] pt-16 pb-12 text-sm text-[#666666]">
       <div className="max-w-[1200px] mx-auto px-6 sm:px-8">
-        <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-10 pb-12 border-b border-[#E8EAED]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 pb-12 border-b border-[#E8EAED]">
           {/* Brand & Narrative */}
           <div className="sm:col-span-3 lg:col-span-2 space-y-4">
             <div className="flex items-center gap-2">
@@ -116,43 +116,6 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Nav Column 3: 账号与支持 */}
-          <div className="space-y-3">
-            <h4 className="text-xs font-semibold text-[#0B1B3A] uppercase tracking-wider">
-              {lang === 'zh' ? '账号与法律合规' : 'Account & Compliance'}
-            </h4>
-            <ul className="space-y-2 text-xs">
-              <li>
-                <button
-                  onClick={() => openPolicy('terms')}
-                  className="hover:text-[#165DFF] transition-colors"
-                >
-                  {lang === 'zh' ? '用户协议 (User Terms)' : 'Terms of Service'}
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => openPolicy('privacy')}
-                  className="hover:text-[#165DFF] transition-colors"
-                >
-                  {lang === 'zh' ? '隐私政策 (Privacy Policy)' : 'Privacy Policy'}
-                </button>
-              </li>
-              <li className="text-[#888888]">
-                {lang === 'zh'
-                  ? '与 atomclub.cn 账号统一打通'
-                  : 'Unified with atomclub.cn ID'}
-              </li>
-              <li>
-                <a
-                  href="mailto:committee@doai2026.org"
-                  className="break-all hover:text-[#165DFF] transition-colors"
-                >
-                  committee@doai2026.org
-                </a>
-              </li>
-            </ul>
-          </div>
         </div>
 
         {/* Bottom bar */}
@@ -162,10 +125,6 @@ export const Footer: React.FC = () => {
             <span>Official Global Digital Platform</span>
             <span>·</span>
             <span>Made for AI Creators Worldwide</span>
-            <span aria-hidden="true">·</span>
-            <button onClick={() => setActiveRoute('admin')} className="hover:text-[#165DFF] transition-colors">
-              {lang === 'en' ? 'Operations' : '运营管理'}
-            </button>
           </div>
         </div>
       </div>
